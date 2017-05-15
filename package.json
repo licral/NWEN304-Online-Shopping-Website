@@ -1,0 +1,15 @@
+{
+  "name": "nwen304-online-shopping-website",
+  "version": "1.0.0",
+  "description": "Shopping website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bonnie, Hector, Slade",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "pg": "^6.2.2"
+  }
+}

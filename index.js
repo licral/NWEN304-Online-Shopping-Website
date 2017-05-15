@@ -5,7 +5,6 @@ var port = process.env.PORT || 3000;
 var pg = require('pg');
 
 app.use(express.static(__dirname + '/public'));
-app.use(express.static(__dirname + '/views'));
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
@@ -13,7 +12,8 @@ app.get('/', function (req, res) {
 });
 
 app.get('/test', function (req, res) {
-    res.sendFile(__dirname + '/test.html');
+    console.log("Got here");
+    res.sendFile(__dirname + '/views/test.html');
 });
 
 app.listen(port, function () {

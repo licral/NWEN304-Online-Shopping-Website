@@ -5,6 +5,7 @@ var port = process.env.PORT || 3000;
 var pg = require('pg');
 
 app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/views'));
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {

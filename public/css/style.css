@@ -1,7 +1,7 @@
+/* NAVIGATION */
 .navigation{
     padding-top: 20px;
-    padding-bottom: 20px;
-    background-color: white;
+    padding-bottom: 10px;
 }
 
 .nav-bar{
@@ -9,13 +9,32 @@
     float: left;
 }
 
-.title{
-    margin-left: auto;
-    margin-right: auto;
-    width: max-content;
-    font-size: 60px;
+li.nav-item{
+    width: 150px;
+    text-align: center;
 }
 
+/* HEADING SECTION */
+.title{
+    width: max-content;
+    font-size: 60px;
+    padding-bottom: 20px;
+}
+
+.search-bar{
+    width: 300px;
+    margin-bottom: 10px;
+}
+
+.heading-wrapper{
+    background-color: white;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+/* BUTTONS */
 .login{
     float: right;
     border: 0px;
@@ -28,11 +47,25 @@
     color: #337ab7;
 }
 
+/* PAGES */
+/*body{*/
+    /*background-image: url("../img/vinyl_wallpaper.png");*/
+    /*background-repeat: repeat;*/
+/*}*/
+
 .container{
     clear: both;
+    background-color: white;
 }
 
-li.nav-item{
-    width: 150px;
-    text-align: center;
+.container.content{
+    height: auto !important;
+    min-height:100%;
+    padding-top: 250px;
+}
+
+/* GENERIC STYLING */
+.center{
+    margin-left: auto;
+    margin-right: auto;
 }

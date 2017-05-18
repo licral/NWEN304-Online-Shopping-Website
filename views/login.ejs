@@ -8,9 +8,12 @@
     <body>
         <% include components/menu_and_heading.ejs %>
         <div class="container content">
-            <h1>Login Page</h1>
-            <input type="text" class="form-control" placeholder="Username">
-            <input type="text" class="form-control" placeholder="Password">
+            <div class="login-panel">
+                <h1>Login</h1>
+                <input type="text" class="form-control login-input" placeholder="Username">
+                <input type="text" class="form-control login-input" placeholder="Password">
+                <button class="btn btn-default" type="button">Login</button>
+            </div>
         </div>
     </body>
 </html>

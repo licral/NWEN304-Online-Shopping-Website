@@ -1,0 +1,96 @@
+/* NAVIGATION */
+.navigation{
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.nav-bar{
+    width: max-content;
+    float: left;
+}
+
+li.nav-item{
+    width: 150px;
+    text-align: center;
+}
+
+/* BANNER */
+.title{
+    width: max-content;
+    font-size: 60px;
+    padding-bottom: 20px;
+}
+
+.search-bar{
+    width: 300px;
+    margin-bottom: 10px;
+}
+
+.heading-wrapper{
+    background-color: white;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    border-bottom: 1px solid #d9d9d9;
+}
+
+/* BUTTONS */
+.login{
+    float: right;
+    border: 0px;
+    padding: 10px 15px;
+    color: #337ab7;
+    font-size: 14px;
+    width: 80px;
+}
+
+.login:hover, a:hover{
+    color: #337ab7;
+}
+
+.login-button{
+    width: inherit;
+    margin-top: 20px;
+}
+
+button.search-button{
+    padding: 9px;
+}
+
+/* PAGES */
+.container{
+    clear: both;
+    background-color: white;
+}
+
+.container.content{
+    height: auto !important;
+    min-height:100%;
+    padding-top: 250px;
+}
+
+.login-panel{
+    width: 400px;
+}
+
+/* INPUTS */
+.login-input{
+    margin-bottom: 10px;
+}
+
+/* GENERIC STYLING */
+.center{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* LINKS */
+.forgot-password{
+    display: block;
+    text-align: right;
+    font-size: 12px;
+}
+
+.login-heading{
+    margin-bottom: 20px;
+}

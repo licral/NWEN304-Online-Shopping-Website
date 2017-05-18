@@ -41,6 +41,7 @@ li.nav-item{
     padding: 10px 15px;
     color: #337ab7;
     font-size: 14px;
+    width: 80px;
 }
 
 .login:hover, a:hover{

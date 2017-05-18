@@ -71,6 +71,17 @@ button.search-button{
 
 .login-panel{
     width: 400px;
+    float: left;
+}
+
+.login-panel.left{
+    margin-right: 100px;
+}
+
+.login-panel-wrapper{
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* INPUTS */

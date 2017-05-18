@@ -3,14 +3,24 @@
     <body>
         <% include components/menu_and_heading.ejs %>
         <div class="container content">
-            <div class="login-panel">
-                <h1 class="login-heading">Login</h1>
-                <label name="username">Username:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="password">Password:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <a href="#" class="forgot-password">Forgot Password?</a>
-                <button class="btn btn-default login-button" type="button">Login</button>
+            <div class="login-panel-wrapper">
+                <div class="login-panel left">
+                    <h1 class="login-heading">Login</h1>
+                    <label name="username">Username:</label>
+                    <input type="text" class="form-control login-input" placeholder="">
+                    <label name="password">Password:</label>
+                    <input type="text" class="form-control login-input" placeholder="">
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <button class="btn btn-default login-button" type="button">Login</button>
+                </div>
+                <div class="login-panel">
+                    <h1>Don't have an account?</h1>
+                    <p>Creating an account allows you to:</p>
+                    <ul>
+                        <li>Add vinyls to a wishlist</li>
+                        <li>Order vinyls online</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </body>

@@ -47,6 +47,10 @@ li.nav-item{
     color: #337ab7;
 }
 
+button.search-button{
+    padding: 9px;
+}
+
 /* PAGES */
 /*body{*/
     /*background-image: url("../img/vinyl_wallpaper.png");*/

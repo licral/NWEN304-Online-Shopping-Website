@@ -8,7 +8,8 @@ var router = express.Router();
 
 router.get('/', function (req, res) {
     res.render('login', {
-        title: 'Login'
+        title: 'Login',
+        description: 'Log in to Vinylholics with an existing account.'
     });
 });
 

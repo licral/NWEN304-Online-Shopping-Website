@@ -9,14 +9,16 @@ var router = express.Router();
 router.get('/all', function (req, res) {
     res.render('browse', {
         title: 'Browse All Vinyls',
-        heading: 'All'
+        heading: 'All',
+        description: "Browse all vinyl records"
     });
 });
 
 router.get('/newest', function (req, res) {
     res.render('browse', {
         title: 'Browse Newest Arrivals',
-        heading: 'Newest'
+        heading: 'Newest',
+        description: "Browse the newest arrivals"
     });
 });
 

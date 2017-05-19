@@ -16,8 +16,6 @@ li.nav-item{
 
 /* BANNER */
 .title{
-    width: max-content;
-    font-size: 60px;
     padding-bottom: 20px;
 }
 
@@ -91,6 +89,7 @@ button.search-button{
 
 /* GENERIC STYLING */
 .center{
+    display: block;
     margin-left: auto;
     margin-right: auto;
 }

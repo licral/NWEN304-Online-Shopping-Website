@@ -3,7 +3,28 @@
     <body>
         <% include components/menu_and_heading.ejs %>
         <div class="container content">
-            <h1>Register</h1>
+            <h1 class="login-heading">Register</h1>
+            <div class="register-panel left">
+                <label name="firstname">First Name:</label>
+                <input type="text" class="form-control login-input" placeholder="">
+                <label name="lastname">Last Name:</label>
+                <input type="text" class="form-control login-input" placeholder="">
+                <label name="email">Email Address:</label>
+                <input type="text" class="form-control login-input" placeholder="">
+                <label name="phone">Phone Number:</label>
+                <input type="text" class="form-control login-input" placeholder="">
+                <button class="btn btn-primary btn-large" type="button">Register</button>
+            </div>
+            <div class="register-panel right">
+                <label name="street">Street Address</label>
+                <input type="text" class="form-control login-input" placeholder="">
+                <label name="suburb">Suburb</label>
+                <input type="text" class="form-control login-input" placeholder="">
+                <label name="city">City</label>
+                <input type="text" class="form-control login-input" placeholder="">
+                <label name="country">Country</label>
+                <input type="text" class="form-control login-input" placeholder="">
+            </div>
         </div>
     </body>
 </html>

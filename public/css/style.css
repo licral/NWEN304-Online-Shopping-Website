@@ -46,9 +46,13 @@ li.nav-item{
     color: #337ab7;
 }
 
-.login-button{
-    width: inherit;
+.btn-large{
+    font-size: 16px;
     margin-top: 20px;
+}
+
+.max-width{
+    width: inherit;
 }
 
 button.search-button{
@@ -68,12 +72,19 @@ button.search-button{
 }
 
 .login-panel{
-    width: 400px;
+    width: 450px;
+}
+
+.register-panel{
+    width: 500px;
+}
+
+.left{
     float: left;
 }
 
-.login-panel.left{
-    margin-right: 100px;
+.right{
+    float: right;
 }
 
 .login-panel-wrapper{
@@ -87,13 +98,6 @@ button.search-button{
     margin-bottom: 10px;
 }
 
-/* GENERIC STYLING */
-.center{
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 /* LINKS */
 .forgot-password{
     display: block;
@@ -103,4 +107,11 @@ button.search-button{
 
 .login-heading{
     margin-bottom: 20px;
+}
+
+/* GENERIC STYLING */
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

@@ -8,6 +8,7 @@ var pg = require('pg');
 var home = require('./routes/index');
 var login = require('./routes/login');
 var browse = require('./routes/browse');
+var register = require('./routes/register');
 
 // Setting a path for our views
 app.set('views', __dirname + '/views');
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 app.use('/', home);
 app.use('/login', login);
 app.use('/browse', browse);
+app.use('/register', register);
 
 app.listen(port, function () {
     console.log('Listening on port ' + port);

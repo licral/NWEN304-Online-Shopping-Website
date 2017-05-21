@@ -4,6 +4,24 @@
         <% include components/menu_and_heading.ejs %>
         <div class="container content">
             <h1>Browse <%= heading %></h1>
+
+            <% if (locals.albums) { %>
+            <ul>
+                <% for (let album of albums) { %>
+                <li>
+                    Album Title: <%= album.title %>,
+                    Released on: <%= album.released_on %>,
+                    Price: <%= album.price %>,
+                    Artist id: <%= album.artist_id %>
+                </li>
+                <% } %>
+            </ul>
+
+            <% } else if (locals.error) { %>
+            <div class="alert alert-danger">
+                <%= error %>
+            </div>
+            <% } %>
         </div>
     </body>
 </html>

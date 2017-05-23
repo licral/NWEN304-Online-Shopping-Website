@@ -59,6 +59,18 @@ button.search-button{
     padding: 9px;
 }
 
+/* BROWSE ITEMS */
+.item{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 4px;
+    width: max-content;
+}
+
+.item-caption{
+    padding: 8px;
+}
+
 /* PAGES */
 .container{
     clear: both;

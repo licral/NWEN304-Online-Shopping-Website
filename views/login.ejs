@@ -5,12 +5,14 @@
         <div class="container content">
             <div class="login-panel left">
                 <h1 class="login-heading">Login</h1>
-                <label name="username">Username:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="password">Password:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <a href="#" class="forgot-password">Forgot Password?</a>
-                <button class="btn btn-primary btn-large max-width" type="button">Login</button>
+                <form action="/login" method="post">
+                    <label>Username:</label>
+                    <input name="username" type="text" class="form-control login-input" placeholder="">
+                    <label>Password:</label>
+                    <input name="password" type="text" class="form-control login-input" placeholder="">
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <button class="btn btn-primary btn-large max-width" type="submit">Login</button>
+                </form>
             </div>
             <div class="login-panel right">
                 <h1 class="login-heading">Don't have an account?</h1>

@@ -1,4 +1,18 @@
 <html>
+    <script>
+        function register(){
+            $.ajax({
+                type: 'POST',
+                url: '/register',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    username: "admin",
+                    password: "admin",
+                    email: "admin@admin.com"
+                })
+            });
+        }
+    </script>
     <% include components/head.ejs %>
     <body>
         <% include components/menu_and_heading.ejs %>
@@ -13,7 +27,7 @@
                 <input type="text" class="form-control login-input" placeholder="">
                 <label name="phone">Phone Number:</label>
                 <input type="text" class="form-control login-input" placeholder="">
-                <button class="btn btn-primary btn-large" type="button">Register</button>
+                <button class="btn btn-primary btn-large" type="button" onclick="register()">Register</button>
             </div>
             <div class="register-panel right">
                 <label name="street">Street Address</label>

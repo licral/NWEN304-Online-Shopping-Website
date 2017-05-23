@@ -3,14 +3,18 @@
  *
  * Route used to handle register
  */
-var express = require('express');
-var router = express.Router();
 
-router.get('/', function (req, res) {
-    res.render('register', {
-        title: 'Register',
-        description: 'Register for the new account.'
+module.exports = function(app, passport){
+    app.get('/register', function (req, res) {
+        res.render('register', {
+            title: 'Register',
+            description: 'Register for the new account.'
+        });
     });
-});
 
-module.exports = router;
+    app.post('/register', passport.authenticate('local-signup', {
+        successRedirect : '/', //where to go on success?
+        failureRedirect : '/register',
+        failureFlash : true
+    }));
+}

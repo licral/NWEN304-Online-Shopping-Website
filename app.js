@@ -1,14 +1,46 @@
 var express = require('express');
+var session  = require('express-session');// needed for the passport
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var morgan = require('morgan');// <-- for better logging
 var app = express();
 var port = process.env.PORT || 3000;
 var pg = require('pg');
+var connectionPool = require('./config/database');
+
+var passport = require('passport');
+var flash = require('connect-flash');
+
+require('./config/passport')(passport, connectionPool);
+
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+// For reading the body of our requests
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
+app.use(session({
+    //secret: 'vidyapathaisalwaysrunning',
+    secret: 'vinylholicssecretforauthentication',
+    resave: true,
+    saveUninitialized: true
+} )); // session secret
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash());
 
 // Adding our route modules
 var home = require('./routes/index');
-var login = require('./routes/login');
-var browse = require('./routes/browse');
-var register = require('./routes/register');
+// var login = require('./routes/login');
+require('./routes/login')(app, passport);
+// var browse = require('./routes/browse');
+require('./routes/browse')(app, connectionPool);
+// var register = require('./routes/register');
+require('./routes/register')(app, passport);
+var logout = require('./routes/logout');
 
 // Setting a path for our views
 app.set('views', __dirname + '/views');
@@ -17,14 +49,12 @@ app.set('view engine', 'ejs');
 // Setting a path for our resources
 app.use(express.static(__dirname + '/public'));
 
-// For reading the body of our requests
-app.use(bodyParser.json());
-
 // Defining all our routes
 app.use('/', home);
-app.use('/login', login);
-app.use('/browse', browse);
-app.use('/register', register);
+// app.use('/login', login);
+// app.use('/browse', browse);
+// app.use('/register', register);
+
 
 app.listen(port, function () {
     console.log('Listening on port ' + port);

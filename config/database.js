@@ -6,7 +6,6 @@ let localDBUrl = "postgres://qppxsuhjsvrdlo:34dc457da7ffb9749662aa55458d4348ccc5
 let databaseUrl = process.env.DATABASE_URL || localDBUrl;
 let params = url.parse(databaseUrl);
 let auth = params.auth.split(':');
-let sslBoolean = !process.env.DATABASE_URL;
 
 let config = {
     user: auth[0],
@@ -14,7 +13,7 @@ let config = {
     host: params.hostname,
     port: params.port,
     database: params.pathname.split('/')[1],
-    ssl: sslBoolean
+    ssl: true   // NOTICE: if connecting on local db, this should be false
 };
 
 const pool = new Pool(config);

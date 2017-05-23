@@ -15,6 +15,7 @@ require('./config/passport')(passport, connectionPool);
 
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
+
 // For reading the body of our requests
 app.use(bodyParser.urlencoded({
     extended: true
@@ -22,7 +23,6 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.use(session({
-    //secret: 'vidyapathaisalwaysrunning',
     secret: 'vinylholicssecretforauthentication',
     resave: true,
     saveUninitialized: true
@@ -34,11 +34,8 @@ app.use(flash());
 
 // Adding our route modules
 var home = require('./routes/index');
-// var login = require('./routes/login');
 require('./routes/login')(app, passport);
-// var browse = require('./routes/browse');
 require('./routes/browse')(app, connectionPool);
-// var register = require('./routes/register');
 require('./routes/register')(app, passport);
 var logout = require('./routes/logout');
 
@@ -51,9 +48,6 @@ app.use(express.static(__dirname + '/public'));
 
 // Defining all our routes
 app.use('/', home);
-// app.use('/login', login);
-// app.use('/browse', browse);
-// app.use('/register', register);
 
 
 app.listen(port, function () {

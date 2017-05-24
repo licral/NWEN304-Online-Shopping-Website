@@ -38,6 +38,10 @@ module.exports = function (passport, pool) {
                             return done(null, false, req.flash('signupMessage', 'Invalid Email.'));
                         }
 
+                        if(username == '') {
+                            return done(null, false, req.flash('signupMessage', 'Username not provided.'));
+                        }
+
                         if(req.body.password != req.body.confpassword) {
                             return done(null, false, req.flash('signupMessage', 'Passwords do not match.'));
                         }

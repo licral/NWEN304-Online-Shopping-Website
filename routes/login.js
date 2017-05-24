@@ -11,11 +11,13 @@ module.exports = function(app, passport){
     app.get('/login', function (req, res) {
         res.render('login', {
             title: 'Login',
-            description: 'Log in to Vinylholics with an existing account.'
+            description: 'Log in to Vinylholics with an existing account.',
+            message: req.flash('loginMessage')
         });
     });
 
     app.post('/login', passport.authenticate('local-login', {
+            successRedirect : '/', //where to go on success?
             failureRedirect : '/login',
             failureFlash : true
         }),

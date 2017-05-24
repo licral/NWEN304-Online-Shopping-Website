@@ -8,7 +8,8 @@ module.exports = function(app, passport){
     app.get('/register', function (req, res) {
         res.render('register', {
             title: 'Register',
-            description: 'Register for the new account.'
+            description: 'Register for the new account.',
+            message: req.flash('signupMessage')
         });
     });
 

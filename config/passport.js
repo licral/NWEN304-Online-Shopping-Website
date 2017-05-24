@@ -1,9 +1,8 @@
 var LocalStrategy = require('passport-local').Strategy;
 
 var pg = require('pg');
+var validator = require('validator');
 var bcrypt = require('bcrypt-nodejs');
-//will need to adjust connection string to work
-const connectionString = process.env.DATABASE_URL || 'postgres://qppxsuhjsvrdlo:34dc457da7ffb9749662aa55458d4348ccc595d12f41056e19b6a40ddf677551@ec2-23-23-227-188.compute-1.amazonaws.com:5432/d5h53moib4fj0q';
 
 module.exports = function (passport, pool) {
 
@@ -34,11 +33,21 @@ module.exports = function (passport, pool) {
                             return done(err);
                         }
 
+                        //Lets do some server side validation because we don't trust the client
+                        if(!validator.isEmail(req.body.email)){
+                            return done(null, false, req.flash('signupMessage', 'Invalid Email.'));
+                        }
+
+                        if(req.body.password != req.body.confpassword) {
+                            return done(null, false, req.flash('signupMessage', 'Passwords do not match.'));
+                        }
+
+
                         client.query("SELECT * FROM users WHERE username = ($1)", [username], function (err, result) {
                             if (err)
                                 return done(err);
                             if (result.rows.length) {
-                                return done(null, false);
+                                return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
                             } else {
 
                                 var newUser = {
@@ -48,9 +57,8 @@ module.exports = function (passport, pool) {
 
                                 var insertQuery = "INSERT INTO users ( username, password ) values ($1,$2) RETURNING id";
 
-                                client.query(insertQuery, [newUser.username, newUser.password], function (err, rows) {
-                                    newUser.id = rows;
-
+                                client.query(insertQuery, [newUser.username, newUser.password], function (err, result) {
+                                    newUser.id = result.rows[0].id;
                                     return done(null, newUser);
                                 });
                             }
@@ -73,15 +81,16 @@ module.exports = function (passport, pool) {
                         if (err) {
                             return done(err);
                         }
+
                         client.query("SELECT * FROM users WHERE username = ($1)", [username], function (err, result) {
                             if (err)
                                 return done(err);
                             if (!result.rows.length) {
-                                return done(null, false);
+                                return done(null, false, req.flash('loginMessage', 'No user found.'));
                             }
 
                             if (!bcrypt.compareSync(password, result.rows[0].password)) {
-                                return done(null, false);
+                                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
                             }
 
                             return done(null, result.rows[0]);

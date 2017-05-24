@@ -4,7 +4,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');// <-- for better logging
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 var pg = require('pg');
 var connectionPool = require('./config/database');
 

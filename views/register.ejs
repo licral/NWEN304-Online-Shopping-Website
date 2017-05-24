@@ -1,17 +1,22 @@
 <html>
-    <script>
-        function register(){
-            $.ajax({
-                type: 'POST',
-                url: '/register',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    username: "admin",
-                    password: "admin",
-                    email: "admin@admin.com"
-                })
-            });
+    <script type="text/javascript">
+
+        window.onload = function () {
+            document.getElementById("password").onchange = validatePassword;
+            document.getElementById("confirm_password").onchange = validatePassword;
         }
+        function validatePassword(){
+            var pass2=document.getElementById("confirm_password").value;
+            var pass1=document.getElementById("password").value;
+            if(pass1!=pass2) {
+                document.getElementById("confirm_password").setCustomValidity("Passwords Don't Match");
+            }
+            else {
+                document.getElementById("confirm_password").setCustomValidity('');
+            }
+            //empty string means no validation error
+        }
+
     </script>
     <% include components/head.ejs %>
     <body>
@@ -19,26 +24,41 @@
         <div class="container content">
             <h1 class="login-heading">Register</h1>
             <div class="register-panel left">
-                <label name="firstname">First Name:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="lastname">Last Name:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="email">Email Address:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="phone">Phone Number:</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <button class="btn btn-primary btn-large" type="button" onclick="register()">Register</button>
+
+                <% if (message.length > 0) { %>
+                <div class="alert alert-danger"><%= message %></div>
+                <% } %>
+
+                <form action="/register" method="post">
+                    <label>Email Address:</label>
+                    <input name="email" type="email" required class="form-control login-input" placeholder="">
+                    <label>Username:</label>
+                    <input name="username" type="text" required class="form-control login-input" placeholder="">
+                    <label>Password:</label>
+                    <input name="password" type="password" id="password" required class="form-control login-input" placeholder="">
+                    <label>Confirm Password:</label>
+                    <input name="confpassword" type="password" id="confirm_password" required class="form-control login-input" placeholder="">
+                    <!--<label>First Name:</label>-->
+                    <!--<input name="firstname" type="text" class="form-control login-input" placeholder="">-->
+                    <!--<label>Last Name:</label>-->
+                    <!--<input name="lastname" type="text" class="form-control login-input" placeholder="">-->
+                    <!--<label>Phone Number:</label>-->
+                    <!--<input name="phone" type="text" class="form-control login-input" placeholder="">-->
+                    <!--<label>Street Address</label>-->
+                    <!--<input name="street" type="text" class="form-control login-input" placeholder="">-->
+                    <!--<label>Suburb</label>-->
+                    <!--<input name="suburb" type="text" class="form-control login-input" placeholder="">-->
+                    <!--<label>City</label>-->
+                    <!--<input name="city" type="text" class="form-control login-input" placeholder="">-->
+                    <!--<label>Country</label>-->
+                    <!--<input name="country" type="text" class="form-control login-input" placeholder="">-->
+
+                    <button class="btn btn-primary btn-large" type="submit">Register</button>
+                </form>
             </div>
-            <div class="register-panel right">
-                <label name="street">Street Address</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="suburb">Suburb</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="city">City</label>
-                <input type="text" class="form-control login-input" placeholder="">
-                <label name="country">Country</label>
-                <input type="text" class="form-control login-input" placeholder="">
-            </div>
+            <!--<div class="register-panel right">-->
+                <!---->
+            <!--</div>-->
         </div>
     </body>
 </html>

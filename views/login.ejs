@@ -5,11 +5,16 @@
         <div class="container content">
             <div class="login-panel left">
                 <h1 class="login-heading">Login</h1>
+
+                <% if (message.length > 0) { %>
+                <div class="alert alert-danger"><%= message %></div>
+                <% } %>
+
                 <form action="/login" method="post">
                     <label>Username:</label>
-                    <input name="username" type="text" class="form-control login-input" placeholder="">
+                    <input name="username" type="text" required class="form-control login-input" placeholder="">
                     <label>Password:</label>
-                    <input name="password" type="text" class="form-control login-input" placeholder="">
+                    <input name="password" type="text" required class="form-control login-input" placeholder="">
                     <a href="#" class="forgot-password">Forgot Password?</a>
                     <button class="btn btn-primary btn-large max-width" type="submit">Login</button>
                 </form>

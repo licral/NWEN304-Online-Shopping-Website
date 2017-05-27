@@ -156,6 +156,10 @@ button.search-button{
     margin-right: 20px;
 }
 
+form{
+    width: inherit;
+}
+
 /* INPUTS */
 .login-input{
     margin-bottom: 10px;

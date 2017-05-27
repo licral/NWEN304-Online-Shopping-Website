@@ -8,7 +8,7 @@
             <% if (locals.albums) { %>
                 <div>
                     <% for (let album of albums) { %>
-                        <div class="item">
+                        <div id="<%= album.id %>" class="item">
                             <img src="/img/175x175_placeholder.png" alt="image" />
                             <div class="item-caption">
                                 <span class="item-title item-label"><%= album.title %></span>

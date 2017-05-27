@@ -69,6 +69,13 @@ button.search-button{
     display: block;
 }
 
+.profile-button{
+    float: right;
+    border: 0px;
+    padding: 10px 15px;
+    color: black;
+}
+
 /* BROWSE ITEMS */
 .item{
     padding: 4px;

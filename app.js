@@ -34,6 +34,9 @@ app.use(flash());
 
 app.use(function(req, res, next){
     res.locals.isLoggedIn = req.user != undefined;
+    if(req.user){
+        res.locals.username = req.user.username;
+    }
     next();
 });
 

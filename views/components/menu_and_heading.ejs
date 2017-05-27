@@ -19,6 +19,7 @@
             </ul>
             <% if(isLoggedIn) {%>
                 <a href="/logout" class="btn btn-default login" role="button">Logout</a>
+                <span class="user-label">Hi <%= username%>!</span>
             <% } else { %>
                 <a href="/register" class="btn btn-default login" role="button">Register</a>
                 <a href="/login" class="btn btn-default login" role="button">Login</a>

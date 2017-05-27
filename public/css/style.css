@@ -32,6 +32,12 @@ li.nav-item{
     border-bottom: 1px solid #d9d9d9;
 }
 
+.user-label{
+    float: right;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
 /* BUTTONS */
 .login{
     float: right;

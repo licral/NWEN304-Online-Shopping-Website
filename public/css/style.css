@@ -70,10 +70,13 @@ button.search-button{
 }
 
 .profile-button{
-    float: right;
     border: 0px;
     padding: 10px 15px;
     color: black;
+}
+
+.btn-group.dropdown{
+    float: right;
 }
 
 /* BROWSE ITEMS */

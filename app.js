@@ -7,6 +7,10 @@ var app = express();
 var port = process.env.PORT || 8080;
 var pg = require('pg');
 var connectionPool = require('./config/database');
+var multer = require('multer');
+var storage = multer.memoryStorage();
+var upload = multer({storage: storage});
+app.use(upload.single('image'));
 
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -50,6 +54,7 @@ require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);
 require('./routes/logout')(app);
 require('./routes/item')(app, connectionPool);
+require('./routes/upload')(app, connectionPool);
 
 // Setting a path for our views
 app.set('views', __dirname + '/views');

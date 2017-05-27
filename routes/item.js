@@ -9,7 +9,8 @@ module.exports = function(app, pool){
 
         pool.connect()
             .then(client => {
-                let sql = "select albums.title, albums.description, albums.released_on, albums.genre, albums.image, albums.is_compilation, albums.price, artists.artist_name from albums inner join artists on albums.artist_id=artists.id where albums.id=" + id + ";";
+                // let sql = "select * from albums where id=" + id + ";";
+                let sql = "select albums.id, albums.title, albums.description, albums.released_on, albums.genre, albums.image, albums.is_compilation, albums.price, artists.artist_name from albums inner join artists on albums.artist_id=artists.id where albums.id=" + id + ";";
 
                 client.query(sql)
                     .then(result => {
@@ -31,6 +32,33 @@ module.exports = function(app, pool){
             .catch(error => {
                 pageData.error = "Database unavailable, please try again.";
                 res.render('item', pageData);
+                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+            });
+    });
+
+    app.get('/item/image/:id', function(req, res){
+        var id = req.params.id;
+        let pageData = {};
+
+        pool.connect()
+            .then(client => {
+                let sql = "select * from albums where id=" + id + ";";
+
+                client.query(sql)
+                    .then(result => {
+                        client.release();
+                        var buffer = new Buffer(result.rows[0].test_image, "base64");
+                        res.writeHead(200, {'Content-Type' : 'image/jpg'});
+                        res.end(buffer, 'binary');
+
+                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
+                    })
+                    .catch(e => {
+                        client.release();
+                        console.error('[ERROR] Query error', e.message, e.stack);
+                    });
+            })
+            .catch(error => {
                 console.error('[ERROR] Unable to connect to database', error.message, error.stack);
             });
     });

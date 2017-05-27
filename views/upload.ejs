@@ -1,0 +1,18 @@
+<html>
+    <% include components/head.ejs %>
+    <body>
+        <% include components/menu_and_heading.ejs %>
+        <div class="container content">
+            <h1>Upload page. Should only be visible to admins</h1>
+
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <!-- Upload image -->
+                <fieldset class="form-group">
+                    <label for="image">File input</label>
+                    <input type="file" class="form-control-file" id="image" name="image" required>
+                </fieldset>
+                <button type="submit" class="btn btn-default">Upload Image</button>
+            </form>
+        </div>
+    </body>
+</html>

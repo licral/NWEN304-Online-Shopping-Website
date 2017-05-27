@@ -44,11 +44,12 @@ app.use(function(req, res, next){
 });
 
 // Adding our route modules
-var home = require('./routes/index');
+require('./routes/index')(app);
 require('./routes/login')(app, passport);
 require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);
 require('./routes/logout')(app);
+require('./routes/item')(app, connectionPool);
 
 // Setting a path for our views
 app.set('views', __dirname + '/views');
@@ -56,10 +57,6 @@ app.set('view engine', 'ejs');
 
 // Setting a path for our resources
 app.use(express.static(__dirname + '/public'));
-
-// Defining all our routes
-app.use('/', home);
-
 
 app.listen(port, function () {
     console.log('Listening on port ' + port);

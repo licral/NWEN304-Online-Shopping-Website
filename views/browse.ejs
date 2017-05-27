@@ -8,14 +8,16 @@
             <% if (locals.albums) { %>
                 <div>
                     <% for (let album of albums) { %>
-                        <div id="<%= album.id %>" class="item">
-                            <img src="/img/175x175_placeholder.png" alt="image" />
-                            <div class="item-caption">
-                                <span class="item-title item-label"><%= album.title %></span>
-                                <span class="artist item-label"><%= album.artist_id %></span>
-                                <span class="price item-label">$<%= album.price %></span>
+                        <a href="/item/<%= album.id %>">
+                            <div class="item">
+                                <img src="/img/175x175_placeholder.png" alt="lbum cover image" />
+                                <div class="item-caption">
+                                    <span class="item-title item-label"><%= album.title %></span>
+                                    <span class="artist item-label"><%= album.artist_id %></span>
+                                    <span class="price item-label">$<%= album.price %></span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     <% } %>
                 </div>
             <% } else if (locals.error) { %>

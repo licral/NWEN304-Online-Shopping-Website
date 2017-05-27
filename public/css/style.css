@@ -65,6 +65,10 @@ button.search-button{
     padding: 9px;
 }
 
+.item-button{
+    display: block;
+}
+
 /* BROWSE ITEMS */
 .item{
     padding: 4px;
@@ -88,6 +92,7 @@ button.search-button{
 .item-title.item-label{
     display: block;
     font-size: 16px;
+    color: black;
 }
 
 .artist.item-label{
@@ -95,10 +100,18 @@ button.search-button{
     color: #bfbfbf;
 }
 
+.price.item-label{
+    color: black;
+}
+
 .item-label{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+.artist.page-label{
+    color: #999999;
 }
 
 /* PAGES */
@@ -133,6 +146,14 @@ button.search-button{
     display: table;
     margin-left: auto;
     margin-right: auto;
+}
+
+.item-page-right{
+    display: table;
+}
+
+.item-page-left{
+    margin-right: 20px;
 }
 
 /* INPUTS */

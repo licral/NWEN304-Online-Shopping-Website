@@ -96,7 +96,6 @@ module.exports = function (passport, pool) {
                             if (!bcrypt.compareSync(password, result.rows[0].password)) {
                                 return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
                             }
-
                             return done(null, result.rows[0]);
                         });
                     })

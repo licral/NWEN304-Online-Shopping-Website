@@ -32,12 +32,17 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash());
 
+app.use(function(req, res, next){
+    res.locals.isLoggedIn = req.user != undefined;
+    next();
+});
+
 // Adding our route modules
 var home = require('./routes/index');
 require('./routes/login')(app, passport);
 require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);
-var logout = require('./routes/logout');
+require('./routes/logout')(app);
 
 // Setting a path for our views
 app.set('views', __dirname + '/views');

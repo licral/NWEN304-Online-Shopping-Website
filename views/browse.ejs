@@ -4,34 +4,24 @@
         <% include components/menu_and_heading.ejs %>
         <div class="container content">
             <h1>Browse <%= heading %></h1>
-            <div>
-                <div>
-                    <div class="item">
-                        <img src="/img/242x200_placeholder.svg" alt="image" />
-                        <div class="item-caption">
-                            <h3>Thumbnail label</h3>
-                            <p>Price</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <% if (locals.albums) { %>
-            <ul>
-                <% for (let album of albums) { %>
-                <li>
-                    Album Title: <%= album.title %>,
-                    Released on: <%= album.released_on %>,
-                    Price: <%= album.price %>,
-                    Artist id: <%= album.artist_id %>
-                </li>
-                <% } %>
-            </ul>
-
+                <div>
+                    <% for (let album of albums) { %>
+                        <div class="item">
+                            <img src="/img/175x175_placeholder.png" alt="image" />
+                            <div class="item-caption">
+                                <span class="item-title item-label"><%= album.title %></span>
+                                <span class="artist item-label"><%= album.artist_id %></span>
+                                <span class="price item-label">$<%= album.price %></span>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
             <% } else if (locals.error) { %>
-            <div class="alert alert-danger">
-                <%= error %>
-            </div>
+                <div class="alert alert-danger">
+                    <%= error %>
+                </div>
             <% } %>
         </div>
     </body>

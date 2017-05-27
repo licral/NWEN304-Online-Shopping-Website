@@ -70,11 +70,29 @@ button.search-button{
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 4px;
-    width: max-content;
+    width: 185px;
+    float: left;
+    margin: 10px;
 }
 
 .item-caption{
     padding: 8px;
+}
+
+.item-title.item-label{
+    display: block;
+    font-size: 16px;
+}
+
+.artist.item-label{
+    display: block;
+    color: #bfbfbf;
+}
+
+.item-label{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 /* PAGES */

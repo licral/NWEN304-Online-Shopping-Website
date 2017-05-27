@@ -33,9 +33,12 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash());
 
 app.use(function(req, res, next){
-    res.locals.isLoggedIn = req.user != undefined;
     if(req.user){
         res.locals.username = req.user.username;
+        res.locals.isLoggedIn = true;
+    } else {
+        res.locals.username = "None";
+        res.locals.isLoggedIn = false;
     }
     next();
 });

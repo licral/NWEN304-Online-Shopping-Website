@@ -7,6 +7,7 @@ var app = express();
 var port = process.env.PORT || 8080;
 var pg = require('pg');
 var connectionPool = require('./config/database');
+var path = require('path');
 var multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({storage: storage});
@@ -53,7 +54,7 @@ require('./routes/login')(app, passport);
 require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);
 require('./routes/logout')(app);
-require('./routes/item')(app, connectionPool);
+require('./routes/item')(app, connectionPool, path);
 require('./routes/upload')(app, connectionPool);
 
 // Setting a path for our views

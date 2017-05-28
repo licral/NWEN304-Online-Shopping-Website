@@ -1,7 +1,7 @@
 /**
  * Created by liaobonn on 27/05/17.
  */
-module.exports = function(app, pool){
+module.exports = function(app, pool, path){
 
     app.get('/item/:id', function(req, res) {
         var id = req.params.id;
@@ -47,11 +47,14 @@ module.exports = function(app, pool){
                 client.query(sql)
                     .then(result => {
                         client.release();
-                        var buffer = new Buffer(result.rows[0].test_image, "base64");
-                        res.writeHead(200, {'Content-Type' : 'image/jpg'});
-                        res.end(buffer, 'binary');
-
-                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
+                        if(result.rows[0].test_image){
+                            var buffer = new Buffer(result.rows[0].test_image, "base64");
+                            res.writeHead(200, {'Content-Type' : 'image/jpg'});
+                            res.end(buffer, 'binary');
+                            console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
+                        } else {
+                            res.sendFile(path.join(__dirname, '../public/img', '350x350_placeholder.png'));
+                        }
                     })
                     .catch(e => {
                         client.release();

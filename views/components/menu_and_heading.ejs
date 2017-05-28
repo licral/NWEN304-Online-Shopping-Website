@@ -16,6 +16,9 @@
                 <li role="presentation" class="nav-item"><a href="/">Home</a></li>
                 <li role="presentation" class="nav-item"><a href="/browse/newest">Newest Arrivals</a></li>
                 <li role="presentation" class="nav-item"><a href="/browse/all">Browse</a></li>
+                <% if(isLoggedIn) {%>
+                    <li role="presentation" class="nav-item"><a href="#">Wishlist</a></li>
+                <% } %>
             </ul>
             <% if(isLoggedIn) {%>
                 <div class="btn-group dropdown">
@@ -28,6 +31,21 @@
                         <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="btn-group dropdown">
+                    <button type="button" class="btn btn-default dropdown-toggle btn-lg profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-shopping-cart"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li class="cart-item">
+                            <span class="cart-item-content">
+                                <img src="/item/image/7" width="30" alt="album cover image" />
+                                Album name
+                            </span>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">View Cart</a></li>
                     </ul>
                 </div>
                 <span class="user-label">Hi <%= username%>!</span>

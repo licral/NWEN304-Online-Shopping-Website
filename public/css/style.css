@@ -38,6 +38,19 @@ li.nav-item{
     font-size: 14px;
 }
 
+/* SHOPPING CART */
+.cart-item-content{
+    margin: 5px;
+}
+
+.cart-item{
+    padding: 5px;
+}
+
+.cart-item:hover{
+    background-color: #f5f5f5;
+}
+
 /* BUTTONS */
 .login{
     float: right;

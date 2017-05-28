@@ -54,8 +54,9 @@ require('./routes/login')(app, passport);
 require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);
 require('./routes/logout')(app);
-require('./routes/item')(app, connectionPool, path);
+require('./routes/item')(app, connectionPool);
 require('./routes/upload')(app, connectionPool);
+require('./routes/image')(app, connectionPool, path);
 
 // Setting a path for our views
 app.set('views', __dirname + '/views');

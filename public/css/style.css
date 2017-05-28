@@ -43,7 +43,7 @@ li.nav-item{
     margin: 5px;
 }
 
-.cart-item{
+.dropdown-menu > li > a.cart-item{
     padding: 5px;
 }
 

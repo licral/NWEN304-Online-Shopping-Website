@@ -11,18 +11,18 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.17.1",
+    "body-parser": "^1.17.2",
     "bootstrap": "^3.3.7",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.6",
-    "express": "^4.15.2",
+    "express": "^4.15.3",
     "express-session": "^1.15.3",
     "fs": "0.0.1-security",
-    "morgan": "^1.8.1",
+    "morgan": "^1.8.2",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pg": "^6.2.2",
+    "pg": "^6.2.3",
     "pg-pool": "^1.7.1"
   }
 }

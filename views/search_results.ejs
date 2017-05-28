@@ -1,0 +1,63 @@
+<html>
+    <% include components/head.ejs %>
+    <body>
+        <% include components/menu_and_heading.ejs %>
+        <div class="container content">
+            <h1>Search Results</h1>
+
+            <% if (locals.results.albums.length > 0) { %>
+                <h3>Albums</h3>
+                <ul>
+                    <% for (let album of results.albums) { %>
+                    <li>
+                        Album Title: <%= album.title %>,
+                        Released on: <%= album.released_on %>,
+                        Price: <%= album.price %>,
+                        Artist id: <%= album.artist_id %>
+                    </li>
+                    <% } %>
+                </ul>
+            <% } %>
+
+            <% if (locals.results.artists.length > 0) { %>
+                <h3>Artists</h3>
+                <ul>
+                    <% for (let artist of results.artists) { %>
+                    <li>
+                        Artist name: <%= artist.artist_name %>
+                    </li>
+                    <% } %>
+                </ul>
+            <% } %>
+
+            <% if (locals.results.songs.length > 0) { %>
+                <h3>Songs</h3>
+                <ul>
+                    <% for (let song of results.songs) { %>
+                    <li>
+                        Song Title: <%= song.title %>,
+                        Track No: <%= song.track_no %>,
+                        Album id: <%= song.album_id %>,
+                        Artist id: <%= song.artist_id %>
+                    </li>
+                    <% } %>
+                </ul>
+            <% } %>
+
+            <% if (locals.results.advanceSearch.length > 0) { %>
+                <h3>Advanced Search</h3>
+                <ul>
+                    <% for (let advanceSearchResult of results.advanceSearch) { %>
+                    <li>
+                        <%= JSON.stringify(advanceSearchResult) %>
+                    </li>
+                    <% } %>
+                </ul>
+            <% } %>
+
+            <% if (locals.results.albums.length + locals.results.artists.length + locals.results.songs.length + locals.results.advanceSearch.length <= 0) { %>
+                <h3>Nothing found</h3>
+            <% } %>
+        </div>
+    </body>
+</html>

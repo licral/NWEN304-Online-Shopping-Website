@@ -39,6 +39,8 @@ require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);
 var logout = require('./routes/logout');
 
+require('./routes/search')(app, connectionPool);
+
 // Setting a path for our views
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');

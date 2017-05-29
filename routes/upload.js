@@ -18,11 +18,12 @@ module.exports = function(app, pool){
                 client.query(sql)
                     .then(result => {
                         client.release();
-                        console.log("Inserted");
+                        res.redirect('/');
                     })
                     .catch(e => {
                         client.release();
                         console.error('[ERROR] Query error', e.message, e.stack);
+                        res.redirect('/');
                     });
             })
             .catch(error => {

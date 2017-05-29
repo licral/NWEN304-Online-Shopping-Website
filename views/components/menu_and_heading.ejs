@@ -1,16 +1,7 @@
 <div class="heading-wrapper">
     <div class="navigation container">
         <img class="title center" src="/img/logo.png" alt="Vinylholics" />
-        <div class="search-bar center">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                    <button class="btn btn-default search-button" type="button">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                </span>
-            </div>
-        </div>
+        <% include search.ejs %>
         <div>
             <ul class="nav nav-pills nav-bar">
                 <li role="presentation" class="nav-item <% if(title === "Home") {%>active<% }%>"><a href="/">Home</a></li>

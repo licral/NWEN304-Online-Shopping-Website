@@ -58,6 +58,8 @@ require('./routes/item')(app, connectionPool);
 require('./routes/upload')(app, connectionPool);
 require('./routes/image')(app, connectionPool, path);
 
+require('./routes/search')(app, connectionPool);
+
 // Setting a path for our views
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');

@@ -13,7 +13,7 @@ module.exports = function (app, pool) {
         };
 
         let sqls = [
-            "SELECT * FROM albums WHERE title = $1",
+            "SELECT * FRooOM albums WHERE title = $1",
             "SELECT * FROM artists WHERE artist_name = $1",
             "SELECT * FROM songs WHERE title = $1"
         ];
@@ -27,7 +27,7 @@ module.exports = function (app, pool) {
 
             respond.render('search_results', pageData);
         }).catch(error => {
-            pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
+            pageData.error = "Database error occurred";
             respond.render('search_results', pageData);
             console.error('[ERROR] Query error', error.message, error.stack);
         });

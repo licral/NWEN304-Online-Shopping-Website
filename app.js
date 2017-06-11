@@ -55,6 +55,7 @@ require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);
 require('./routes/logout')(app);
 require('./routes/item')(app, connectionPool);
+require('./routes/artist')(app, connectionPool);
 require('./routes/upload')(app, connectionPool);
 require('./routes/image')(app, connectionPool, path);
 

@@ -78,10 +78,6 @@ button.search-button{
     padding: 9px;
 }
 
-button.search-toggle{
-    padding: 9px;
-}
-
 .item-button{
     display: block;
 }
@@ -100,7 +96,8 @@ button.search-toggle{
 .item{
     padding: 4px;
     width: 183px;
-    float: left;
+    /*float: left;*/  /* Sorry I changed float to 'display: inline-block', because I don't know how to make a new block after float... according some stackover flow page, display: inline-block should behave just same.  -- Hektar */
+    display: inline-block;
     margin: 10px;
 }
 

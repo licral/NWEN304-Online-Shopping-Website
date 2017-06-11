@@ -18,10 +18,7 @@ CREATE TABLE IF NOT EXISTS user_details (
     user_id INTEGER REFERENCES users (id),
     is_admin BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
-    last_visit_on TIMESTAMP,
-
-    CONSTRAINT emailFormatCheck CHECK (email ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-    CONSTRAINT contactFormatCheck CHECK (contact_no ~ '^(\+64|0)\d{9}$')
+    last_visit_on TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS artists (
@@ -35,10 +32,16 @@ CREATE TABLE IF NOT EXISTS albums (
     description TEXT,
     released_on DATE,
     genre CHARACTER VARYING(255),
-    image BYTEA,
+    image BYTEA,  -- TODO: this column will be removed
     is_compilation BOOLEAN NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     artist_id INTEGER REFERENCES artists (id)
+);
+
+CREATE TABLE IF NOT EXISTS album_images (
+    id SERIAL PRIMARY KEY,
+    image BYTEA,
+    album_id INTEGER REFERENCES albums (id)
 );
 
 CREATE TABLE IF NOT EXISTS songs (

@@ -5,26 +5,37 @@
         <div class="container content">
             <h1>Browse <%= heading %></h1>
 
+            <div>
             <% if (locals.albums) { %>
-                <div>
-                    <% for (let album of albums) { %>
+                <% for (let album of albums) { %>
+                    <div class="item">
                         <a href="/item/<%= album.id %>">
-                            <div class="item">
-                                <img src="/image/albums/medium/<%= album.id %>" width="175" alt="album cover image" />
-                                <div class="item-caption">
-                                    <span class="item-title item-label"><%= album.title %></span>
-                                    <span class="artist item-label"><%= album.artist_id %></span>
-                                    <span class="price item-label">$<%= album.price %></span>
-                                </div>
+                            <img src="/image/albums/medium/<%= album.id %>" width="175" alt="album cover image" />
+                            <div class="item-caption">
+                                <span class="item-title item-label"><%= album.title %></span>
+                                <span class="artist item-label"><%= album.artist_id %></span>
+                                <span class="price item-label">$<%= album.price %></span>
                             </div>
                         </a>
-                    <% } %>
-                </div>
+                    </div>
+                <% } %>
+            <% } else if (locals.artists) { %>
+                <% for (let artist of artists) { %>
+                    <div class="item">
+                        <a href="/artist/<%= artist.id %>">
+                            <img src="/image/artists/medium/<%= artist.id %>" width="175" alt="album cover image" />
+                            <div class="item-caption">
+                                <span class="item-title item-label"><%= artist.artist_name %></span>
+                            </div>
+                        </a>
+                    </div>
+                <% } %>
             <% } else if (locals.error) { %>
                 <div class="alert alert-danger">
                     <%= error %>
                 </div>
             <% } %>
+            </div>
         </div>
     </body>
 </html>

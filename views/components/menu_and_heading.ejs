@@ -5,8 +5,8 @@
         <div>
             <ul class="nav nav-pills nav-bar">
                 <li role="presentation" class="nav-item <% if(title === "Home") {%>active<% }%>"><a href="/">Home</a></li>
-                <li role="presentation" class="nav-item <% if(title === "Browse Newest Arrivals") {%>active<% }%>"><a href="/browse/newest">Newest Arrivals</a></li>
-                <li role="presentation" class="nav-item <% if(title === "Browse All Vinyls") {%>active<% }%>"><a href="/browse/all">Browse</a></li>
+                <li role="presentation" class="nav-item <% if(title === "Browse All Vinyls") {%>active<% }%>"><a href="/browse/all">Browse Vinyls</a></li>
+                <li role="presentation" class="nav-item <% if(title === "Browse Artists") {%>active<% }%>"><a href="/browse/artist">Browse Artists</a></li>
                 <% if(isLoggedIn) {%>
                     <li role="presentation" class="nav-item <% if(title === "Wishlist") {%>active<% }%>"><a href="#">Wishlist</a></li>
                 <% } %>

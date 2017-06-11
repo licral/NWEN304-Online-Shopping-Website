@@ -38,11 +38,36 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.get('/browse/newest', function (req, res) {
-        res.render('browse', {
-            title: 'Browse Newest Arrivals',
-            heading: 'Newest',
-            description: "Browse the newest arrivals"
-        });
+    app.get('/browse/artist', function (req, res) {
+        let pageData = {
+            title: 'Browse Artists',
+            heading: 'Artists',
+            description: "Browse all artists of the vinyls we sell."
+        };
+
+        pool.connect()
+            .then(client => {
+                let sql = "SELECT id, artist_name FROM artists;";
+
+                client.query(sql)
+                    .then(result => {
+                        client.release();
+                        pageData.artists = result.rows;
+                        res.render('browse', pageData);
+
+                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
+                    })
+                    .catch(e => {
+                        client.release();
+                        pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
+                        res.render('browse', pageData);
+                        console.error('[ERROR] Query error', e.message, e.stack);
+                    });
+            })
+            .catch(error => {
+                pageData.error = "Database unavailable, please try again.";
+                res.render('browse', pageData);
+                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+            });
     });
 }

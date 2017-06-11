@@ -63,6 +63,7 @@ li.nav-item{
 
 .login:hover, a:hover{
     color: #337ab7;
+    text-decoration: none;
 }
 
 .btn-large{
@@ -99,6 +100,7 @@ button.search-button{
     /*float: left;*/  /* Sorry I changed float to 'display: inline-block', because I don't know how to make a new block after float... according some stackover flow page, display: inline-block should behave just same.  -- Hektar */
     display: inline-block;
     margin: 10px;
+    cursor: pointer;
 }
 
 .item:hover{

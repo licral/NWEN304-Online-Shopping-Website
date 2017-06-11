@@ -20,6 +20,10 @@ module.exports = function (app, pool) {
                     .then(result => {
                         client.release();
                         pageData.albums = result.rows;
+                        res.set({
+                            'Cache-Control': 'public, max-age=86400, must-revalidate',
+                            'Expires': new Date(Date.now() + 86400000).toUTCString()
+                        });
                         res.render('browse', pageData);
 
                         console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
@@ -51,6 +55,10 @@ module.exports = function (app, pool) {
 
                 client.query(sql)
                     .then(result => {
+                        res.set({
+                            'Cache-Control': 'public, max-age=86400, must-revalidate',
+                            'Expires': new Date(Date.now() + 86400000).toUTCString()
+                        });
                         client.release();
                         pageData.artists = result.rows;
                         res.render('browse', pageData);

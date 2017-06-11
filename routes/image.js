@@ -23,6 +23,10 @@ module.exports = function (app, pool, path) {
 
         pool.query(albumImageSql, [id])
             .then(result => {
+                response.set({
+                    'Cache-Control': 'public, max-age=86400, must-revalidate',
+                    'Expires': new Date(Date.now() + 86400000).toUTCString()
+                });
                 if (result.rows[0]) {
                     let buffer = new Buffer(result.rows[0].image, "base64");
                     response.type('png').status(200).end(buffer, 'binary');
@@ -53,6 +57,10 @@ module.exports = function (app, pool, path) {
 
         pool.query(artistImageSql, [id])
             .then(result => {
+                response.set({
+                    'Cache-Control': 'public, max-age=86400, must-revalidate',
+                    'Expires': new Date(Date.now() + 86400000).toUTCString()
+                });
                 if (result.rows[0]) {
                     let buffer = new Buffer(result.rows[0].image, "base64");
                     response.type('png').status(200).end(buffer, 'binary');

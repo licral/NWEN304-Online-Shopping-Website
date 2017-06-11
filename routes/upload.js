@@ -1,7 +1,7 @@
 /**
  * Created by Bonnie on 27/05/2017.
  */
-module.exports = function(app, pool){
+module.exports = function (app, pool) {
     app.get('/upload', function (req, res) {
         res.render('upload', {
             title: 'Upload a Record',
@@ -9,25 +9,24 @@ module.exports = function(app, pool){
         });
     });
 
-    app.post('/upload', function(req, res){
-        console.log(req.file.buffer.toString('base64'));
-        pool.connect()
-            .then(client => {
-                let sql = "insert into albums (title, is_compilation, price, test_image, artist_id) values ('Test album', false, 12, '" + req.file.buffer.toString('base64') + "', 1);";
+    app.post('/upload-album-image', function (request, response) {
+        let pageData = {
+            title: 'Upload a Record',
+            description: "Upload a new record to sell",
+        };
 
-                client.query(sql)
-                    .then(result => {
-                        client.release();
-                        res.redirect('/');
-                    })
-                    .catch(e => {
-                        client.release();
-                        console.error('[ERROR] Query error', e.message, e.stack);
-                        res.redirect('/');
-                    });
+        let album_id = request.body.id;
+        let album_image = request.file.buffer.toString('base64');
+        let sql = "insert into album_images (image, album_id) values ($1, $2);";
+
+        pool.query(sql, [album_image, album_id])
+            .then(result => {
+                response.render('upload', pageData);
             })
-            .catch(error => {
-                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                pageData.error = "Database error occurred";
+                response.render('upload', pageData);
             });
     });
 

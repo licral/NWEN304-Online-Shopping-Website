@@ -22,7 +22,13 @@
                     <div class="item-page-right">
                         <h1><%= artist.artist_name %></h1>
                         <h3>Profile:</h3>
-                        <p><%- artist.description.replace(/(?:\r\n|\r|\n)/g, '<br/>') %></p>
+                        <p>
+                            <% if (artist.description) { %>
+                                <%- artist.description.replace(/(?:\r\n|\r|\n)/g, '<br/>') %>
+                            <% } else { %>
+                                No content.
+                            <% } %>
+                        </p>
 
                         <% if (locals.albums) { %>
                             <h3>Albums:</h3>

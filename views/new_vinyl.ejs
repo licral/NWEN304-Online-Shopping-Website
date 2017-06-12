@@ -1,0 +1,37 @@
+<html>
+    <% include components/head.ejs %>
+    <body>
+        <% include components/menu_and_heading.ejs %>
+        <div class="container content">
+            <h1>New Vinyl</h1>
+            <div>
+                <form action="/upload/update/<%= item.id %>" method="POST" enctype="multipart/form-data">
+                    <label>Upload new image:</label>
+                    <input type="file" class="form-control-file" name="image" required>
+                    <label>Title:</label>
+                    <input name="title" type="text" required class="form-control" placeholder="">
+                    <label>Artist:</label>
+                    <select name="artist">
+                        <% for (let artist of artists) {%>
+                        <option value="<%= artist.id%>"><%= artist.artist_name %></option>
+                        <% } %>
+                    </select>
+                    <br>
+                    <label>Description:</label>
+                    <input name="description" type="text" class="form-control" placeholder="">
+                    <label>Released on:</label>
+                    <input type="date" name="released_on" value="<%= date %>">
+                    <br>
+                    <label>Genre:</label>
+                    <input name="genre" type="text" class="form-control" placeholder="">
+                    <label>Is Compilation: <input type="checkbox" value=""></label>
+                    <br>
+                    <label>Price:</label>
+                    <input name="price" type="" required class="form-control" placeholder="" step="0.01" min="0.00">
+                    <button class="btn btn-primary btn-large" type="submit">Save</button>
+                    <a href="/manage/vinyls" class="btn btn-primary btn-large" role="button">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -14,6 +14,7 @@ module.exports = function (passport, pool) {
         pool.connect()
             .then((client, err) => {
                 client.query("SELECT * FROM users WHERE id = ($1)", [id], function (err, result) {
+                    client.release();
                     done(err, result.rows[0]);
                 });
             });
@@ -48,6 +49,7 @@ module.exports = function (passport, pool) {
 
 
                         client.query("SELECT * FROM users WHERE username = ($1)", [username], function (err, result) {
+                            client.release();
                             if (err)
                                 return done(err);
                             if (result.rows.length) {
@@ -87,6 +89,7 @@ module.exports = function (passport, pool) {
                         }
 
                         client.query("SELECT * FROM users WHERE username = ($1)", [username], function (err, result) {
+                            client.release();
                             if (err)
                                 return done(err);
                             if (!result.rows.length) {

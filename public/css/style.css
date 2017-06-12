@@ -140,6 +140,21 @@ button.search-button{
     color: #999999;
 }
 
+/* MANAGE PAGES*/
+span.glyphicon.action{
+    cursor: pointer;
+    color: #333;
+    position: initial;
+}
+
+span.glyphicon.action.edit:hover{
+    color: #337ab7;
+}
+
+span.glyphicon.action.remove:hover{
+    color: red;
+}
+
 /* PAGES */
 .container{
     clear: both;

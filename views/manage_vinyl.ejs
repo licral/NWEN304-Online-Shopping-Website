@@ -1,0 +1,38 @@
+<html>
+    <% include components/head.ejs %>
+    <body>
+        <% include components/menu_and_heading.ejs %>
+        <div class="container content">
+            <h1>Edit Vinyl (ID): <%= item.id %></h1>
+            <div>
+                <img src="/image/albums/medium/<%= item.id %>" width="175" alt="image" />
+
+                <form action="/manage/vinyl/<%= item.id %>" method="post">
+                    <label>Title:</label>
+                    <input name="title" type="text" required class="form-control" placeholder="" value="<%= title%>">
+                    <label>Artist:</label>
+                    <select name="artist">
+                        <% for (let artist of artists) {%>
+                            <option value="<%= artist.id%>" <% if(artist.id == item.artist_id) { %>selected<% } %>><%= artist.artist_name %></option>
+                        <% } %>
+                    </select>
+                    <br>
+                    <label>Description:</label>
+                    <input name="description" type="text" class="form-control" placeholder="" value="<%= item.description %>">
+                    <label>Released on:</label>
+                    <input type="date" name="released_on" value="2017-06-12">
+                    <br>
+                    <!--<input name="released_on" type="text" required class="form-control" placeholder="" value="<%= item.released_on %>">-->
+                    <label>Genre:</label>
+                    <input name="genre" type="text" class="form-control" placeholder="" value="<%= item.genre %>">
+                    <label>Is Compilation: <input type="checkbox" value="" <% if(item.is_compilation) { %>checked<% } %>></label>
+                    <br>
+                    <label>Price:</label>
+                    <input name="price" type="" required class="form-control" placeholder="" step="0.01" value="<%= item.price %>" min="0.00">
+                    <button class="btn btn-primary btn-large" type="submit">Save</button>
+                    <button class="btn btn-primary btn-large">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

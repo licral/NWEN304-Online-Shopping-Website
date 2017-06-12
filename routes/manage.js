@@ -13,7 +13,7 @@ module.exports = function (app, pool) {
 
         pool.connect()
             .then(client => {
-                let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id;";
+                let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.id;";
 
                 client.query(sql)
                     .then(result => {
@@ -50,6 +50,16 @@ module.exports = function (app, pool) {
                         pageData.title = result.rows[0].title;
                         pageData.description = result.rows[0].description;
                         pageData.item = result.rows[0];
+                        var date = new Date(result.rows[0].released_on);
+                        var month = date.getMonth() + "";
+                        if(month.length == 1){
+                            month = "0" + month;
+                        }
+                        var day = date.getDate() + "";
+                        if(day.length == 1){
+                            day = "0" + day;
+                        }
+                        pageData.item.released_on = date.getFullYear() + "-" + month + "-" + day;
 
                         client.query("select id, artist_name from artists;")
                             .then(result2 => {
@@ -93,10 +103,12 @@ module.exports = function (app, pool) {
         let sql = "update albums set title=$1, artist_id=$2, description=$3, released_on=$4, genre=$5, price=$6 where id=$7;";
         pool.query(sql, [title, artist, description, released_on, genre, price, id])
             .then(result => {
+                // Fix redirects here
                 res.redirect('/manage/vinyls');
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
                 res.redirect('/manage/vinyls');
             });
 

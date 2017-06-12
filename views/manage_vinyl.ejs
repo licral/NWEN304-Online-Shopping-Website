@@ -6,6 +6,11 @@
             <h1>Edit Vinyl (ID): <%= item.id %></h1>
             <div>
                 <img src="/image/albums/medium/<%= item.id %>" width="175" alt="image" />
+                <form action="/upload/update/<%= item.id %>" method="POST" enctype="multipart/form-data">
+                    <label>Upload new image:</label>
+                    <input type="file" class="form-control-file" name="image" required>
+                    <button type="submit" class="btn btn-default">Save New Image</button>
+                </form>
 
                 <form action="/manage/vinyl/<%= item.id %>" method="post">
                     <label>Title:</label>
@@ -20,9 +25,8 @@
                     <label>Description:</label>
                     <input name="description" type="text" class="form-control" placeholder="" value="<%= item.description %>">
                     <label>Released on:</label>
-                    <input type="date" name="released_on" value="2017-06-12">
+                    <input type="date" name="released_on" value="<%= item.released_on %>">
                     <br>
-                    <!--<input name="released_on" type="text" required class="form-control" placeholder="" value="<%= item.released_on %>">-->
                     <label>Genre:</label>
                     <input name="genre" type="text" class="form-control" placeholder="" value="<%= item.genre %>">
                     <label>Is Compilation: <input type="checkbox" value="" <% if(item.is_compilation) { %>checked<% } %>></label>
@@ -30,7 +34,7 @@
                     <label>Price:</label>
                     <input name="price" type="" required class="form-control" placeholder="" step="0.01" value="<%= item.price %>" min="0.00">
                     <button class="btn btn-primary btn-large" type="submit">Save</button>
-                    <button class="btn btn-primary btn-large">Cancel</button>
+                    <a href="/manage/vinyls" class="btn btn-primary btn-large" role="button">Cancel</a>
                 </form>
             </div>
         </div>

@@ -9,13 +9,13 @@ module.exports = function (app, pool) {
         });
     });
 
-    app.post('/upload-album-image', function (request, response) {
+    app.post('/upload-album-image/:id', function (request, response) {
         let pageData = {
             title: 'Upload a Record',
             description: "Upload a new record to sell",
         };
 
-        let album_id = request.body.id;
+        let album_id = request.params.id;
         let album_image = request.file.buffer.toString('base64');
         let sql = "insert into album_images (image, album_id) values ($1, $2);";
 
@@ -48,6 +48,23 @@ module.exports = function (app, pool) {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 pageData.error = "Database error occurred";
                 response.render('upload', pageData);
+            });
+    });
+
+    app.post('/upload/update/:id', function (request, response) {
+        let album_id = request.params.id;
+        let album_image = request.file.buffer.toString('base64');
+        let sql = "update album_images set image=$1 where album_id=$2;";
+
+        pool.query(sql, [album_image, album_id])
+            .then(result => {
+                // Fix redirect here
+                response.redirect('/manage/vinyls');
+            })
+            .catch(e => {
+                // Fix redirect here
+                console.error('[ERROR] Query error', e.message, e.stack);
+                response.redirect('/manage/vinyls');
             });
     });
 };

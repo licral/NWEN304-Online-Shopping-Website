@@ -109,15 +109,28 @@ module.exports = function (app, pool) {
         let sql = "update albums set title=$1, artist_id=$2, description=$3, is_compilation=$4, released_on=$5, genre=$6, price=$7 where id=$8;";
         pool.query(sql, [title, artist, description, is_compilation, released_on, genre, price, id])
             .then(result => {
-                // Fix redirects here
-                res.redirect('/manage/vinyls');
+                if(req.file === undefined){
+                    // Fix redirects here
+                    res.redirect('/manage/vinyls');
+                } else {
+                    var album_image = req.file.buffer.toString('base64');
+                    sql = "update album_images set image=$1 where album_id=$2;";
+                    pool.query(sql, [album_image, id])
+                        .then(result2 => {
+                            res.redirect('/manage/vinyls');
+                        })
+                        .catch(e => {
+                            console.error('[ERROR] Query error', e.message, e.stack);
+                            // Fix redirects here
+                            res.redirect('/manage/vinyls');
+                        });
+                }
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 // Fix redirects here
                 res.redirect('/manage/vinyls');
             });
-
     });
 
 

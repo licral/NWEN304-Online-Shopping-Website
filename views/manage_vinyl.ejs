@@ -6,13 +6,9 @@
             <h1>Edit Vinyl (ID): <%= item.id %></h1>
             <div>
                 <img src="/image/albums/medium/<%= item.id %>" width="175" alt="image" />
-                <form action="/upload/update/<%= item.id %>" method="POST" enctype="multipart/form-data">
+                <form action="/manage/vinyl/<%= item.id %>" method="POST" enctype="multipart/form-data">
                     <label>Upload new image:</label>
-                    <input type="file" class="form-control-file" name="image" required>
-                    <button type="submit" class="btn btn-default">Save New Image</button>
-                </form>
-
-                <form action="/manage/vinyl/<%= item.id %>" method="post">
+                    <input type="file" class="form-control-file" name="image">
                     <label>Title:</label>
                     <input name="title" type="text" required class="form-control" placeholder="" value="<%= title%>">
                     <label>Artist:</label>

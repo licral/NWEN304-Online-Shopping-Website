@@ -36,11 +36,13 @@
                 </div>
             <% } %>
             </div>
+            <% if (locals.count) {%>
             <ul class="pagination">
                 <% for (var i = 0; i < count; i++) {%>
                 <li <% if(i + 1 == current_page) {%>class="active"<% } %>><a href="/browse/page/<%= i + 1 %>"><%= i + 1 %></a></li>
                 <% } %>
             </ul>
+            <% } %>
         </div>
     </body>
 </html>

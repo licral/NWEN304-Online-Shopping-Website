@@ -5,44 +5,6 @@
  */
 
 module.exports = function (app, pool) {
-    app.get('/browse/all', function (req, res) {
-        let pageData = {
-            title: 'Browse All Vinyls',
-            heading: 'All',
-            description: "Browse all vinyl records",
-        };
-
-        let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.title limit 10;";
-
-        pool.query(sql)
-            .then(result => {
-                sql = "select count(id) from albums;";
-                pool.query(sql)
-                    .then(result2 => {
-                        pageData.albums = result.rows;
-                        var count = result2.rows[0].count;
-                        count = Math.round(count / 10);
-                        pageData.count = result2.rows[0].count;
-                        pageData.current_page = 1;
-                        res.set({
-                            'Cache-Control': 'public, max-age=86400, must-revalidate',
-                            'Expires': new Date(Date.now() + 86400000).toUTCString()
-                        });
-                        res.render('browse', pageData);
-                    })
-                    .catch(e2 => {
-                        console.error('[ERROR] Unable to connect to database', e2.message, e2.stack);
-                        // Fix redirect here
-                        res.render('browse', pageData);
-                    });
-            })
-            .catch(e => {
-                console.error('[ERROR] Unable to connect to database', e.message, e.stack);
-                // Fix redirect here
-                res.render('browse', pageData);
-            });
-    });
-
     app.get('/browse/artist', function (req, res) {
         let pageData = {
             title: 'Browse Artists',

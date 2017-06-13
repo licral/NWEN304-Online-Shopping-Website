@@ -29,7 +29,7 @@
                     <br>
                     <label>Genre:</label>
                     <input name="genre" type="text" class="form-control" placeholder="" value="<%= item.genre %>">
-                    <label>Is Compilation: <input type="checkbox" value="" <% if(item.is_compilation) { %>checked<% } %>></label>
+                    <label>Is Compilation: <input name="is_compilation" type="checkbox" value="" <% if(item.is_compilation) { %>checked<% } %>></label>
                     <br>
                     <label>Price:</label>
                     <input name="price" type="" required class="form-control" placeholder="" step="0.01" value="<%= item.price %>" min="0.00">

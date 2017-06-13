@@ -96,12 +96,18 @@ module.exports = function (app, pool) {
         var title = req.body.title;
         var artist = req.body.artist;
         var description = req.body.description;
+        var is_compilation;
+        if(req.body.is_compilation === ""){
+            is_compilation = true;
+        } else {
+            is_compilation = false;
+        }
         var released_on = req.body.released_on;
         var genre = req.body.genre;
         var price = req.body.price;
 
-        let sql = "update albums set title=$1, artist_id=$2, description=$3, released_on=$4, genre=$5, price=$6 where id=$7;";
-        pool.query(sql, [title, artist, description, released_on, genre, price, id])
+        let sql = "update albums set title=$1, artist_id=$2, description=$3, is_compilation=$4, released_on=$5, genre=$6, price=$7 where id=$8;";
+        pool.query(sql, [title, artist, description, is_compilation, released_on, genre, price, id])
             .then(result => {
                 // Fix redirects here
                 res.redirect('/manage/vinyls');

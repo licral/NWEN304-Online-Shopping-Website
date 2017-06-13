@@ -3,173 +3,56 @@
  */
 module.exports = function (app, pool) {
 
-    app.get('/manage/vinyls', function (req, res) {
+    app.post('/add/vinyl', function (req, res) {
+        var title = req.body.title;
+        var artist = req.body.artist;
+        var description = req.body.description;
+        var released_on = req.body.released_on;
+        var genre = req.body.genre;
+        var price = req.body.price;
+        var album_image = request.file.buffer.toString('base64');
 
+        let sql = "insert into albums (title, description, released_on, genre, is_compilation, price, artist_id) values ($1, $2, $3, $4, $5, $6, $7);";
+        pool.query(sql, [title, description, released_on, genre])
+            .then(result => {
+                // Fix redirects here
+                res.redirect('/manage/vinyls');
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/manage/vinyls');
+            });
+    });
+
+
+    app.get('/add/vinyl', function (req, res) {
         let pageData = {
-            title: 'Manage All Vinyls',
-            heading: 'Vinyls',
-            description: "Manage all vinyls in the database"
+            title : "Add New Vinyl",
+            description : "Add a new vinyl record"
         };
+        let sql = "select id, artist_name from artists;";
 
-        pool.connect()
-            .then(client => {
-                let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.id;";
+        pool.query(sql)
+            .then(result => {
+                pageData.artists = result.rows;
+                var date = new Date();
+                var month = (date.getMonth() + 1) + "";
+                if(month.length == 1){
+                    month = "0" + month;
+                }
+                var day = date.getDate() + "";
+                if(day.length == 1){
+                    day = "0" + day;
+                }
+                pageData.date = date.getFullYear() + "-" + month + "-" + day;
 
-                client.query(sql)
-                    .then(result => {
-                        client.release();
-                        pageData.albums = result.rows;
-                        res.render('manage_list', pageData);
-
-                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
-                    })
-                    .catch(e => {
-                        client.release();
-                        pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                        res.render('manage_list', pageData);
-                        console.error('[ERROR] Query error', e.message, e.stack);
-                    });
+                res.render('new_vinyl', pageData);
             })
-            .catch(error => {
-                pageData.error = "Database unavailable, please try again.";
-                res.render('manage_list', pageData);
-                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+            .catch(e => {
+                pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
+                res.render('new_vinyl', pageData);
+                console.error('[ERROR] Query error', e.message, e.stack);
             });
-    });
-
-    app.get('/manage/vinyl/:id', function (req, res) {
-        var id = req.params.id;
-        let pageData = {};
-
-        pool.connect()
-            .then(client => {
-                let sql = "select * from albums where id=" + id + ";";
-
-                client.query(sql)
-                    .then(result => {
-                        pageData.title = result.rows[0].title;
-                        pageData.description = result.rows[0].description;
-                        pageData.item = result.rows[0];
-                        var date = new Date(result.rows[0].released_on);
-                        var month = (date.getMonth() + 1) + "";
-                        if(month.length == 1){
-                            month = "0" + month;
-                        }
-                        var day = date.getDate() + "";
-                        if(day.length == 1){
-                            day = "0" + day;
-                        }
-                        pageData.item.released_on = date.getFullYear() + "-" + month + "-" + day;
-
-                        client.query("select id, artist_name from artists;")
-                            .then(result2 => {
-                                client.release();
-                                pageData.artists = result2.rows;
-
-                                res.render('manage_vinyl', pageData);
-                            })
-                            .catch(e => {
-                                client.release();
-                                pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                                res.render('manage_vinyl', pageData);
-                                console.error('[ERROR] Query error', e.message, e.stack);
-                            });
-
-                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
-                    })
-                    .catch(e => {
-                        client.release();
-                        pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                        res.render('manage_vinyl', pageData);
-                        console.error('[ERROR] Query error', e.message, e.stack);
-                    });
-            })
-            .catch(error => {
-                pageData.error = "Database unavailable, please try again.";
-                res.render('manage_vinyl', pageData);
-                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
-            });
-    });
-
-    // app.post('/manage/vinyl/:id', function (req, res) {
-    //     var id = req.params.id;
-    //     var title = req.body.title;
-    //     var artist = req.body.artist;
-    //     var description = req.body.description;
-    //     var released_on = req.body.released_on;
-    //     var genre = req.body.genre;
-    //     var price = req.body.price;
-    //
-    //     let sql = "update albums set title=$1, artist_id=$2, description=$3, released_on=$4, genre=$5, price=$6 where id=$7;";
-    //     pool.query(sql, [title, artist, description, released_on, genre, price, id])
-    //         .then(result => {
-    //             // Fix redirects here
-    //             res.redirect('/manage/vinyls');
-    //         })
-    //         .catch(e => {
-    //             console.error('[ERROR] Query error', e.message, e.stack);
-    //             // Fix redirects here
-    //             res.redirect('/manage/vinyls');
-    //         });
-    //
-    // });
-
-
-    app.get('/new/vinyl', function (req, res) {
-        let pageData = {};
-
-        pool.connect()
-            .then(client => {
-                let sql = "select id, artist_name from artists;";
-
-                client.query(sql)
-                    .then(result => {
-                        pageData.title = result.rows[0].title;
-                        pageData.description = result.rows[0].description;
-                        pageData.item = result.rows[0];
-                        var date = new Date(result.rows[0].released_on);
-                        var month = (date.getMonth() + 1) + "";
-                        if(month.length == 1){
-                            month = "0" + month;
-                        }
-                        var day = date.getDate() + "";
-                        if(day.length == 1){
-                            day = "0" + day;
-                        }
-                        pageData.item.released_on = date.getFullYear() + "-" + month + "-" + day;
-
-                        client.query("select id, artist_name from artists;")
-                            .then(result2 => {
-                                client.release();
-                                pageData.artists = result2.rows;
-
-                                res.render('manage_vinyl', pageData);
-                            })
-                            .catch(e => {
-                                client.release();
-                                pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                                res.render('manage_vinyl', pageData);
-                                console.error('[ERROR] Query error', e.message, e.stack);
-                            });
-
-                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
-                    })
-                    .catch(e => {
-                        client.release();
-                        pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                        res.render('manage_vinyl', pageData);
-                        console.error('[ERROR] Query error', e.message, e.stack);
-                    });
-            })
-            .catch(error => {
-                pageData.error = "Database unavailable, please try again.";
-                res.render('manage_vinyl', pageData);
-                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
-            });
-        res.render('manage_list', {
-            title: 'Manage All Orders',
-            heading: 'Orders',
-            description: "Manage all order histories in the database"
-        });
     });
 };

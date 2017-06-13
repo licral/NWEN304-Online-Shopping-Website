@@ -5,7 +5,7 @@
         <div class="container content">
             <h1>New Vinyl</h1>
             <div>
-                <form action="/upload/update/<%= item.id %>" method="POST" enctype="multipart/form-data">
+                <form action="/add/vinyl" method="POST" enctype="multipart/form-data">
                     <label>Upload new image:</label>
                     <input type="file" class="form-control-file" name="image" required>
                     <label>Title:</label>
@@ -24,7 +24,7 @@
                     <br>
                     <label>Genre:</label>
                     <input name="genre" type="text" class="form-control" placeholder="">
-                    <label>Is Compilation: <input type="checkbox" value=""></label>
+                    <label>Is Compilation: <input name="is_compilation" type="checkbox" value=""></label>
                     <br>
                     <label>Price:</label>
                     <input name="price" type="" required class="form-control" placeholder="" step="0.01" min="0.00">

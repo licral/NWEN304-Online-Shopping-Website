@@ -10,7 +10,7 @@ module.exports = function(app, pool){
         pool.connect()
             .then(client => {
                 // let sql = "select * from albums where id=" + id + ";";
-                let sql = "select albums.id, albums.title, albums.description, albums.released_on, albums.genre, albums.is_compilation, albums.price, artists.artist_name from albums inner join artists on albums.artist_id=artists.id where albums.id=" + id + ";";
+                let sql = "select albums.*, artists.artist_name from albums inner join artists on albums.artist_id=artists.id where albums.id=" + id + ";";
 
                 client.query(sql)
                     .then(result => {

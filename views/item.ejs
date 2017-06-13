@@ -10,7 +10,7 @@
             </div>
             <div class="item-page-right">
                 <h1><%= title%></h1>
-                <h4 class="artist page-label"><%= item.artist_name %></h4>
+                <h4 class="artist page-label"><a href="/artist/<%= item.artist_id %>"><%= item.artist_name %></a></h4>
                 <h3>$<%= item.price %></h3>
                 <p>Genre: <%= item.genre %></p>
                 <p>Description: <%= item.description %></p>

@@ -14,7 +14,7 @@ module.exports = function (app, pool) {
 
         pool.connect()
             .then(client => {
-                let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id;";
+                let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.title;";
 
                 client.query(sql)
                     .then(result => {

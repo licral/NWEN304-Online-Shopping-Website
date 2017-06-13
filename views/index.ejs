@@ -10,6 +10,21 @@
                 </p>
                 <p><a class="btn btn-primary btn-lg" href="/browse/all" role="button">Browse Vinyls</a></p>
             </div>
+            <h1>Newest Arrivals</h1>
+            <div>
+                <% for (let album of albums) { %>
+                <div class="item">
+                    <a href="/item/<%= album.id %>">
+                        <img src="/image/albums/medium/<%= album.id %>" width="175" alt="album cover image" />
+                        <div class="item-caption">
+                            <span class="item-title item-label"><%= album.title %></span>
+                            <span class="artist item-label"><%= album.artist_name %></span>
+                            <span class="price item-label">$<%= album.price %></span>
+                        </div>
+                    </a>
+                </div>
+                <% } %>
+            </div>
         </div>
     </body>
 </html>

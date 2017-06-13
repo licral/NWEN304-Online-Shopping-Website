@@ -49,7 +49,7 @@ app.use(function(req, res, next){
 });
 
 // Adding our route modules
-require('./routes/index')(app);
+require('./routes/index')(app, connectionPool);
 require('./routes/login')(app, passport);
 require('./routes/browse')(app, connectionPool);
 require('./routes/register')(app, passport);

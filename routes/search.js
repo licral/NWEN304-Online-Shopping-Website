@@ -1,6 +1,4 @@
 module.exports = function (app, pool) {
-    "use strict";
-
     app.post('/search', function (request, response) {
         let keyword = request.body.keyword;
 

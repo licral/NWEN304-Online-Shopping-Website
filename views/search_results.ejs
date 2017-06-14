@@ -4,6 +4,11 @@
         <% include components/menu_and_heading.ejs %>
 
         <div class="container content">
+
+            <div class="item">
+                <a href="#0" class="add-to-cart-button" data-price="25.99" data-album-id="1" data-album-title="SOME TITLE">Add To Cart</a>
+            </div>
+
             <% if (locals.error) { %>
 
                 <div class="alert alert-danger">

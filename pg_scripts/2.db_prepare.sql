@@ -4,17 +4,17 @@
 
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
-    username CHARACTER VARYING(255) UNIQUE NOT NULL,
-    password CHARACTER VARYING(255) NOT NULL
+    username CHARACTER VARYING UNIQUE NOT NULL,
+    password CHARACTER VARYING NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS user_details (
     id SERIAL PRIMARY KEY,
-    first_name CHARACTER VARYING(255) NOT NULL,
-    last_name CHARACTER VARYING(255),
-    email CHARACTER VARYING(255) UNIQUE NOT NULL,
-    contact_no CHARACTER VARYING(255),
-    address CHARACTER VARYING(255),
+    first_name CHARACTER VARYING NOT NULL,
+    last_name CHARACTER VARYING,
+    email CHARACTER VARYING UNIQUE NOT NULL,
+    contact_no CHARACTER VARYING,
+    address CHARACTER VARYING,
     user_id INTEGER REFERENCES users (id),
     is_admin BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
@@ -23,30 +23,38 @@ CREATE TABLE IF NOT EXISTS user_details (
 
 CREATE TABLE IF NOT EXISTS artists (
     id SERIAL PRIMARY KEY,
-    artist_name CHARACTER VARYING(255) NOT NULL
+    artist_name CHARACTER VARYING NOT NULL,
+    description CHARACTER VARYING
+);
+
+CREATE TABLE IF NOT EXISTS artist_images (
+    id SERIAL PRIMARY KEY,
+    image TEXT,
+    artist_id INTEGER UNIQUE REFERENCES artists (id)
 );
 
 CREATE TABLE IF NOT EXISTS albums (
     id SERIAL PRIMARY KEY,
-    title CHARACTER VARYING(255) NOT NULL,
-    description TEXT,
+    title CHARACTER VARYING NOT NULL,
+    description CHARACTER VARYING,
     released_on DATE,
-    genre CHARACTER VARYING(255),
-    image BYTEA,  -- TODO: this column will be removed
+    genre CHARACTER VARYING,
     is_compilation BOOLEAN NOT NULL,
     price NUMERIC(10,2) NOT NULL,
-    artist_id INTEGER REFERENCES artists (id)
+    artist_id INTEGER REFERENCES artists (id),
+
+    CONSTRAINT priceCheck CHECK (price >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS album_images (
     id SERIAL PRIMARY KEY,
-    image BYTEA,
-    album_id INTEGER REFERENCES albums (id)
+    image TEXT,
+    album_id INTEGER UNIQUE REFERENCES albums (id)
 );
 
 CREATE TABLE IF NOT EXISTS songs (
     id SERIAL PRIMARY KEY,
-    title CHARACTER VARYING(255) NOT NULL,
+    title CHARACTER VARYING NOT NULL,
     track_no SMALLINT NOT NULL,
     artist_id INTEGER REFERENCES artists (id),
     album_id INTEGER REFERENCES albums (id)
@@ -54,16 +62,19 @@ CREATE TABLE IF NOT EXISTS songs (
 
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users (id)
+    user_id INTEGER REFERENCES users (id),
+    order_time TIMESTAMP NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS order_details (
     id SERIAL PRIMARY KEY,
     order_id INTEGER REFERENCES orders (id),
     album_id INTEGER REFERENCES albums (id),
+    price NUMERIC(10,2) NOT NULL,
     quantity INTEGER NOT NULL,
 
-    CONSTRAINT quantityCheck CHECK (quantity > 0)
+    CONSTRAINT quantityCheck CHECK (quantity > 0),
+    CONSTRAINT priceCheck CHECK (price >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS shopping_carts (

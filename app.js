@@ -59,6 +59,7 @@ require('./routes/artist')(app, connectionPool);
 require('./routes/upload')(app, connectionPool);
 require('./routes/image')(app, connectionPool, path);
 require('./routes/search')(app, connectionPool);
+require('./routes/shopping_cart')(app, connectionPool);
 require('./routes/manage')(app, connectionPool);
 require('./routes/add')(app, connectionPool);
 

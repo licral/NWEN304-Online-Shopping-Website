@@ -2,6 +2,8 @@ module.exports = function (app, pool) {
     "use strict";
 
     app.post('/search', function (request, response) {
+        let keyword = request.body.keyword;
+
         let pageData = {
             title: 'Search Result',
             description: "Search Result",
@@ -13,13 +15,13 @@ module.exports = function (app, pool) {
         };
 
         let sqls = [
-            "SELECT * FROM albums WHERE LOWER(title) = LOWER($1)",
-            "SELECT * FROM artists WHERE LOWER(artist_name) = LOWER($1)",
-            "SELECT * FROM songs WHERE LOWER(title) = LOWER($1)"
+            "SELECT * FROM albums WHERE LOWER(title) LIKE $1",
+            "SELECT * FROM artists WHERE LOWER(artist_name) LIKE $1",
+            "SELECT * FROM songs WHERE LOWER(title) LIKE $1"
         ];
 
         Promise.all(sqls.map(sql => {
-            return pool.query(sql, [request.body.keyword]);
+            return pool.query(sql, ['%' + keyword + '%']);
         })).then((arrayOfResult) => {
             pageData.results.albums.push(...arrayOfResult[0].rows);
             pageData.results.artists.push(...arrayOfResult[1].rows);
@@ -29,7 +31,7 @@ module.exports = function (app, pool) {
         }).catch(error => {
             pageData.error = "Database error occurred";
             response.render('search_results', pageData);
-            console.error('[ERROR] Query error', error.message, error.stack);
+            console.error('[ERROR] Query error:', error.message, error.stack);
         });
     });
 };

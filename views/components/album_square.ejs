@@ -1,0 +1,13 @@
+<div class="item">
+    <a href="/item/<%= album.id %>">
+        <img src="/image/albums/medium/<%= album.id %>" width="175" alt="album cover image" />
+        <div class="item-caption">
+            <div class="item-title item-label"><%= album.title %></div>
+            <div class="artist item-label"><%= album.artist_name %></div>
+            <div>
+                <span class="price item-label">$<%= album.price %></span>
+                <span class="price add-to-cart-trigger" data-id="<%= album.id %>" data-title="<%= album.title %>" data-price="<%= album.price %>"><button href="#0" class="btn-primary btn-xs">Add To Cart</button></span>
+            </div>
+        </div>
+    </a>
+</div>

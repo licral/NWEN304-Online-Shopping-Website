@@ -8,16 +8,7 @@
             <div>
             <% if (locals.albums) { %>
                 <% for (let album of albums) { %>
-                    <div class="item">
-                        <a href="/item/<%= album.id %>">
-                            <img src="/image/albums/medium/<%= album.id %>" width="175" alt="album cover image" />
-                            <div class="item-caption">
-                                <span class="item-title item-label"><%= album.title %></span>
-                                <span class="artist item-label"><%= album.artist_name %></span>
-                                <span class="price item-label">$<%= album.price %></span>
-                            </div>
-                        </a>
-                    </div>
+                    <% include components/album_square.ejs %>
                 <% } %>
             <% } else if (locals.artists) { %>
                 <% for (let artist of artists) { %>

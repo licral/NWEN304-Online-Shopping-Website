@@ -5,10 +5,6 @@
 
         <div class="container content">
 
-            <div class="item">
-                <a href="#0" class="add-to-cart-button" data-price="25.99" data-album-id="1" data-album-title="SOME TITLE">Add To Cart</a>
-            </div>
-
             <% if (locals.error) { %>
 
                 <div class="alert alert-danger">
@@ -23,16 +19,7 @@
                     <div class="album-panel">
                         <h3>We have found these vinyls:</h3>
                         <% for (let album of results.albums) { %>
-                            <a href="/item/<%= album.id %>">
-                                <div class="item">
-                                    <img src="/image/albums/medium/<%= album.id %>" width="175" alt="album cover image" />
-                                    <div class="item-caption">
-                                        <span class="item-title item-label"><%= album.title %></span>
-                                        <span class="artist item-label"><%= album.artist_id %></span>
-                                        <span class="price item-label">$<%= album.price %></span>
-                                    </div>
-                                </div>
-                            </a>
+                            <% include components/album_square.ejs %>
                         <% } %>
                     </div>
                 <% } %>

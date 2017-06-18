@@ -116,18 +116,21 @@ button.search-button{
 }
 
 .item-title.item-label{
-    display: block;
     font-size: 16px;
     color: black;
 }
 
 .artist.item-label{
-    display: block;
     color: #bfbfbf;
 }
 
 .price.item-label{
+    float: left;
     color: black;
+}
+
+.price.add-to-cart-trigger {
+    float: right;
 }
 
 .item-label{

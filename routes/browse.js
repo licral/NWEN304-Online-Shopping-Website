@@ -78,4 +78,4 @@ module.exports = function (app, pool) {
                 console.error('[ERROR] Unable to connect to database', error.message, error.stack);
             });
     });
-}
+};

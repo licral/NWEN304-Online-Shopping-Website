@@ -41,6 +41,7 @@ app.use(function(req, res, next){
     if(req.user){
         res.locals.username = req.user.username;
         res.locals.isLoggedIn = true;
+        res.locals.userId = req.user.id;
     } else {
         res.locals.username = "None";
         res.locals.isLoggedIn = false;

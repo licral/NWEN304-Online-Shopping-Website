@@ -14,7 +14,11 @@
 
                 <div class="left item-page-left">
                     <img src="/image/albums/large/<%= album.id %>" width="350" alt="image"/>
-                    <a href="#" class="btn btn-primary btn-large max-width item-button add-to-cart-trigger" role="button" data-id="<%= album.id %>" data-title="<%= album.title %>" data-price="<%= album.price %>">Add to cart</a>
+
+                    <% if (locals.isLoggedIn) { %>
+                        <a href="#" class="btn btn-primary btn-large max-width item-button add-to-cart-trigger" role="button" data-id="<%= album.id %>" data-title="<%= album.title %>" data-price="<%= album.price %>">Add to cart</a>
+                    <% } %>
+
                     <a href="#" class="btn btn-primary btn-large max-width item-button" role="button">Add to wishlist</a>
                 </div>
                 <div class="item-page-right">

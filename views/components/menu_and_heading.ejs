@@ -63,4 +63,6 @@
     </div>
 </div>
 
-<% include shopping_cart.ejs %>
+<% if (locals.isLoggedIn) { %>
+    <% include shopping_cart.ejs %>
+<% } %>

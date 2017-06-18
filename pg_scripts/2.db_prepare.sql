@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS user_details (
     email CHARACTER VARYING UNIQUE NOT NULL,
     contact_no CHARACTER VARYING,
     address CHARACTER VARYING,
-    user_id INTEGER REFERENCES users (id),
+    user_id INTEGER UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     is_admin BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     last_visit_on TIMESTAMP
@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS artists (
 
 CREATE TABLE IF NOT EXISTS artist_images (
     id SERIAL PRIMARY KEY,
-    image TEXT,
-    artist_id INTEGER UNIQUE REFERENCES artists (id)
+    image TEXT NOT NULL,
+    artist_id INTEGER UNIQUE NOT NULL REFERENCES artists (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS albums (
@@ -41,35 +41,35 @@ CREATE TABLE IF NOT EXISTS albums (
     genre CHARACTER VARYING,
     is_compilation BOOLEAN NOT NULL,
     price NUMERIC(10,2) NOT NULL,
-    artist_id INTEGER REFERENCES artists (id),
+    artist_id INTEGER REFERENCES artists (id) ON UPDATE CASCADE,
 
     CONSTRAINT priceCheck CHECK (price >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS album_images (
     id SERIAL PRIMARY KEY,
-    image TEXT,
-    album_id INTEGER UNIQUE REFERENCES albums (id)
+    image TEXT NOT NULL,
+    album_id INTEGER UNIQUE NOT NULL REFERENCES albums (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS songs (
     id SERIAL PRIMARY KEY,
     title CHARACTER VARYING NOT NULL,
     track_no SMALLINT NOT NULL,
-    artist_id INTEGER REFERENCES artists (id),
-    album_id INTEGER REFERENCES albums (id)
+    artist_id INTEGER REFERENCES artists (id) ON UPDATE CASCADE,
+    album_id INTEGER REFERENCES albums (id) ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users (id),
+    user_id INTEGER REFERENCES users (id) ON UPDATE CASCADE,
     order_time TIMESTAMP NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS order_details (
     id SERIAL PRIMARY KEY,
-    order_id INTEGER REFERENCES orders (id),
-    album_id INTEGER REFERENCES albums (id),
+    order_id INTEGER NOT NULL REFERENCES orders (id) ON UPDATE CASCADE,
+    album_id INTEGER NOT NULL REFERENCES albums (id) ON UPDATE CASCADE,
     price NUMERIC(10,2) NOT NULL,
     quantity INTEGER NOT NULL,
 
@@ -79,13 +79,13 @@ CREATE TABLE IF NOT EXISTS order_details (
 
 CREATE TABLE IF NOT EXISTS shopping_carts (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER UNIQUE REFERENCES users (id)
+    user_id INTEGER UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS shopping_cart_details (
     id SERIAL PRIMARY KEY,
-    shopping_cart_id INTEGER REFERENCES shopping_carts (id),
-    album_id INTEGER REFERENCES albums (id),
+    shopping_cart_id INTEGER NOT NULL REFERENCES shopping_carts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    album_id INTEGER NOT NULL REFERENCES albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
     quantity INTEGER NOT NULL,
 
     CONSTRAINT quantityCheck CHECK (quantity > 0)

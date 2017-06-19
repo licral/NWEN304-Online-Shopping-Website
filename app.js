@@ -49,6 +49,13 @@ app.use(function(req, res, next){
     next();
 });
 
+// Setting a path for our views
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+// Setting a path for our resources
+app.use(express.static(__dirname + '/public'));
+
 // Adding our route modules
 require('./routes/index')(app);
 require('./routes/login')(app, passport);
@@ -63,13 +70,7 @@ require('./routes/search')(app, connectionPool);
 require('./routes/shopping_cart')(app, connectionPool);
 require('./routes/manage')(app, connectionPool);
 require('./routes/add')(app, connectionPool);
-
-// Setting a path for our views
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
-// Setting a path for our resources
-app.use(express.static(__dirname + '/public'));
+require('./routes/404')(app);
 
 app.listen(port, function () {
     console.log('Listening on port ' + port);

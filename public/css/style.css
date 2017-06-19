@@ -170,6 +170,26 @@ span.glyphicon.action.remove:hover{
     padding-top: 250px;
 }
 
+.container-404 {
+    height: auto !important;
+    min-height:100%;
+    padding-top: 250px;
+    background-color: black;
+}
+
+.spoon {
+    display: block;
+    margin: auto;
+}
+
+.spoon-text {
+    color: #38B44D;
+    font-size: 1.5em;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    margin: auto;
+}
+
 .login-panel{
     width: 450px;
 }

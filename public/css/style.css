@@ -190,7 +190,14 @@ span.glyphicon.action.remove:hover{
     margin: auto;
 }
 
-.login-panel{
+.money-text {
+    color: #337ab7;
+    font-size: 1.5em;
+    text-align: center;
+    margin: 1em;
+}
+
+.login-panel {
     width: 450px;
 }
 

@@ -20,7 +20,7 @@ module.exports = function (app, pool) {
 
         Promise.all(sqls.map(sql => {
             return pool.query(sql, ['%' + keyword + '%']);
-        })).then((arrayOfResult) => {
+        })).then(arrayOfResult => {
             pageData.results.albums.push(...arrayOfResult[0].rows);
             pageData.results.artists.push(...arrayOfResult[1].rows);
             pageData.results.songs.push(...arrayOfResult[2].rows);

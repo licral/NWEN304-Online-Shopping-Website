@@ -1,4 +1,5 @@
 module.exports = function (app, pool) {
+    // retrieving all items in the shopping cart for this user
     app.get('/shopping_cart', function (request, response) {
         if (request.user) {
             let userId = request.user.id;
@@ -18,6 +19,7 @@ module.exports = function (app, pool) {
         }
     });
 
+    // add an album / add a new row in shopping_cart_details
     app.post('/shopping_cart', function (request, response) {
         if (request.user) {
             let userId = request.user.id;
@@ -29,7 +31,7 @@ module.exports = function (app, pool) {
                 .then(result => {
                     if (result.rowCount === 1) {
                         let id = result.rows[0].id;
-                        response.status(200).json({ id: id });
+                        response.status(200).json({id: id});
                     } else {
                         response.status(500).send("Invalid query, items in cart may not be saved, please refresh or contact hectorcaesar@hotmail.com.");
                         console.error('[ERROR] Insertion failed, check the result from query:');
@@ -46,6 +48,7 @@ module.exports = function (app, pool) {
         }
     });
 
+    // delete an album / delete a row from shopping_cart_details
     app.delete('/shopping_cart/:id', function (request, response) {
         if (request.user) {
             let id = request.params.id;
@@ -72,6 +75,7 @@ module.exports = function (app, pool) {
         }
     });
 
+    // update the quantity / update a row in shopping_cart_details
     app.patch('/shopping_cart/:id', function (request, response) {
         if (request.user) {
             let newQuantity = request.body.quantity;
@@ -96,25 +100,6 @@ module.exports = function (app, pool) {
         } else {
             response.send([]); // this shouldn't happen
             console.error(`[ERROR] Received PATCH '/shopping_cart/${request.params.id}' without authenticated user.`);
-        }
-    });
-
-    app.get('/checkout', function (request, response) {
-        if (request.user) {
-            let userId = request.user.id;
-            let sql = "SELECT shopping_cart_details.id, albums.id AS album_id, albums.title, quantity, albums.price FROM shopping_carts INNER JOIN shopping_cart_details ON shopping_carts.id = shopping_cart_details.shopping_cart_id INNER JOIN albums ON shopping_cart_details.album_id = albums.id WHERE shopping_carts.user_id = $1";
-
-            pool.query(sql, [userId])
-                .then(result => {
-                    response.send(result.rows);
-                })
-                .catch(e => {
-                    response.status(500).send("Database error occurred, items in cart may not be saved, please refresh or contact hectorcaesar@hotmail.com.");
-                    console.error('[ERROR] Query error:', e.message, e.stack);
-                });
-        } else {
-            response.send(); // this shouldn't happen
-            console.error("[ERROR] Received GET '/shopping_cart' without authenticated user.");
         }
     });
 };

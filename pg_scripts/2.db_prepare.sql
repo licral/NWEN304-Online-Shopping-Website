@@ -2,26 +2,28 @@
      Creating tables
  ***********************/
 
+DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username CHARACTER VARYING(255) UNIQUE NOT NULL,
     password CHARACTER VARYING(255) NOT NULL
 );
 
+DROP TABLE IF EXISTS user_details;
 CREATE TABLE IF NOT EXISTS user_details (
     id SERIAL PRIMARY KEY,
-    first_name CHARACTER VARYING(255) NOT NULL,
+    first_name CHARACTER VARYING(255),
     last_name CHARACTER VARYING(255),
     email CHARACTER VARYING(255) UNIQUE NOT NULL,
     contact_no CHARACTER VARYING(255),
-    address CHARACTER VARYING(255),
+    street CHARACTER VARYING(255),
+    suburb CHARACTER VARYING(255),
+    city CHARACTER VARYING(255),
+    country CHARACTER VARYING(255),
     user_id INTEGER REFERENCES users (id),
     is_admin BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
-    last_visit_on TIMESTAMP,
-
-    CONSTRAINT emailFormatCheck CHECK (email ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-    CONSTRAINT contactFormatCheck CHECK (contact_no ~ '^(\+64|0)\d{9}$')
+    last_visit_on TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS artists (
@@ -76,6 +78,27 @@ CREATE TABLE IF NOT EXISTS shopping_cart_details (
 
     CONSTRAINT quantityCheck CHECK (quantity > 0)
 );
+
+/***********************
+  Functions
+ ***********************/
+
+ CREATE OR REPLACE FUNCTION insert(username text, password text, email text)
+   RETURNS "users"."id"%TYPE
+   AS
+     $$
+     DECLARE
+       DECLARE id_var int;
+     BEGIN
+
+    	INSERT INTO users ( username, password ) values ($1,$2) RETURNING id INTO id_var;
+ 	    INSERT INTO user_details (email,user_id) values ($3,id_var);
+
+ 	    RETURN id_var;
+
+    END;
+    $$
+    LANGUAGE plpgsql;
 
 /***********************
   Populating test data

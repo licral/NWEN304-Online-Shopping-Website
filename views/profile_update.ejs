@@ -1,0 +1,45 @@
+<html>
+<% include components/head.ejs %>
+<body>
+<% include components/menu_and_heading.ejs %>
+<div class="container content">
+    <h1 class="login-heading">Shipping and Billing Details</h1>
+    <div class="register-panel left">
+
+        <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+        <% } %>
+
+        <form action="/profile_update" method="post">
+            <!--<label>Email Address:</label>-->
+            <!--<input name="email" type="email" required class="form-control login-input" placeholder="">-->
+            <!--<label>Username:</label>-->
+            <!--<input name="username" type="text" required class="form-control login-input" placeholder="">-->
+            <!--<label>Password:</label>-->
+            <!--<input name="password" type="password" id="password" required class="form-control login-input" placeholder="">-->
+            <!--<label>Confirm Password:</label>-->
+            <!--<input name="confpassword" type="password" id="confirm_password" required class="form-control login-input" placeholder="">-->
+            <label>First Name:</label>
+            <input name="firstname" type="text" class="form-control login-input" required placeholder="">
+            <label>Last Name:</label>
+            <input name="lastname" type="text" class="form-control login-input" placeholder="">
+            <label>Phone Number:</label>
+            <input name="phone" type="tel" class="form-control login-input" required placeholder="">
+            <label>Street Address</label>
+            <input name="street" type="text" class="form-control login-input" required placeholder="">
+            <label>Suburb</label>
+            <input name="suburb" type="text" class="form-control login-input" required placeholder="">
+            <label>City</label>
+            <input name="city" type="text" class="form-control login-input" required placeholder="">
+            <label>Country</label>
+            <input name="country" type="text" class="form-control login-input" required placeholder="">
+
+            <button class="btn btn-primary btn-large" type="submit">Update</button>
+        </form>
+    </div>
+    <!--<div class="register-panel right">-->
+    <!---->
+    <!--</div>-->
+</div>
+</body>
+</html>

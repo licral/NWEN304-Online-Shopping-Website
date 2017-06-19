@@ -1,0 +1,24 @@
+<html>
+<% include components/head.ejs %>
+<body>
+<% include components/menu_and_heading.ejs %>
+<div class="container content">
+    <h1 class="login-heading"><%= title%></h1>
+    <div class="register-panel left">
+        <label>First Name: </label> <p><%= first_name %></p>
+        <label>Last Name: </label> <p><%= last_name %></p>
+        <label>Email: </label><p><%= email %></p>
+        <label>Contact No: </label><p><%= contact_no %></p>
+        <label>Street: </label><p><%= street %></p>
+        <label>Suburb: </label><p><%= suburb %></p>
+        <label>City: </label><p><%= city %></p>
+        <label>Country: </label><p><%= country %></p>
+
+        <button class="btn btn-primary btn-large" type="submit">Edit</button>
+    </div>
+    <!--<div class="register-panel right">-->
+    <!---->
+    <!--</div>-->
+</div>
+</body>
+</html>

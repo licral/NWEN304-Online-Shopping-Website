@@ -52,6 +52,7 @@ app.use(function(req, res, next){
 require('./routes/index')(app);
 require('./routes/login')(app, passport);
 require('./routes/browse')(app, connectionPool);
+require('./routes/profile')(app, connectionPool);
 require('./routes/register')(app, passport);
 require('./routes/logout')(app);
 require('./routes/item')(app, connectionPool);

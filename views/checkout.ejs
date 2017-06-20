@@ -1,0 +1,12 @@
+<html>
+<% include components/head.ejs %>
+<script src="/js/checkout.js"></script>
+<body>
+<% include components/menu_and_heading.ejs %>
+<div class="container content">
+    <img src="/img/gif/money_<%= Math.floor(Math.random() * 23 + 1) %>.gif" class="spoon">
+    <div class="money-text" id="money-text">Please sit tight and wait while we are becoming rich</div>
+    <div class="money-text" id="order-link" hidden><a href="/orders">Have a look at how much you've wasted on us</a></div>
+</div>
+</body>
+</html>

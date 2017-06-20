@@ -1,15 +1,12 @@
 <div class="heading-wrapper">
     <div class="navigation container">
         <img class="title center" src="/img/logo.png" alt="Vinylholics" />
-        <% include search.ejs %>
+        <% include search_bar.ejs %>
         <div>
             <ul class="nav nav-pills nav-bar">
                 <li role="presentation" class="nav-item <% if(title === "Home") {%>active<% }%>"><a href="/">Home</a></li>
-                <li role="presentation" class="nav-item <% if(title === "Browse Newest Arrivals") {%>active<% }%>"><a href="/browse/newest">Newest Arrivals</a></li>
-                <li role="presentation" class="nav-item <% if(title === "Browse All Vinyls") {%>active<% }%>"><a href="/browse/all">Browse</a></li>
-                <% if(isLoggedIn) {%>
-                    <li role="presentation" class="nav-item <% if(title === "Wishlist") {%>active<% }%>"><a href="#">Wishlist</a></li>
-                <% } %>
+                <li role="presentation" class="nav-item <% if(title === "Browse All Vinyls") {%>active<% }%>"><a href="/browse/page/1">Browse Vinyls</a></li>
+                <li role="presentation" class="nav-item <% if(title === "Browse Artists") {%>active<% }%>"><a href="/browse/artist">Browse Artists</a></li>
             </ul>
             <% if(isLoggedIn) {%>
                 <div class="btn-group dropdown">
@@ -17,9 +14,15 @@
                         <span class="glyphicon glyphicon-user"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
+                        <% if(username === "admin") {%>
+                            <li><a href="/manage/vinyls">Manage Vinyls</a></li>
+                            <li><a href="/manage/artists">Manage Artists</a></li>
+                            <li><a href="/manage/orders">Manage All Orders</a></li>
+                            <li role="separator" class="divider"></li>
+                        <% } else { %>
+                            <li><a href="#">View Order History</a></li>
+                        <% } %>
                         <li><a href="/profile/<%= username%>">Profile</a></li>
-                        <li><a href="/upload">Upload Item(admin)</a></li>
-                        <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout">Logout</a></li>
                     </ul>
@@ -45,7 +48,7 @@
                                 <!--</span>-->
                             <!--</a>-->
                         <!--</li>-->
-                        <li role="separator" class="divider"></li>
+                        <!--<li role="separator" class="divider"></li>-->
                         <li><a href="#">View Cart</a></li>
                     </ul>
                 </div>
@@ -58,3 +61,6 @@
     </div>
 </div>
 
+<% if (locals.isLoggedIn) { %>
+    <% include shopping_cart.ejs %>
+<% } %>

@@ -1,0 +1,28 @@
+<html>
+<% include components/head.ejs %>
+<body>
+<% include components/menu_and_heading.ejs %>
+
+<div class="container content">
+    <h1>Order History</h1>
+
+    <div>
+        <% if (locals.error) { %>
+            <div class="alert alert-danger">
+                <%= error %>, please refresh or contact our <a href="mailto:hectorcaesar@hotmail.com">customer service</a>.
+            </div>
+
+        <% } else { %>
+            <% for (let order of orders) { %>
+                <p>Order: { id: <%= order.order_id %>, order time: <%= order.order_time %>, total price: <%= order.totalPrice %> }</p>
+                <ul>
+                    <% for (let album of order.albums) { %>
+                        <li>Album: { id: <%= album.id %>, title: <%= album.title %>, quantity: <%= album.quantity %>, price: <%= album.price %> }</li>
+                    <% } %>
+                </ul>
+            <% } %>
+        <% } %>
+    </div>
+</div>
+</body>
+</html>

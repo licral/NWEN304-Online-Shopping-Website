@@ -3,18 +3,33 @@
     <body>
     <% include components/menu_and_heading.ejs %>
         <div class="container content">
-            <div class="left item-page-left">
-                <img src="/image/large/<%= item.id %>" width="350" alt="image" />
-                <a href="#" class="btn btn-primary btn-large max-width item-button" role="button">Add to cart</a>
-                <a href="#" class="btn btn-primary btn-large max-width item-button" role="button">Add to wishlist</a>
-            </div>
-            <div class="item-page-right">
-                <h1><%= title%></h1>
-                <h4 class="artist page-label"><%= item.artist_name %></h4>
-                <h3>$<%= item.price %></h3>
-                <p>Genre: <%= item.genre %></p>
-                <p>Description: <%= item.description %></p>
-            </div>
+
+            <% if (locals.error) { %>
+
+                <div class="alert alert-danger">
+                    <%= error %>, please refresh or contact our <a href="mailto:hectorcaesar@hotmail.com">customer service</a>.
+                </div>
+
+            <% } else { %>
+
+                <div class="left item-page-left">
+                    <img src="/image/albums/large/<%= album.id %>" width="350" alt="image"/>
+
+                    <% if (locals.isLoggedIn) { %>
+                        <a href="#" class="btn btn-primary btn-large max-width item-button add-to-cart-trigger" role="button" data-id="<%= album.id %>" data-title="<%= album.title %>" data-price="<%= album.price %>">Add to cart</a>
+                    <% } %>
+
+                    <a href="#" class="btn btn-primary btn-large max-width item-button" role="button">Add to wishlist</a>
+                </div>
+                <div class="item-page-right">
+                    <h1><%= album.title %></h1>
+                    <a href="/artist/<%= artist.id %>"><h4 class="artist page-label"><%= artist.name %></h4></a>
+                    <h3>$<%= album.price %></h3>
+                    <p>Genre: <%= album.genre %></p>
+                    <p>Description: <%= album.description %></p>
+                </div>
+
+            <% } %>
         </div>
     </body>
 </html>

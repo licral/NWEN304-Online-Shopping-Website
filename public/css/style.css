@@ -43,6 +43,30 @@ li.nav-item{
     background-color: #f2f2f2;
 }
 
+.confirm-dialog{
+    background-color: white;
+    padding: 20px;
+    width: 300px;
+    height: max-content;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin: auto;
+    text-align: center;
+}
+
+.dimmer{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.5;
+}
+
 /* BUTTONS */
 .login{
     float: right;

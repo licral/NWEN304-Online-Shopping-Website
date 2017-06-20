@@ -21,7 +21,7 @@ module.exports = function (app, pool) {
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 // Fix redirects here
-                res.redirect('/manage/vinyls');
+                res.redirect('/');
             });
     });
 
@@ -128,7 +128,7 @@ module.exports = function (app, pool) {
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 // Fix redirects here
-                res.redirect('/manage/vinyls');
+                res.redirect('/');
             });
     });
 
@@ -187,31 +187,65 @@ module.exports = function (app, pool) {
 
 
     app.get('/manage/orders', function (req, res) {
-        res.render('manage_list', {
+        let pageData = {
             title: 'Manage All Orders',
             heading: 'Orders',
             description: "Manage all order histories in the database"
-        });
+        };
+
+        let sql = "SELECT orders.id, orders.order_time, users.username FROM orders JOIN users ON orders.user_id=users.id order by orders.id";
+
+        pool.query(sql)
+            .then(result => {
+                pageData.orders = result.rows;
+                res.render('manage_list', pageData);
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/');
+            });
     });
 
-    // app.post('/upload-artist-image', function (request, response) {
-    //     let pageData = {
-    //         title: 'Upload a Record',
-    //         description: "Upload a new record to sell",
-    //     };
-    //
-    //     let artist_id = request.body.id;
-    //     let artist_image = request.file.buffer.toString('base64');
-    //     let sql = "insert into artist_images (image, artist_id) values ($1, $2);";
-    //
-    //     pool.query(sql, [artist_image, artist_id])
-    //         .then(result => {
-    //             response.render('upload', pageData);
-    //         })
-    //         .catch(e => {
-    //             console.error('[ERROR] Query error', e.message, e.stack);
-    //             pageData.error = "Database error occurred";
-    //             response.render('upload', pageData);
-    //         });
-    // });
+    app.get('/manage/order/:id', function (req, res) {
+        var id = req.params.id;
+        let pageData = {};
+
+        let sql = "SELECT orders.id AS order_id, users.username, orders.order_time, order_details.album_id, albums.title, order_details.quantity, order_details.price, order_details.id AS item_id FROM orders INNER JOIN order_details ON orders.id = order_details.order_id INNER JOIN albums ON order_details.album_id = albums.id INNER JOIN users ON orders.user_id = users.id WHERE orders.id = $1;";
+
+        pool.query(sql, [id])
+            .then(result => {
+                pageData.title = "Order #" + result.rows[0].order_id;
+                pageData.description = "Viewing information of order # " + result.rows[0].order_id;
+                pageData.order_id = result.rows[0].order_id;
+                pageData.order_time = result.rows[0].order_time;
+                pageData.user = result.rows[0].username;
+                pageData.albums = result.rows;
+                pageData.totalPrice = 0;
+                pageData.albums.forEach(album => {
+                    pageData.totalPrice = pageData.totalPrice + album.quantity * Number(album.price);
+                });
+                res.render('manage_order', pageData);
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/manage/orders');
+            });
+    });
+
+    app.post('/manage/remove/item/:id', function (req, res) {
+        var id = req.params.id;
+
+        let sql = "delete from order_details where id=$1;";
+        pool.query(sql, [id])
+            .then(result => {
+                res.sendStatus(200);
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.sendStatus(400);
+            });
+    });
 };

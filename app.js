@@ -41,6 +41,7 @@ app.use(function(req, res, next){
     if(req.user){
         res.locals.username = req.user.username;
         res.locals.isLoggedIn = true;
+        res.locals.userId = req.user.id;
     } else {
         res.locals.username = "None";
         res.locals.isLoggedIn = false;
@@ -48,25 +49,30 @@ app.use(function(req, res, next){
     next();
 });
 
-// Adding our route modules
-require('./routes/index')(app);
-require('./routes/login')(app, passport);
-require('./routes/browse')(app, connectionPool);
-require('./routes/profile')(app, connectionPool);
-require('./routes/register')(app, passport);
-require('./routes/logout')(app);
-require('./routes/item')(app, connectionPool);
-require('./routes/upload')(app, connectionPool);
-require('./routes/image')(app, connectionPool, path);
-
-require('./routes/search')(app, connectionPool);
-
 // Setting a path for our views
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 // Setting a path for our resources
 app.use(express.static(__dirname + '/public'));
+
+// Adding our route modules
+require('./routes/index')(app, connectionPool);
+require('./routes/login')(app, passport);
+require('./routes/browse')(app, connectionPool);
+require('./routes/profile')(app, connectionPool);
+require('./routes/register')(app, passport);
+require('./routes/logout')(app);
+require('./routes/item')(app, connectionPool);
+require('./routes/artist')(app, connectionPool);
+require('./routes/upload')(app, connectionPool);
+require('./routes/image')(app, connectionPool, path);
+require('./routes/search')(app, connectionPool);
+require('./routes/shopping_cart')(app, connectionPool);
+require('./routes/order')(app, connectionPool);
+require('./routes/manage')(app, connectionPool);
+require('./routes/add')(app, connectionPool);
+require('./routes/404')(app);
 
 app.listen(port, function () {
     console.log('Listening on port ' + port);

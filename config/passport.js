@@ -1,6 +1,11 @@
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 
+var auth = require('./auth');
+
+
+//1963999183844087
+//3d3bdee7c4bc3262e17cc8e5bc1f5b9d
 
 var pg = require('pg');
 var validator = require('validator');
@@ -126,4 +131,38 @@ module.exports = function (passport, pool) {
                     return done(null, results.rows[0]);
                 });
             }));
+
+
+    passport.use(new FacebookStrategy({
+            clientID: auth.facebook.clientID,
+            clientSecret: auth.facebook.secret,
+            callbackURL: auth.facebook.callback,
+            auth_type: "reauthenticate"
+        },
+        function(accessToken, refreshToken, profile, done) {
+            usersDAO.getRow([profile.id], pool, function(err, result){
+                if(err){
+                    return done(err);
+                }
+
+                if(result.rows){
+                    return done(null, result.rows[0]);
+                }
+
+                var user = [
+                    profile.id,
+                    accessToken,
+                    profile.name.givenName,
+                    profile.name.familyName,
+                    profile.emails[0].value
+                ]
+
+
+
+
+
+            })
+
+        }
+    ));
 };

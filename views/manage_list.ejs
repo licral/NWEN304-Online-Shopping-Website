@@ -4,56 +4,74 @@
 <% include components/menu_and_heading.ejs %>
 <div class="container content">
     <h1>Manage All <%= heading %></h1>
-    <a href="/add/vinyl" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Vinyl</a>
+    <% if(heading === "Vinyls") { %>
+    <a href="/add/vinyl" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"
+                                                                     aria-hidden="true"></span> Add Vinyl</a>
+    <% } else if(heading === "Artists") { %>
+    <a href="/add/artist" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"
+                                                                      aria-hidden="true"></span> Add Artist</a>
+    <% } %>
     <div>
         <% if (locals.error) { %>
-            <div class="alert alert-danger">
-                <%= error %>
-            </div>
+        <div class="alert alert-danger">
+            <%= error %>
+        </div>
         <% } else { %>
-
+        <% if (locals.albums) { %>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Artist</th>
+                <th>Album Cover</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% for (let album of albums) { %>
+            <tr>
+                <td><%= album.id %></td>
+                <td><%= album.title %></td>
+                <td><%= album.price %></td>
+                <td><%= album.artist_name %></td>
+                <td><img src="/image/albums/small/<%= album.id %>" width="30" alt="album cover image"/></td>
+                <td>
+                    <a href="/manage/vinyl/<%= album.id %>">
+                        <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
+                    </a>
+                    <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
+                </td>
+            </tr>
+            <% } %>
+            <% } else if (locals.artists) { %>
             <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Price</th>
-                        <th>Artist</th>
-                        <th>Album Cover</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (locals.albums) { %>
-                        <% for (let album of albums) { %>
-                            <tr>
-                                <td><%= album.id %></td>
-                                <td><%= album.title %></td>
-                                <td><%= album.price %></td>
-                                <td><%= album.artist_name %></td>
-                                <td><img src="/image/albums/small/<%= album.id %>" width="30" alt="album cover image" /></td>
-                                <td>
-                                    <a href="vinyl/<%= album.id %>">
-                                        <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
-                                    </a>
-                                    <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
-                                </td>
-                            </tr>
-                        <% } %>
-                    <% } else if (locals.artists) { %>
-                        <% for (let artist of artists) { %>
-                            <div class="item">
-                                <a href="/artist/<%= artist.id %>">
-                                    <img src="/image/artists/small/<%= artist.id %>" width="30" alt="album cover image" />
-                                    <div class="item-caption">
-                                        <span class="item-title item-label"><%= artist.artist_name %></span>
-                                    </div>
-                                </a>
-                            </div>
-                        <% } %>
-                    <% } %>
-                </tbody>
-            </table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Artist Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            <% for (let artist of artists) { %>
+            <tr>
+                <td><%= artist.id %></td>
+                <td><%= artist.artist_name %></td>
+                <td><img src="/image/artists/small/<%= artist.id %>" width="30" alt="album cover image"/></td>
+                <td>
+                    <a href="/manage/artist/<%= artist.id %>">
+                        <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
+                    </a>
+                    <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
+                </td>
+            </tr>
+            <% } %>
+            <% } %>
+            </tbody>
+        </table>
         <% } %>
     </div>
 </div>

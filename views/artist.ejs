@@ -34,7 +34,14 @@
                             <h3>Albums:</h3>
                             <div>
                                 <% for (let album of albums) { %>
-                                    <span class="item"><a href="/item/<%= album.id %>"><%= album.title %></a></span>
+                                    <div class="item">
+                                        <a href="/item/<%= album.id %>">
+                                            <img src="/image/albums/medium/<%= album.id %>" width="175" alt="album cover image" />
+                                            <div class="item-caption">
+                                                <span class="item-title item-label"><%= album.title %></span>
+                                            </div>
+                                        </a>
+                                    </div>
                                 <% } %>
                             </div>
                         <% } %>

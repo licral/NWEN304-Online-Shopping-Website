@@ -11,29 +11,17 @@ module.exports = function (app, pool) {
             description: "Manage all vinyls in the database"
         };
 
-        pool.connect()
-            .then(client => {
-                let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.id;";
+        let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.id;";
 
-                client.query(sql)
-                    .then(result => {
-                        client.release();
-                        pageData.albums = result.rows;
-                        res.render('manage_list', pageData);
-
-                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
-                    })
-                    .catch(e => {
-                        client.release();
-                        pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                        res.render('manage_list', pageData);
-                        console.error('[ERROR] Query error', e.message, e.stack);
-                    });
-            })
-            .catch(error => {
-                pageData.error = "Database unavailable, please try again.";
+        pool.query(sql)
+            .then(result => {
+                pageData.albums = result.rows;
                 res.render('manage_list', pageData);
-                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/manage/vinyls');
             });
     });
 
@@ -41,53 +29,41 @@ module.exports = function (app, pool) {
         var id = req.params.id;
         let pageData = {};
 
-        pool.connect()
-            .then(client => {
-                let sql = "select * from albums where id=" + id + ";";
+        let sql = "select * from albums where id=" + id + ";";
 
-                client.query(sql)
-                    .then(result => {
-                        pageData.title = result.rows[0].title;
-                        pageData.description = result.rows[0].description;
-                        pageData.item = result.rows[0];
-                        var date = new Date(result.rows[0].released_on);
-                        var month = (date.getMonth() + 1) + "";
-                        if(month.length == 1){
-                            month = "0" + month;
-                        }
-                        var day = date.getDate() + "";
-                        if(day.length == 1){
-                            day = "0" + day;
-                        }
-                        pageData.item.released_on = date.getFullYear() + "-" + month + "-" + day;
+        pool.query(sql)
+            .then(result => {
+                pageData.title = result.rows[0].title;
+                pageData.description = result.rows[0].description;
+                pageData.item = result.rows[0];
+                var date = new Date(result.rows[0].released_on);
+                var month = (date.getMonth() + 1) + "";
+                if(month.length == 1){
+                    month = "0" + month;
+                }
+                var day = date.getDate() + "";
+                if(day.length == 1){
+                    day = "0" + day;
+                }
+                pageData.item.released_on = date.getFullYear() + "-" + month + "-" + day;
 
-                        client.query("select id, artist_name from artists;")
-                            .then(result2 => {
-                                client.release();
-                                pageData.artists = result2.rows;
-
-                                res.render('manage_vinyl', pageData);
-                            })
-                            .catch(e => {
-                                client.release();
-                                pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                                res.render('manage_vinyl', pageData);
-                                console.error('[ERROR] Query error', e.message, e.stack);
-                            });
-
-                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
+                pool.query("select id, artist_name from artists;")
+                    .then(result2 => {
+                        pageData.artists = result2.rows;
+                        res.render('manage_vinyl', pageData);
                     })
                     .catch(e => {
                         client.release();
-                        pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                        res.render('manage_vinyl', pageData);
                         console.error('[ERROR] Query error', e.message, e.stack);
+                        // Fix redirects here
+                        res.redirect('/manage/vinyls');
                     });
+
             })
-            .catch(error => {
-                pageData.error = "Database unavailable, please try again.";
-                res.render('manage_vinyl', pageData);
-                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/manage/vinyls');
             });
     });
 
@@ -109,15 +85,104 @@ module.exports = function (app, pool) {
         let sql = "update albums set title=$1, artist_id=$2, description=$3, is_compilation=$4, released_on=$5, genre=$6, price=$7 where id=$8;";
         pool.query(sql, [title, artist, description, is_compilation, released_on, genre, price, id])
             .then(result => {
-                // Fix redirects here
-                res.redirect('/manage/vinyls');
+                if(req.file === undefined){
+                    // Fix redirects here
+                    res.redirect('/manage/vinyls');
+                } else {
+                    var album_image = req.file.buffer.toString('base64');
+                    sql = "update album_images set image=$1 where album_id=$2;";
+                    pool.query(sql, [album_image, id])
+                        .then(result2 => {
+                            res.redirect('/manage/vinyls');
+                        })
+                        .catch(e => {
+                            console.error('[ERROR] Query error', e.message, e.stack);
+                            // Fix redirects here
+                            res.redirect('/manage/vinyls');
+                        });
+                }
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 // Fix redirects here
                 res.redirect('/manage/vinyls');
             });
+    });
 
+
+    app.get('/manage/artists', function (req, res) {
+
+        let pageData = {
+            title: 'Manage All Artists',
+            heading: 'Artists',
+            description: "Manage all artists in the database"
+        };
+
+        let sql = "select id, artist_name from artists order by id;";
+
+        pool.query(sql)
+            .then(result => {
+                pageData.artists = result.rows;
+                res.render('manage_list', pageData);
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/manage/vinyls');
+            });
+    });
+
+    app.get('/manage/artist/:id', function (req, res) {
+        var id = req.params.id;
+        let pageData = {};
+
+        let sql = "select * from artists where id=$1;";
+
+        pool.query(sql, [id])
+            .then(result => {
+                pageData.title = result.rows[0].artist_name;
+                pageData.description = "Viewing information of artist " + result.rows[0].artist_name;
+                pageData.item = result.rows[0];
+
+                res.render('manage_artist', pageData);
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/manage/artists');
+            });
+    });
+
+    app.post('/manage/artist/:id', function (req, res) {
+        var id = req.params.id;
+        var artist_name = req.body.artist_name;
+        var description = req.body.description;
+
+        let sql = "update artists set artist_name=$1, description=$2 where id=$3;";
+        pool.query(sql, [artist_name, description, id])
+            .then(result => {
+                if(req.file === undefined){
+                    // Fix redirects here
+                    res.redirect('/manage/artists');
+                } else {
+                    var album_image = req.file.buffer.toString('base64');
+                    sql = "update artist_images set image=$1 where artist_id=$2;";
+                    pool.query(sql, [album_image, id])
+                        .then(result2 => {
+                            res.redirect('/manage/artists');
+                        })
+                        .catch(e => {
+                            console.error('[ERROR] Query error', e.message, e.stack);
+                            // Fix redirects here
+                            res.redirect('/manage/artists');
+                        });
+                }
+            })
+            .catch(e => {
+                console.error('[ERROR] Query error', e.message, e.stack);
+                // Fix redirects here
+                res.redirect('/manage/artists');
+            });
     });
 
 

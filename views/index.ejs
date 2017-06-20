@@ -10,6 +10,12 @@
                 </p>
                 <p><a class="btn btn-primary btn-lg" href="/browse/all" role="button">Browse Vinyls</a></p>
             </div>
+            <h1>Newest Arrivals</h1>
+            <div>
+                <% for (let album of albums) { %>
+                    <% include components/album_square.ejs %>
+                <% } %>
+            </div>
         </div>
     </body>
 </html>

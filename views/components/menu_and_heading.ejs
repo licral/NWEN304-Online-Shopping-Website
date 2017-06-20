@@ -19,37 +19,11 @@
                             <li><a href="/manage/artists">Manage Artists</a></li>
                             <li><a href="/manage/orders">Manage All Orders</a></li>
                             <li role="separator" class="divider"></li>
-                        <% } else { %>
-                            <li><a href="#">View Order History</a></li>
                         <% } %>
+                        <li><a href="/orders">View Order History</a></li>
                         <li><a href="/profile/<%= username%>">Profile</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout">Logout</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group dropdown">
-                    <button type="button" class="btn btn-default dropdown-toggle btn-lg profile-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="glyphicon glyphicon-shopping-cart"></span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <!--<li>-->
-                            <!--<a href="#" class="cart-item">-->
-                                <!--<span class="cart-item-content">-->
-                                    <!--<img src="/image/small/7" width="30" alt="album cover image" />-->
-                                    <!--Album name-->
-                                <!--</span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li>-->
-                            <!--<a href="#" class="cart-item">-->
-                                <!--<span class="cart-item-content">-->
-                                    <!--<img src="/image/small/1" width="30" alt="album cover image" />-->
-                                    <!--Album name-->
-                                <!--</span>-->
-                            <!--</a>-->
-                        <!--</li>-->
-                        <!--<li role="separator" class="divider"></li>-->
-                        <li><a href="#">View Cart</a></li>
                     </ul>
                 </div>
                 <span class="user-label">Hi <%= username%>!</span>

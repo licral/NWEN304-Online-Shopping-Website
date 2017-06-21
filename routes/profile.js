@@ -6,11 +6,19 @@ var userDetailsDAO = require('../data_access_objects/user_details_DAO');
 
 module.exports = function(app, pool){
 
-    app.get('/profile_update', isLoggedIn, function (req, res) {
+    app.get('/profile_update_registration', isLoggedIn, function (req, res) {
         res.render('profile_update', {
             title: 'Shipping and Billing Details',
             description: 'Update/Add User Details',
-            message: req.flash('updateDetailMessage')
+            message: req.flash('updateDetailMessage'),
+            first_name: '',
+            last_name: '',
+            email: req.user.email,
+            contact_no: '',
+            street: '',
+            suburb: '',
+            city: '',
+            country: '',
         });
     });
 
@@ -26,7 +34,9 @@ module.exports = function(app, pool){
                 return;
             }
 
-            userDetailsDAO.getRow([results.rows[0].id], pool, function (err, msg, results) {
+            var userResults = results.rows[0];
+
+            userDetailsDAO.getRow([userResults.id], pool, function (err, msg, results) {
                 if (err) {
                     res.status(500).send(msg);
                     return;
@@ -39,7 +49,7 @@ module.exports = function(app, pool){
                     description: 'User Details',
                     first_name: results.first_name,
                     last_name: results.last_name,
-                    email: results.email,
+                    email: userResults.email,
                     contact_no: results.contact_no,
                     street: results.street,
                     suburb: results.suburb,
@@ -63,7 +73,9 @@ module.exports = function(app, pool){
                 return;
             }
 
-            userDetailsDAO.getRow([results.rows[0].id], pool, function (err, msg, results) {
+            var userResults = results.rows[0];
+
+            userDetailsDAO.getRow([userResults.id], pool, function (err, msg, results) {
                 if (err) {
                     res.status(500).send(msg);
                     return;
@@ -73,13 +85,13 @@ module.exports = function(app, pool){
                     title: 'Shipping and Billing Details',
                     description: 'Update/Add User Details',
                     message: req.flash('updateDetailMessage'),
-                    first_name: results.first_name,
-                    last_name: results.last_name,
-                    email: results.email,
+                    first_name:results.first_name,
+                    last_name:results.last_name,
+                    email:userResults.email,
                     contact_no: results.contact_no,
                     street: results.street,
                     suburb: results.suburb,
-                    city: results.city,
+                    city:  results.city,
                     country: results.country
                 });
             });
@@ -133,6 +145,24 @@ function validateInput(data){
 
     if(data.firstname == ''){
         return 'name must not be empty';
+    }
+
+    if(data.phone == ''){
+        return 'phone must not be empty';
+    }
+
+    if(data.street == ''){
+        return 'street must not be empty';
+    }
+
+    if(data.suburb == ''){
+        return 'suburb must not be empty';
+    }
+    if(data.city== ''){
+        return 'city must not be empty';
+    }
+    if(data.country == ''){
+        return 'country must not be empty';
     }
 }
 

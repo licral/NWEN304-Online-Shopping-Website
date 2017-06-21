@@ -3,7 +3,7 @@
  */
 module.exports = function (app, pool) {
 
-    app.get('/manage/vinyls', function (req, res) {
+    app.get('/manage/vinyls', isAdmin, function (req, res) {
 
         let pageData = {
             title: 'Manage All Vinyls',
@@ -25,7 +25,7 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.get('/manage/vinyl/:id', function (req, res) {
+    app.get('/manage/vinyl/:id', isAdmin, function (req, res) {
         var id = req.params.id;
         let pageData = {};
 
@@ -67,7 +67,7 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.post('/manage/vinyl/:id', function (req, res) {
+    app.post('/manage/vinyl/:id', isAdmin, function (req, res) {
         var id = req.params.id;
         var title = req.body.title;
         var artist = req.body.artist;
@@ -110,7 +110,7 @@ module.exports = function (app, pool) {
     });
 
 
-    app.get('/manage/artists', function (req, res) {
+    app.get('/manage/artists', isAdmin, function (req, res) {
 
         let pageData = {
             title: 'Manage All Artists',
@@ -132,7 +132,7 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.get('/manage/artist/:id', function (req, res) {
+    app.get('/manage/artist/:id', isAdmin, function (req, res) {
         var id = req.params.id;
         let pageData = {};
 
@@ -153,7 +153,7 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.post('/manage/artist/:id', function (req, res) {
+    app.post('/manage/artist/:id', isAdmin, function (req, res) {
         var id = req.params.id;
         var artist_name = req.body.artist_name;
         var description = req.body.description;
@@ -186,7 +186,7 @@ module.exports = function (app, pool) {
     });
 
 
-    app.get('/manage/orders', function (req, res) {
+    app.get('/manage/orders', isAdmin, function (req, res) {
         res.render('manage_list', {
             title: 'Manage All Orders',
             heading: 'Orders',
@@ -215,3 +215,13 @@ module.exports = function (app, pool) {
     //         });
     // });
 };
+
+function isAdmin(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.user.isAdmin)
+        return next();
+
+    // if they aren't redirect them to the home page
+    res.redirect('/');
+}

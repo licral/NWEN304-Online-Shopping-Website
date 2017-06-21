@@ -42,6 +42,7 @@ app.use(function(req, res, next){
     if(req.user){
         res.locals.displayname = req.user.displayname;
         res.locals.username = req.user.username;
+        res.locals.isAdmin = req.user.is_admin;
         res.locals.isLoggedIn = true;
         res.locals.userId = req.user.id;
     } else {

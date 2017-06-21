@@ -50,7 +50,7 @@ module.exports = function (passport, pool) {
                             return done(err);
                         }
 
-                        client.query("SELECT * FROM user_details WHERE email = ($1)", [req.body.email], function (err, result) {
+                        client.query("SELECT * FROM users WHERE email = ($1)", [req.body.email], function (err, result) {
                             if (err) {
                                 client.release();
                                 return done(err);

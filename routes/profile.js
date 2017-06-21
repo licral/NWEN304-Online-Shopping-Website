@@ -22,7 +22,7 @@ module.exports = function(app, pool){
             }
 
             if (!results.rows.length) {
-                res.status(500).send('Cannot Get /profile/' + req.params.id + ' User does not exist');
+                res.status(400).send('Cannot Get /profile/' + req.params.id + ' User does not exist');
                 return;
             }
 
@@ -35,8 +35,44 @@ module.exports = function(app, pool){
                 console.log(results);
 
                 res.render('profile', {
-                    title: req.params.id + ' Details',
+                    title: 'Edit Details',
                     description: 'User Details',
+                    first_name: results.first_name,
+                    last_name: results.last_name,
+                    email: results.email,
+                    contact_no: results.contact_no,
+                    street: results.street,
+                    suburb: results.suburb,
+                    city: results.city,
+                    country: results.country,
+                    message: req.flash('profileMessage')
+                });
+            });
+        });
+    });
+
+    app.get('/profile_update/:id', isLoggedIn, function (req, res){
+        usersDAO.getRow([req.params.id], pool, function(err,msg,results) {
+            if (err) {
+                res.status(500).send(msg);
+                return;
+            }
+
+            if (!results.rows.length) {
+                res.status(400).send('Cannot Get /profile/' + req.params.id + ' User does not exist');
+                return;
+            }
+
+            userDetailsDAO.getRow([results.rows[0].id], pool, function (err, msg, results) {
+                if (err) {
+                    res.status(500).send(msg);
+                    return;
+                }
+
+                res.render('profile_update', {
+                    title: 'Shipping and Billing Details',
+                    description: 'Update/Add User Details',
+                    message: req.flash('updateDetailMessage'),
                     first_name: results.first_name,
                     last_name: results.last_name,
                     email: results.email,
@@ -87,8 +123,9 @@ module.exports = function(app, pool){
                 return;
             }
 
-            res.redirect('/');
-        })
+            req.flash('profileMessage', 'Update Successful');
+            res.redirect('/profile/' + req.user.username);
+        });
     });
 };
 

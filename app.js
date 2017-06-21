@@ -12,11 +12,6 @@ var multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({storage: storage});
 
-
-var jwt = require('jsonwebtoken');
-
-app.set('superSecret', 'vinylholicssecretforauthentication');
-
 app.use(upload.single('image'));
 
 var passport = require('passport');
@@ -45,6 +40,7 @@ app.use(flash());
 
 app.use(function(req, res, next){
     if(req.user){
+        res.locals.displayname = req.user.displayname;
         res.locals.username = req.user.username;
         res.locals.isLoggedIn = true;
         res.locals.userId = req.user.id;

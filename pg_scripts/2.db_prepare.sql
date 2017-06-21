@@ -5,6 +5,7 @@
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
+    displayname CHARACTER VARYING UNIQUE NOT NULL,
     username CHARACTER VARYING UNIQUE NOT NULL,
     password CHARACTER VARYING NOT NULL
 );
@@ -100,7 +101,7 @@ CREATE TABLE IF NOT EXISTS shopping_cart_details (
   Functions
  ***********************/
 
- CREATE OR REPLACE FUNCTION insert(username text, password text, email text)
+ CREATE OR REPLACE FUNCTION insert(username text, password text, email text, displayname text)
    RETURNS "users"."id"%TYPE
    AS
      $$
@@ -108,7 +109,7 @@ CREATE TABLE IF NOT EXISTS shopping_cart_details (
        DECLARE id_var int;
      BEGIN
 
-    	INSERT INTO users ( username, password ) values ($1,$2) RETURNING id INTO id_var;
+    	INSERT INTO users (displayname, username, password ) values ($4,$1,$2) RETURNING id INTO id_var;
  	    INSERT INTO user_details (email,user_id) values ($3,id_var);
  	    INSERT INTO shopping_carts (user_id) values (id_var);
 

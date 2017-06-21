@@ -4,9 +4,6 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var auth = require('./auth');
 
 
-//1963999183844087
-//3d3bdee7c4bc3262e17cc8e5bc1f5b9d
-
 var pg = require('pg');
 var validator = require('validator');
 var bcrypt = require('bcrypt-nodejs');
@@ -82,9 +79,9 @@ module.exports = function (passport, pool) {
                                     };
 
                                     // use the transaction function to set up the user
-                                    var insertQuery = "SELECT insert($1,$2,$3)";
+                                    var insertQuery = "SELECT insert($1,$2,$3,$4)";
 
-                                    client.query(insertQuery, [newUser.username, newUser.password, req.body.email], function (err, result) {
+                                    client.query(insertQuery, [newUser.username, newUser.password, req.body.email, newUser.username], function (err, result) {
                                         client.release();
                                         if (err) {
                                             return done(err);
@@ -137,7 +134,7 @@ module.exports = function (passport, pool) {
             profileFields: ['id','email','first_name', 'last_name', 'displayName' ],
             enableProof: true
         },
-        function(req, accessToken, refreshToken, profile, done) {
+        function(accessToken, refreshToken, profile, done) {
             usersDAO.getRow([profile.id], pool, function(err, msg, result){
                 if(err){
                     return done(err);
@@ -151,20 +148,16 @@ module.exports = function (passport, pool) {
                     // set all of the facebook information in our user model
                     username : profile.displayName,
                     facebook_id : profile.id, // set the users facebook id
-                    token : accessToken, // we will save the token that facebook provides to the user
-                    first_name : profile.name.givenName,
-                    last_name : profile.name.familyName, // look at the passport user profile to see how names are returned
+                    token : accessToken // we will save the token that facebook provides to the user
                 };
 
                 if(profile.emails !== undefined){
                     newUser.email = profile.emails[0].value;
                 }
 
-                var insertQuery = "SELECT insert($1,$2,$3)";
+                var insertQuery = "SELECT insert($1,$2,$3,$4)";
 
-                console.log(profile);
-
-                pool.query(insertQuery, [newUser.facebook_id, newUser.token, newUser.email], function (err, result) {
+                pool.query(insertQuery, [newUser.facebook_id, newUser.token, newUser.email, newUser.username], function (err, result) {
                     if (err) {
                         return done(err);
                     }

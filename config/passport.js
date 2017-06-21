@@ -20,13 +20,9 @@ module.exports = function (passport, pool) {
     });
 
     passport.deserializeUser(function (id, done) {
-        pool.connect()
-            .then((client, err) => {
-                client.query("SELECT * FROM users WHERE id = ($1)", [id], function (err, result) {
-                    client.release();
-                    done(err, result.rows[0]);
-                });
-            });
+         pool.query("SELECT * FROM users WHERE id = ($1)", [id], function (err, result) {
+             done(err, result.rows[0]);
+         });
     });
 
     passport.use(
@@ -137,32 +133,47 @@ module.exports = function (passport, pool) {
             clientID: auth.facebook.clientID,
             clientSecret: auth.facebook.secret,
             callbackURL: auth.facebook.callback,
-            auth_type: "reauthenticate"
+            assReqToCallback : true,
+            profileFields: ['id','email','first_name', 'last_name', 'displayName' ],
+            enableProof: true
         },
-        function(accessToken, refreshToken, profile, done) {
-            usersDAO.getRow([profile.id], pool, function(err, result){
+        function(req, accessToken, refreshToken, profile, done) {
+            usersDAO.getRow([profile.id], pool, function(err, msg, result){
                 if(err){
                     return done(err);
                 }
 
-                if(result.rows){
+                if(result.rows.length > 0){
                     return done(null, result.rows[0]);
                 }
 
-                var user = [
-                    profile.id,
-                    accessToken,
-                    profile.name.givenName,
-                    profile.name.familyName,
-                    profile.emails[0].value
-                ]
+                var newUser = {
+                    // set all of the facebook information in our user model
+                    username : profile.displayName,
+                    facebook_id : profile.id, // set the users facebook id
+                    token : accessToken, // we will save the token that facebook provides to the user
+                    first_name : profile.name.givenName,
+                    last_name : profile.name.familyName, // look at the passport user profile to see how names are returned
+                };
 
+                if(profile.emails !== undefined){
+                    newUser.email = profile.emails[0].value;
+                }
 
+                var insertQuery = "SELECT insert($1,$2,$3)";
 
+                console.log(profile);
 
+                pool.query(insertQuery, [newUser.facebook_id, newUser.token, newUser.email], function (err, result) {
+                    if (err) {
+                        return done(err);
+                    }
 
+                    newUser.id = result.rows[0].insert;
+
+                    return done(null, newUser);
+                });
             })
-
         }
     ));
 };

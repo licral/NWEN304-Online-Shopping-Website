@@ -56,64 +56,15 @@
             <% } else { %>
             <a href="/register" class="btn btn-default login" role="button">Register</a>
             <a href="/login" class="btn btn-default login" role="button">Login</a>
-            <!--<a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>-->
             <div id="center">
-                <div class="fb-login-button" data-max-rows="1"
-                     data-size="large" data-button-type="login_with"
-                     data-show-faces="false" data-auto-logout-link="false"
-                     data-use-continue-as="true">
-                </div>
-            </div>b
+            <a href="/auth/facebook" class="btn btn-primary facebook" style="background-color:#3B5998"><span class="fa fa-facebook-official" style="font-size:20px"></span> Login with Facebook</a>
+            </div>
+
             <% } %>
         </div>
     </div>
 
     <div id="fb-root"></div>
-    <script>
-//        var finished_rendering = function() {
-//            console.log("finished rendering plugins");
-//            var spinner = document.getElementById("spinner");
-//            spinner.removeAttribute("style");
-//            spinner.removeChild(spinner.childNodes[0]);
-//        }
-//        FB.Event.subscribe('xfbml.render', finished_rendering);
-
-//        function checkLoginState() {
-//            FB.getLoginStatus(function(response) {
-//                statusChangeCallback(response);
-//            });
-//        }
-//
-        (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.9&appId=1963999183844087";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-//
-//        window.fbAsyncInit = function() {
-//            FB.init({
-//                appId      : '1963999183844087',
-//                cookie     : true,
-//                xfbml      : true,
-//                version    : 'v2.8'
-//            });
-//            FB.AppEvents.logPageView();
-//        };
-//
-//        (function(d, s, id){
-//            var js, fjs = d.getElementsByTagName(s)[0];
-//            if (d.getElementById(id)) {return;}
-//            js = d.createElement(s); js.id = id;
-//            js.src = "//connect.facebook.net/en_US/sdk.js";
-//            fjs.parentNode.insertBefore(js, fjs);
-//        }(document, 'script', 'facebook-jssdk'));
-//
-//        FB.getLoginStatus(function(response) {
-//            statusChangeCallback(response);
-//        });
-    </script>
 </div>
 
 <% if (locals.isLoggedIn) { %>

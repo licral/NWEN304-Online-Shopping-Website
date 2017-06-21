@@ -11,6 +11,12 @@ var path = require('path');
 var multer = require('multer');
 var storage = multer.memoryStorage();
 var upload = multer({storage: storage});
+
+
+var jwt = require('jsonwebtoken');
+
+app.set('superSecret', 'vinylholicssecretforauthentication');
+
 app.use(upload.single('image'));
 
 var passport = require('passport');

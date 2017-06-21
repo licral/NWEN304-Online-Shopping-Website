@@ -110,12 +110,31 @@ CREATE TABLE IF NOT EXISTS shopping_cart_details (
 
     	INSERT INTO users ( username, password ) values ($1,$2) RETURNING id INTO id_var;
  	    INSERT INTO user_details (email,user_id) values ($3,id_var);
+ 	    INSERT INTO shopping_carts (user_id) values (id_var);
 
  	    RETURN id_var;
 
     END;
     $$
     LANGUAGE plpgsql;
+
+ CREATE OR REPLACE FUNCTION insert_facebook(id text, token text)
+    RETURNS "users"."id"%TYPE
+    AS
+      $$
+      DECLARE
+        DECLARE id_var int;
+      BEGIN
+
+     	INSERT INTO users ( username, password ) values ($1,$2) RETURNING id INTO id_var;
+  	    INSERT INTO user_details (email,user_id) values ($3,id_var);
+  	    INSERT INTO shopping_carts (user_id) values (id_var);
+
+  	    RETURN id_var;
+
+     END;
+     $$
+     LANGUAGE plpgsql;
 
 /***********************
   Populating test data

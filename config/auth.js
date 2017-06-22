@@ -7,6 +7,6 @@ module.exports = {
     'facebook' : {
         'clientID' : '1963999183844087',
         'secret' : '3d3bdee7c4bc3262e17cc8e5bc1f5b9d',
-        'callback' : 'https://localhost:8080/auth/facebook/callback'
+        'callback' : '/auth/facebook/callback'
     }
-}
+};

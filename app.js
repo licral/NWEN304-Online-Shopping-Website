@@ -1,21 +1,38 @@
-var express = require('express');
 var session  = require('express-session');// needed for the passport
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');// <-- for better logging
-var app = express();
+//var app = express();
 var port = process.env.PORT || 8080;
 var pg = require('pg');
 var connectionPool = require('./config/database');
 var path = require('path');
 var multer = require('multer');
+
 var storage = multer.memoryStorage();
 var upload = multer({storage: storage});
 
-app.use(upload.single('image'));
-
 var passport = require('passport');
 var flash = require('connect-flash');
+
+//for https
+var https = require('https');
+var fs = require('fs');
+
+var key = fs.readFileSync('vinylholicskey.pem');
+var cert = fs.readFileSync('certificate.pem')
+
+var options = {
+    key: key,
+    cert: cert
+};
+//
+
+var express = require('express');
+var app = express();
+
+
+app.use(upload.single('image'));
 
 require('./config/passport')(passport, connectionPool);
 
@@ -77,8 +94,10 @@ require('./routes/manage')(app, connectionPool);
 require('./routes/add')(app, connectionPool);
 require('./routes/404')(app);
 
-app.listen(port, function () {
+
+
+https.createServer(options,app).listen(port, function () {
     console.log('Listening on port ' + port);
 });
 
-module.exports = app;
+module.exports = https;

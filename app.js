@@ -26,7 +26,7 @@ var options = {
     key: key,
     cert: cert
 };
-//
+
 
 var express = require('express');
 var app = express();
@@ -98,9 +98,16 @@ require('./routes/add')(app, connectionPool);
 require('./routes/404')(app);
 
 //========================================
-// create https server
+// create https server paid resource
 //========================================
-https.createServer(options,app).listen(port, function () {
+// https.createServer(options,app).listen(port, function () {
+//     console.log('Listening on port ' + port);
+// });
+
+//========================================
+// create standard http
+//========================================
+app.listen(port, function () {
     console.log('Listening on port ' + port);
 });
 

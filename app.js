@@ -31,11 +31,12 @@ var options = {
 var express = require('express');
 var app = express();
 
-
-app.use(upload.single('image'));
-
 require('./config/passport')(passport, connectionPool);
 
+//========================================
+// Config app
+//========================================
+app.use(upload.single('image'));
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 
@@ -76,7 +77,9 @@ app.set('view engine', 'ejs');
 // Setting a path for our resources
 app.use(express.static(__dirname + '/public'));
 
-// Adding our route modules
+//========================================
+// Add routes
+//========================================
 require('./routes/index')(app, connectionPool);
 require('./routes/login')(app, passport);
 require('./routes/browse')(app, connectionPool);
@@ -94,8 +97,9 @@ require('./routes/manage')(app, connectionPool);
 require('./routes/add')(app, connectionPool);
 require('./routes/404')(app);
 
-
-
+//========================================
+// create https server
+//========================================
 https.createServer(options,app).listen(port, function () {
     console.log('Listening on port ' + port);
 });

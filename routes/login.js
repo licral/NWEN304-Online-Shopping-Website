@@ -23,7 +23,7 @@ module.exports = function(app, passport){
         }),
         function(req, res) {
             if (req.body.remember) {
-                req.session.cookie.maxAge = 1000 * 60 * 3;
+                req.session.cookie.maxAge = 300000;
             } else {
                 req.session.cookie.expires = false;
             }

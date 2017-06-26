@@ -5,25 +5,42 @@
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
+    displayname CHARACTER VARYING UNIQUE NOT NULL,
     username CHARACTER VARYING UNIQUE NOT NULL,
-    password CHARACTER VARYING NOT NULL
+    password CHARACTER VARYING NOT NULL,
+    email CHARACTER VARYING UNIQUE NOT NULL,
+    is_admin BOOLEAN NOT NULL DEFAULT false
 );
 
-DROP TABLE IF EXISTS user_details;
+DROP TABLE IF EXISTS user_details CASCADE;
 CREATE TABLE IF NOT EXISTS user_details (
     id SERIAL PRIMARY KEY,
     first_name CHARACTER VARYING,
     last_name CHARACTER VARYING,
-    email CHARACTER VARYING UNIQUE NOT NULL,
     contact_no CHARACTER VARYING,
     street CHARACTER VARYING,
     suburb CHARACTER VARYING,
     city CHARACTER VARYING,
     country CHARACTER VARYING,
     user_id INTEGER UNIQUE NOT NULL REFERENCES users (id) ,
-    is_admin BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     last_visit_on TIMESTAMP NOT NULL DEFAULT now()
+);
+
+DROP TABLE IF EXISTS shopping_carts CASCADE;
+CREATE TABLE IF NOT EXISTS shopping_carts (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS shopping_cart_details CASCADE;
+CREATE TABLE IF NOT EXISTS shopping_cart_details (
+    id SERIAL PRIMARY KEY,
+    shopping_cart_id INTEGER NOT NULL REFERENCES shopping_carts (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    album_id INTEGER NOT NULL REFERENCES albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    quantity INTEGER NOT NULL,
+
+    CONSTRAINT quantityCheck CHECK (quantity > 0)
 );
 
 CREATE TABLE IF NOT EXISTS artists (
@@ -82,25 +99,12 @@ CREATE TABLE IF NOT EXISTS order_details (
     CONSTRAINT priceCheck CHECK (price >= 0)
 );
 
-CREATE TABLE IF NOT EXISTS shopping_carts (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER UNIQUE NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS shopping_cart_details (
-    id SERIAL PRIMARY KEY,
-    shopping_cart_id INTEGER NOT NULL REFERENCES shopping_carts (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    album_id INTEGER NOT NULL REFERENCES albums (id) ON DELETE CASCADE ON UPDATE CASCADE,
-    quantity INTEGER NOT NULL,
-
-    CONSTRAINT quantityCheck CHECK (quantity > 0)
-);
 
 /***********************
   Functions
  ***********************/
 
- CREATE OR REPLACE FUNCTION insert(username text, password text, email text)
+ CREATE OR REPLACE FUNCTION insert(username text, password text, email text, displayname text)
    RETURNS "users"."id"%TYPE
    AS
      $$
@@ -108,8 +112,9 @@ CREATE TABLE IF NOT EXISTS shopping_cart_details (
        DECLARE id_var int;
      BEGIN
 
-    	INSERT INTO users ( username, password ) values ($1,$2) RETURNING id INTO id_var;
- 	    INSERT INTO user_details (email,user_id) values ($3,id_var);
+    	INSERT INTO users (displayname, username, password, email) values ($4,$1,$2,$3) RETURNING id INTO id_var;
+ 	    INSERT INTO user_details (user_id) values (id_var);
+ 	    INSERT INTO shopping_carts (user_id) values (id_var);
 
  	    RETURN id_var;
 

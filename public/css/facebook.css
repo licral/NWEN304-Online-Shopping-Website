@@ -1,0 +1,13 @@
+
+.facebook{
+    float: right;
+    border: 0px;
+    padding: 9px 15px;
+    color: #FFFFFF;
+    font-size: 14px;
+    width: 180px;
+}
+
+.fa-cog {
+    color: #3B5998;
+}

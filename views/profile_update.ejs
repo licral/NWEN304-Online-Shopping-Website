@@ -20,19 +20,19 @@
             <!--<label>Confirm Password:</label>-->
             <!--<input name="confpassword" type="password" id="confirm_password" required class="form-control login-input" placeholder="">-->
             <label>First Name:</label>
-            <input name="firstname" type="text" class="form-control login-input" required placeholder="">
+            <input name="firstname" type="text" class="form-control login-input" required value="<%= first_name %>">
             <label>Last Name:</label>
-            <input name="lastname" type="text" class="form-control login-input" placeholder="">
+            <input name="lastname" type="text" class="form-control login-input" value="<%= last_name %>">
             <label>Phone Number:</label>
-            <input name="phone" type="tel" class="form-control login-input" required placeholder="">
+            <input name="phone" type="tel" class="form-control login-input" required value="<%= contact_no %>">
             <label>Street Address</label>
-            <input name="street" type="text" class="form-control login-input" required placeholder="">
+            <input name="street" type="text" class="form-control login-input" required value="<%= street %>">
             <label>Suburb</label>
-            <input name="suburb" type="text" class="form-control login-input" required placeholder="">
+            <input name="suburb" type="text" class="form-control login-input" required value="<%= suburb %>">
             <label>City</label>
-            <input name="city" type="text" class="form-control login-input" required placeholder="">
+            <input name="city" type="text" class="form-control login-input" required value="<%= city %>">
             <label>Country</label>
-            <input name="country" type="text" class="form-control login-input" required placeholder="">
+            <input name="country" type="text" class="form-control login-input" required value="<%= country %>">
 
             <button class="btn btn-primary btn-large" type="submit">Update</button>
         </form>

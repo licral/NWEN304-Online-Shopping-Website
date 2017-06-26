@@ -14,7 +14,7 @@ module.exports = function(app, passport){
     });
 
     app.post('/register', passport.authenticate('local-signup', {
-        successRedirect : '/profile_update', //where to go on success?
+        successRedirect : '/profile_update_registration', //where to go on success?
         failureRedirect : '/register',
         failureFlash : true
     }));

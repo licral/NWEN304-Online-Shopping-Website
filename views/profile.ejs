@@ -5,6 +5,9 @@
 <div class="container content">
     <h1 class="login-heading"><%= title%></h1>
     <div class="register-panel left">
+        <% if (message.length > 0) { %>
+        <div class="alert alert-success"><%= message %></div>
+        <% } %>
         <label>First Name: </label> <p><%= first_name %></p>
         <label>Last Name: </label> <p><%= last_name %></p>
         <label>Email: </label><p><%= email %></p>
@@ -14,7 +17,7 @@
         <label>City: </label><p><%= city %></p>
         <label>Country: </label><p><%= country %></p>
 
-        <button class="btn btn-primary btn-large" type="submit">Edit</button>
+        <a href="/profile_update/<%= username%>" class="btn btn-primary btn-large max-width" role="button">Edit</a>
     </div>
     <!--<div class="register-panel right">-->
     <!---->

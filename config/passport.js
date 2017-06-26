@@ -1,6 +1,8 @@
 var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 
+var auth = require('./auth');
+
 
 var pg = require('pg');
 var validator = require('validator');
@@ -15,13 +17,9 @@ module.exports = function (passport, pool) {
     });
 
     passport.deserializeUser(function (id, done) {
-        pool.connect()
-            .then((client, err) => {
-                client.query("SELECT * FROM users WHERE id = ($1)", [id], function (err, result) {
-                    client.release();
-                    done(err, result.rows[0]);
-                });
-            });
+         pool.query("SELECT * FROM users WHERE id = ($1)", [id], function (err, result) {
+             done(err, result.rows[0]);
+         });
     });
 
     passport.use(
@@ -52,7 +50,7 @@ module.exports = function (passport, pool) {
                             return done(err);
                         }
 
-                        client.query("SELECT * FROM user_details WHERE email = ($1)", [req.body.email], function (err, result) {
+                        client.query("SELECT * FROM users WHERE email = ($1)", [req.body.email], function (err, result) {
                             if (err) {
                                 client.release();
                                 return done(err);
@@ -81,9 +79,9 @@ module.exports = function (passport, pool) {
                                     };
 
                                     // use the transaction function to set up the user
-                                    var insertQuery = "SELECT insert($1,$2,$3)";
+                                    var insertQuery = "SELECT insert($1,$2,$3,$4)";
 
-                                    client.query(insertQuery, [newUser.username, newUser.password, req.body.email], function (err, result) {
+                                    client.query(insertQuery, [newUser.username, newUser.password, req.body.email, newUser.username], function (err, result) {
                                         client.release();
                                         if (err) {
                                             return done(err);
@@ -126,4 +124,49 @@ module.exports = function (passport, pool) {
                     return done(null, results.rows[0]);
                 });
             }));
+
+
+    passport.use(new FacebookStrategy({
+            clientID: auth.facebook.clientID,
+            clientSecret: auth.facebook.secret,
+            callbackURL: auth.facebook.callback,
+            assReqToCallback : true,
+            profileFields: ['id','email','first_name', 'last_name', 'displayName' ],
+            enableProof: true
+        },
+        function(accessToken, refreshToken, profile, done) {
+            usersDAO.getRow([profile.id], pool, function(err, msg, result){
+                if(err){
+                    return done(err);
+                }
+
+                if(result.rows.length > 0){
+                    return done(null, result.rows[0]);
+                }
+
+                var newUser = {
+                    // set all of the facebook information in our user model
+                    username : profile.displayName,
+                    facebook_id : profile.id, // set the users facebook id
+                    token : accessToken // we will save the token that facebook provides to the user
+                };
+
+                if(profile.emails !== undefined){
+                    newUser.email = profile.emails[0].value;
+                }
+
+                var insertQuery = "SELECT insert($1,$2,$3,$4)";
+
+                pool.query(insertQuery, [newUser.facebook_id, newUser.token, newUser.email, newUser.username], function (err, result) {
+                    if (err) {
+                        return done(err);
+                    }
+
+                    newUser.id = result.rows[0].insert;
+
+                    return done(null, newUser);
+                });
+            })
+        }
+    ));
 };

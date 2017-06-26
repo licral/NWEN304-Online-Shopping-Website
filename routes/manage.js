@@ -253,7 +253,7 @@ module.exports = function (app, pool) {
 function isAdmin(req, res, next) {
 
     // if user is authenticated in the session, carry on
-    if (req.user.isAdmin)
+    if (req.user.is_admin)
         return next();
 
     // if they aren't redirect them to the home page

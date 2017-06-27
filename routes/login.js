@@ -9,10 +9,13 @@
 module.exports = function(app, passport){
 
     app.get('/login', function (req, res) {
+        var error = req.session.error;
+        req.session.error = null;
         res.render('login', {
             title: 'Login',
             description: 'Log in to Vinylholics with an existing account.',
-            message: req.flash('loginMessage')
+            message: req.flash('loginMessage'),
+            error: error
         });
     });
 

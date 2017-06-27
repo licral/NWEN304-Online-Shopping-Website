@@ -234,7 +234,7 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.post('/manage/remove/item/:id', function (req, res) {
+    app.post('/manage/remove/item/:id', isAdmin, function (req, res) {
         var id = req.params.id;
 
         let sql = "delete from order_details where id=$1;";
@@ -252,10 +252,18 @@ module.exports = function (app, pool) {
 
 function isAdmin(req, res, next) {
 
-    // if user is authenticated in the session, carry on
-    if (req.user.is_admin)
-        return next();
+    if(req.user){
+        // if user is authenticated in the session, carry on
+        if (req.user.is_admin){
+            return next();
+        } else {
+            // if they aren't redirect them to the home page
+            req.session.error = "Sorry you do not have permissions to access this content.";
+            res.redirect('/');
+        }
+    } else {
+        req.session.error = "You must be logged in to access this content.";
+        res.redirect('/login');
+    }
 
-    // if they aren't redirect them to the home page
-    res.redirect('/');
 }

@@ -5,9 +5,12 @@
  */
 module.exports = function(app, pool){
     app.get('/', function (req, res) {
+        var error = req.session.error;
+        req.session.error = null;
         let pageData = {
             title: 'Home',
-            description: "Welcome to Vinylholics! Find those classic vinyls you have always been looking for and maybe stumble on a great deal for it!"
+            description: "Welcome to Vinylholics! Find those classic vinyls you have always been looking for and maybe stumble on a great deal for it!",
+            error: error
         };
 
         let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.id desc limit 10;";

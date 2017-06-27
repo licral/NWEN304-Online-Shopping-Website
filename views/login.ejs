@@ -3,6 +3,9 @@
     <body>
         <% include components/menu_and_heading.ejs %>
         <div class="container content">
+            <% if (locals.error) {%>
+                <div class="alert alert-danger" role="alert"><%= locals.error %></div>
+            <% } %>
             <div class="login-panel left">
                 <h1 class="login-heading">Login</h1>
 

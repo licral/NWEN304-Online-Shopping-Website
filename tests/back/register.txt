@@ -1,0 +1,15 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/register \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 649943a4-5412-e5f4-6cf4-20e2ad601a3d'
+
+// THE EMAIL, USERNAME WILL NEED TO BE ALTERED FOR EACH NEW TEST
+curl -X POST \
+  https://vinylholics.herokuapp.com/register \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: b3d784b4-f9f3-097f-93ea-59d1b06982c2' \
+  -F email=test1@test.com \
+  -F username=test1 \
+  -F password=test \
+  -F confpassword=test

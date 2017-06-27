@@ -10,8 +10,8 @@
         <% if (locals.error) { %>
             <div class="alert alert-danger">
                 <%= error %>, please refresh or contact our <a href="mailto:hectorcaesar@hotmail.com">customer service</a>.
-            </div>s
-        <% } else { %>
+            </div>
+        <% } else if (orders.length) {%>
             <div class="panel-group">
                 <% for (let order of orders) { %>
                     <div class="panel panel-default">
@@ -74,6 +74,8 @@
                     </div>
                 <% } %>
             </div>
+        <% } else { %>
+            <p>No orders found.</p>
         <% } %>
     </div>
 </div>

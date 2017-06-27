@@ -1,0 +1,22 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/profile_update_registration \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 38735df1-d0dc-c776-1eec-9f7a3e061e0e'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/profile/admin \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: c781d29c-902c-44c7-4a0c-36df34a7679a'
+
+curl -X POST \
+  https://vinylholics.herokuapp.com/profile_update \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: 98fc0494-e25d-fee0-3470-7c7bd9756ee0' \
+  -F firstname=admin \
+  -F lastname=admin \
+  -F phone=12345678 \
+  -F 'street=test street' \
+  -F 'suburb=test suburb' \
+  -F 'city=test city' \
+  -F 'country=test country'

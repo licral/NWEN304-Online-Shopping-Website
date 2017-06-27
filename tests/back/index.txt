@@ -1,0 +1,4 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/ \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 1705412e-982e-a042-5f6a-3a459d1dd592'

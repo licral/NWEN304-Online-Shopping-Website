@@ -45,7 +45,7 @@ module.exports = function(app, pool){
                 console.log(results);
 
                 res.render('profile', {
-                    title: 'Edit Details',
+                    title: 'View Profile',
                     description: 'User Details',
                     first_name: results.first_name,
                     last_name: results.last_name,
@@ -174,5 +174,6 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    req.session.error = "You must be logged in to access this content.";
+    res.redirect('/login');
 }

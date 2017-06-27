@@ -95,7 +95,7 @@ require('./routes/shopping_cart')(app, connectionPool);
 require('./routes/order')(app, connectionPool);
 require('./routes/manage')(app, connectionPool);
 require('./routes/add')(app, connectionPool);
-// require('./routes/404')(app);
+require('./routes/404')(app);
 require('./routes/access_denied')(app);
 
 //========================================

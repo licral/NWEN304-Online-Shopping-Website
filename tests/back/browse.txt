@@ -1,0 +1,14 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/browse/page/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 9907e3d7-b5c0-501c-86d2-06e3b2792ac5'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/browse/page/2 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 6fa2e702-c225-87ec-248e-76e7ffe30520'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/browse/artist \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: e5acddd2-5a6e-f604-55bc-05dd60cb6d60'

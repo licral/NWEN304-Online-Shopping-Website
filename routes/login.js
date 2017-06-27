@@ -9,6 +9,10 @@
 module.exports = function(app, passport){
 
     app.get('/login', function (req, res) {
+        if(req.user){
+            req.session.error = "You must log out first before registering";
+            res.redirect('/');
+        }
         var error = req.session.error;
         req.session.error = null;
         res.render('login', {

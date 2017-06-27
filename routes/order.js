@@ -52,6 +52,7 @@ module.exports = function (app, pool) {
                 console.error('[ERROR] Query error:', error.message, error.stack);
             });
         } else {
+            request.session.error = "You must be logged in to access this content.";
             response.redirect("/login"); // if the user is not logged in, redirect. This shouldn't happen.
             console.error("[ERROR] Received GET '/checkout' without authenticated user.");
         }
@@ -109,8 +110,10 @@ module.exports = function (app, pool) {
                 .catch(error => {
                     pageData.error = "Database error occurred";
                     console.error(`[ERROR] Failed to retrieve order history for user ${userId}. error: ${error.message} ${error.stack}`);
+                    response.render('orders', pageData);
                 });
         } else {
+            request.session.error = "You must be logged in to access this content.";
             response.redirect("/login"); // if the user is not logged in, redirect. This shouldn't happen.
             console.error("[ERROR] Received GET '/orders' without authenticated user.");
         }

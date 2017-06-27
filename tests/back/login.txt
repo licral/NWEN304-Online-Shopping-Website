@@ -1,0 +1,9 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/login \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: dcc6724b-1eb1-4056-1a56-9d185f05cd78'
+
+curl -X POST \
+  'https://vinylholics.herokuapp.com/login?username=admin&password=admin' \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 2631b752-2656-5f36-a57e-79bc9c31eaa0'

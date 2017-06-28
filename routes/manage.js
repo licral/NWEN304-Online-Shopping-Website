@@ -193,11 +193,34 @@ module.exports = function (app, pool) {
             description: "Manage all order histories in the database"
         };
 
-        let sql = "SELECT orders.id, orders.order_time, users.username FROM orders JOIN users ON orders.user_id=users.id order by orders.id";
+        let sql = "SELECT orders.id, orders.order_time, users.displayname FROM orders JOIN users ON orders.user_id = users.id ORDER BY orders.id";
 
         pool.query(sql)
             .then(result => {
-                pageData.orders = result.rows;
+                pageData.orders = result.rows.map(order => {
+                    let timeStamp = new Date(order.order_time);
+                    let hour = timeStamp.getUTCHours();
+                    let minute = timeStamp.getMinutes();
+                    let day = timeStamp.getDate();
+                    let month = timeStamp.getMonth() + 1;
+                    let year = timeStamp.getFullYear();
+
+                    day = day < 10 ? '0' + day : day;
+                    month = month < 10 ? '0' + month : month;
+
+                    let end = hour >= 12 ? "PM" : "AM";
+                    hour = hour > 12 ? hour - 12 : hour;
+                    hour = hour < 10 ? '0' + hour : hour;
+                    minute = minute < 10 ? '0' + minute : minute;
+
+                    return {
+                        id: order.id,
+                        order_date: `${day}/${month}/${year}`,
+                        order_time: `${hour}:${minute} ${end}`,
+                        user: order.displayname
+                    };
+                });
+
                 res.render('manage_list', pageData);
             })
             .catch(e => {
@@ -215,16 +238,37 @@ module.exports = function (app, pool) {
 
         pool.query(sql, [id])
             .then(result => {
-                pageData.title = "Order #" + result.rows[0].order_id;
-                pageData.description = "Viewing information of order # " + result.rows[0].order_id;
-                pageData.order_id = result.rows[0].order_id;
-                pageData.order_time = result.rows[0].order_time;
-                pageData.user = result.rows[0].username;
+                let order = result.rows[0];
+
+                let timeStamp = new Date(order.order_time);
+                let hour = timeStamp.getUTCHours();
+                let minute = timeStamp.getMinutes();
+                let day = timeStamp.getDate();
+                let month = timeStamp.getMonth() + 1;
+                let year = timeStamp.getFullYear();
+
+                day = day < 10 ? '0' + day : day;
+                month = month < 10 ? '0' + month : month;
+
+                let end = hour >= 12 ? "PM" : "AM";
+                hour = hour > 12 ? hour - 12 : hour;
+                hour = hour < 10 ? '0' + hour : hour;
+                minute = minute < 10 ? '0' + minute : minute;
+
+                pageData.order_time = `${hour}:${minute} ${end}`;
+                pageData.order_date = `${day}/${month}/${year}`;
+
+                pageData.title = "Order #" + order.order_id;
+                pageData.description = "Viewing information of order # " + order.order_id;
+                pageData.order_id = order.order_id;
+                pageData.user = order.username;
                 pageData.albums = result.rows;
-                pageData.totalPrice = 0;
-                pageData.albums.forEach(album => {
-                    pageData.totalPrice = pageData.totalPrice + album.quantity * Number(album.price);
-                });
+
+                let totalPrice = pageData.albums.reduce((sum, album) => {
+                    return sum + album.quantity * Number(album.price);
+                }, 0);
+                pageData.totalPrice = Number(totalPrice).toFixed(2);
+
                 res.render('manage_order', pageData);
             })
             .catch(e => {

@@ -17,8 +17,8 @@
                 <%= error %>
             </div>
         <% } else { %>
-            <% if (locals.albums) { %>
-                <table class="table">
+            <table class="table">
+                <% if (locals.albums) { %>
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -45,8 +45,7 @@
                             </td>
                         </tr>
                     <% } %>
-            <% } else if (locals.artists) { %>
-                <table class="table">
+                <% } else if (locals.artists) { %>
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -69,8 +68,7 @@
                         </td>
                     </tr>
                     <% } %>
-            <% } else if (locals.orders) { %>
-                <table class="table">
+                <% } else if (locals.orders) { %>
                     <thead>
                     <tr>
                         <th>Order ID</th>
@@ -82,31 +80,16 @@
                     </thead>
                     <tbody>
                     <% for (let order of orders) { %>
-                    <%
-                        var date = new Date(order.order_time);
-                        var end = 'AM';
-                        var hour = date.getUTCHours();
-                        if(hour >= 12){
-                            end = 'PM';
-                        }
-                        if(hour > 12){
-                            hour = hour - 12;
-                        }
-                        var minute = date.getMinutes();
-                        if(minute < 10){
-                            minute = '0' + minute;
-                        }
-                    %>
                     <tr>
                         <td><%= order.id %></td>
-                        <td><%= order.username %></td>
-                        <td><%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %></td>
-                        <td><%= hour %>:<%= minute %> <%= end %></td>
+                        <td><%= order.user %></td>
+                        <td><%= order.order_date %></td>
+                        <td><%= order.order_time %></td>
                         <td>
                             <a href="/manage/order/<%= order.id %>">
                                 <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
                             </a>
-                            <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
+                            <span class="fa fa-archive action remove" aria-hidden="true"></span>
                         </td>
                     </tr>
                     <% } %>

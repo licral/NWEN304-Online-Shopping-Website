@@ -5,33 +5,9 @@
         <div class="container content">
             <h1>Order #<%= order_id %></h1>
             <div>
-                <%
-                var date = new Date(order_time);
-                var end = 'AM';
-                var hour = date.getUTCHours();
-                if(hour >= 12){
-                    end = 'PM';
-                }
-                if(hour > 12){
-                    hour = hour - 12;
-                }
-                var minute = date.getMinutes();
-                if(minute < 10){
-                    minute = '0' + minute;
-                }
-                var total = (totalPrice + "").split('.');
-                var dollar = total[0];
-                var cent = '00';
-                if(total.length == 2){
-                    cent = total[1];
-                    if(total[1] < 10){
-                        cent = cent + '0';
-                    }
-                }
-                %>
-                <p>Date Ordered: <%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %></p>
-                <p>Time Ordered: <%= hour %>:<%= minute %> <%= end %></p>
-                <p>Total Price: $<%= dollar %>.<%= cent %></p>
+                <p>Date Ordered: <%= order_date %></p>
+                <p>Time Ordered: <%= order_time %></p>
+                <p>Total Price: $<%= totalPrice %></p>
                 <table class="table">
                     <thead>
                     <tr>

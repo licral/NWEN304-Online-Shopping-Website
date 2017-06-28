@@ -28,22 +28,13 @@ const pool = new Pool(config);
 
 // =================== connect & prepare ===================
 
-pool.connect()
-    .then(client => {
-        let sql = fs.readFileSync('pg_scripts/2.db_prepare.sql').toString();
-
-        client.query(sql)
-            .then(result => {
-                client.release();
-                console.log("[SUCCESS] tables created and test data populated.");
-            })
-            .catch(e => {
-                client.release();
-                console.error('[ERROR] Query error', e.message, e.stack);
-            });
+let sql = fs.readFileSync('pg_scripts/2.db_prepare.sql').toString();
+pool.query(sql)
+    .then(result => {
+        console.log("[SUCCESS] tables created and test data populated.");
     })
-    .catch(error => {
-        console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+    .catch(e => {
+        console.error('[ERROR] Query error', e.message, e.stack);
     });
 
 // disconnect

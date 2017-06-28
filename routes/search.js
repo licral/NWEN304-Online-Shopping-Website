@@ -7,15 +7,13 @@ module.exports = function (app, pool) {
             description: "Search Result",
             results: {
                 albums: [],
-                artists: [],
-                songs: []
+                artists: []
             }
         };
 
         let sqls = [
             "SELECT * FROM albums WHERE LOWER(title) LIKE $1",
-            "SELECT * FROM artists WHERE LOWER(artist_name) LIKE $1",
-            "SELECT * FROM songs WHERE LOWER(title) LIKE $1"
+            "SELECT * FROM artists WHERE LOWER(artist_name) LIKE $1"
         ];
 
         Promise.all(sqls.map(sql => {
@@ -23,7 +21,6 @@ module.exports = function (app, pool) {
         })).then(arrayOfResult => {
             pageData.results.albums.push(...arrayOfResult[0].rows);
             pageData.results.artists.push(...arrayOfResult[1].rows);
-            pageData.results.songs.push(...arrayOfResult[2].rows);
 
             response.set({
                 'Cache-Control': 'public, no-cache, must-revalidate'

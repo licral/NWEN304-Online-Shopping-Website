@@ -24,7 +24,10 @@ module.exports = function (app, pool) {
                 pageData.albums = arrayOfResult[1].rows;
             }
 
-            response.render('artist', pageData);
+            response.set({
+                'Cache-Control': 'public, max-age=86400',
+                'Expires': new Date(Date.now() + 86400000).toUTCString()
+            }).render('artist', pageData);
         }).catch(error => {
             pageData.title = "Error";
             pageData.description = "Error";

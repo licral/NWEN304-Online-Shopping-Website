@@ -104,7 +104,9 @@ module.exports = function (app, pool) {
                         }, 0);
                     });
 
-                    response.render('orders', pageData);
+                    response.set({
+                        'Cache-Control': 'private, no-cache, no-store, must-revalidate'
+                    }).render('orders', pageData);
                 })
                 .catch(error => {
                     pageData.error = "Database error occurred";

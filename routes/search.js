@@ -25,7 +25,9 @@ module.exports = function (app, pool) {
             pageData.results.artists.push(...arrayOfResult[1].rows);
             pageData.results.songs.push(...arrayOfResult[2].rows);
 
-            response.render('search_results', pageData);
+            response.set({
+                'Cache-Control': 'public, no-cache, must-revalidate'
+            }).render('search_results', pageData);
         }).catch(error => {
             pageData.error = "Database error occurred";
             response.render('search_results', pageData);

@@ -38,7 +38,7 @@ module.exports = function (app, pool) {
                             });
                     })
                     .catch(e2 => {
-                        console.error('[ERROR] Query error', e.message, e.stack);
+                        console.error('[ERROR] Query error', e2.message, e2.stack);
                         // Fix redirects here
                         res.redirect('/manage/vinyls');
                     });
@@ -71,7 +71,10 @@ module.exports = function (app, pool) {
                 }
                 pageData.date = date.getFullYear() + "-" + month + "-" + day;
 
-                res.render('new_vinyl', pageData);
+                res.set({
+                    'Cache-Control': 'public, max-age=86400',
+                    'Expires': new Date(Date.now() + 86400000).toUTCString()
+                }).render('new_vinyl', pageData);
             })
             .catch(e => {
                 pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
@@ -106,7 +109,7 @@ module.exports = function (app, pool) {
                             });
                     })
                     .catch(e2 => {
-                        console.error('[ERROR] Query error', e.message, e.stack);
+                        console.error('[ERROR] Query error', e2.message, e2.stack);
                         // Fix redirects here
                         res.redirect('/manage/artists');
                     });
@@ -119,9 +122,12 @@ module.exports = function (app, pool) {
     });
 
     app.get('/add/artist', function (req, res) {
-        res.render('new_artist', {
+        res.set({
+            'Cache-Control': 'public, max-age=86400',
+            'Expires': new Date(Date.now() + 86400000).toUTCString()
+        }).render('new_artist', {
             title : "Add New Artist",
             description : "Add a new artist"
-        })
+        });
     });
 };

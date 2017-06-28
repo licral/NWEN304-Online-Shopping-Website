@@ -74,8 +74,10 @@ app.use(function(req, res, next){
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-// Setting a path for our resources
-app.use(express.static(__dirname + '/public'));
+// Setting a path for public resources
+app.use(express.static(__dirname + '/public', {
+    maxage: "1y"   // caching public files
+}));
 
 //========================================
 // Add routes

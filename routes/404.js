@@ -6,7 +6,7 @@ module.exports = function (app) {
         };
 
         response.header({
-            'Cache-Control': 'public, max-age=86400',
+            'Cache-Control': 'public, no-cache, must-revalidate',
             'Expires': new Date(Date.now() + 86400000).toUTCString()
         }).render('404', pageData);
         console.log(`[Log] Someone is poking around. Received: ${request.method} '${request.path}'`);

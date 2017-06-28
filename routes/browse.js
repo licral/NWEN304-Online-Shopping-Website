@@ -19,7 +19,7 @@ module.exports = function (app, pool) {
                 pageData.artists = result.rows;
 
                 res.set({
-                    'Cache-Control': 'public, max-age=86400',
+                    'Cache-Control': 'public, no-cache, must-revalidate',
                     'Expires': new Date(Date.now() + 86400000).toUTCString()
                 }).render('browse', pageData);
             })

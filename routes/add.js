@@ -72,7 +72,7 @@ module.exports = function (app, pool) {
                 pageData.date = date.getFullYear() + "-" + month + "-" + day;
 
                 res.set({
-                    'Cache-Control': 'public, max-age=86400',
+                    'Cache-Control': 'public, no-cache, must-revalidate',
                     'Expires': new Date(Date.now() + 86400000).toUTCString()
                 }).render('new_vinyl', pageData);
             })
@@ -123,7 +123,7 @@ module.exports = function (app, pool) {
 
     app.get('/add/artist', function (req, res) {
         res.set({
-            'Cache-Control': 'public, max-age=86400',
+            'Cache-Control': 'public, no-cache, must-revalidate',
             'Expires': new Date(Date.now() + 86400000).toUTCString()
         }).render('new_artist', {
             title : "Add New Artist",

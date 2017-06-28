@@ -25,7 +25,7 @@ module.exports = function (app, pool) {
             }
 
             response.set({
-                'Cache-Control': 'public, max-age=86400',
+                'Cache-Control': 'public, no-cache, must-revalidate',
                 'Expires': new Date(Date.now() + 86400000).toUTCString()
             }).render('artist', pageData);
         }).catch(error => {

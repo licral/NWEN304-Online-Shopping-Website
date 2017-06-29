@@ -63,8 +63,12 @@
                 $.ajax({
                     url: '/manage/remove/item/' + id,
                     type: 'post',
-                    success: function(){
-                        location.reload();
+                    success: function (jqxhr) {
+                        if (jqxhr.redirect) {
+                            location.href = jqxhr.redirect;
+                        } else {
+                            location.reload();
+                        }
                     }
                 })
             });

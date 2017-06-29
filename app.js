@@ -19,8 +19,8 @@ var flash = require('connect-flash');
 var https = require('https');
 var fs = require('fs');
 
-var key = fs.readFileSync('vinylholicskey.pem');
-var cert = fs.readFileSync('certificate.pem')
+var key = fs.readFileSync('pems/vinylholicskey.pem');
+var cert = fs.readFileSync('pems/certificate.pem');
 
 var options = {
     key: key,

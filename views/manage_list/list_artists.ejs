@@ -1,0 +1,26 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Artist Image</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% for (let artist of artists) { %>
+    <tr>
+        <td><%= artist.id %></td>
+        <td><%= artist.artist_name %></td>
+        <td><img src="/image/artists/small/<%= artist.id %>" width="30" alt="album cover image"/></td>
+        <td>
+            <a href="/manage/artist/<%= artist.id %>">
+                <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
+            </a>
+            <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
+        </td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>

@@ -53,7 +53,6 @@ module.exports = function (app, pool) {
                         res.render('manage_vinyl', pageData);
                     })
                     .catch(e => {
-                        client.release();
                         console.error('[ERROR] Query error', e.message, e.stack);
                         // Fix redirects here
                         res.redirect('/manage/vinyls');
@@ -193,6 +192,12 @@ module.exports = function (app, pool) {
             description: "Manage all order histories in the database"
         };
 
+        // pass in flash messages
+        let flash = req.flash();
+        Object.keys(flash).forEach(key => {
+            pageData[key] = flash[key];
+        });
+
         let sql = "SELECT orders.id, orders.order_time, users.displayname FROM orders JOIN users ON orders.user_id = users.id ORDER BY orders.id";
 
         pool.query(sql)
@@ -279,27 +284,78 @@ module.exports = function (app, pool) {
     });
 
     app.post('/manage/remove/item/:id', function (req, res) {
-        var id = req.params.id;
+        let id = req.params.id;
+        let order_id;
 
-        let sql = "delete from order_details where id=$1;";
-        pool.query(sql, [id])
-            .then(result => {
+        let sql1 = "SELECT order_id FROM order_details WHERE id = $1";
+        let sql2 = "DELETE FROM order_details WHERE id = $1";
+        let sql3 = "SELECT id FROM order_details WHERE order_id = $1";
+
+        pool.query(sql1, [id]).then(result => {
+            order_id = result.rows[0].order_id;
+            return pool.query(sql2, [id]);
+        }).then(result => {
+            return pool.query(sql3, [order_id]);
+        }).then(result => {
+            if (result.rowCount === 0) {
+                // we need to delete the corresponding order as well
+                let sql4 = "DELETE FROM orders WHERE id = $1";
+                return pool.query(sql4, [order_id]);
+            }
+        }).then(result => {
+            if (result === undefined) {
                 res.sendStatus(200);
-            })
-            .catch(e => {
-                console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
-                res.sendStatus(400);
+            } else {
+                // a workaround to make ajax respond to redirect
+                res.status(200).json({ redirect: '/manage/orders' });
+            }
+        }).catch(e => {
+            console.error('[ERROR] Query error', e.message, e.stack);
+            // Fix redirects here
+            res.sendStatus(400);
+        });
+    });
+
+    app.post("/archive", function (request, response) {
+        // request.body example: { '16': 'on', '17': 'on', '18': 'on' }
+        let arrayOfIds = Object.keys(request.body);
+
+        if (arrayOfIds.length > 0) {
+            let archiver = require("../services/order_archiver");
+            let path = require('path');
+            let fileName = new Date().toISOString().replace(/:/g, "").split(".")[0] + '.json';
+            let filePath = path.join(__dirname, '../archives/orders/');
+            let fullPath = filePath + fileName;
+
+            archiver.archiveOrders(pool, arrayOfIds, fullPath, function (error) {
+                if (error) {
+                    console.error('[ERROR] Query error', error.message, error.stack);
+                    request.flash('archiving_error', 'Archiving failed, please examine orders with id: ' + arrayOfIds);
+                    response.redirect('/manage/orders');
+                } else {
+                    request.flash('archiving_done', 'Archiving done. File location: ' + fullPath);
+                    response.redirect('/manage/orders');
+                }
             });
+        } else {
+            request.flash('archiving_error', 'Please at lease select one order to archive');
+            response.redirect('/manage/orders');
+        }
     });
 };
 
 function isAdmin(req, res, next) {
-
-    // if user is authenticated in the session, carry on
-    if (req.user.is_admin)
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/');
+    if (req.user) {
+        // if user is authenticated in the session, carry on
+        if (req.user.is_admin) {
+            return next();
+        } else {
+            // if they aren't redirect them to the home page
+            req.session.error = "Sorry you do not have permissions to access this content.";
+            res.redirect('/');
+        }
+    } else {
+        req.session.error = "You must be logged in to access this content.";
+        res.redirect('/login');
+    }
 }

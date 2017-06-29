@@ -25,9 +25,6 @@ module.exports = {
             return new Promise(function (resolve, reject) {
                 let fs = require("fs");
 
-                console.log("====================================");
-                console.log(json);
-
                 // 2. write those orders to json files
                 fs.writeFile(filePath, json, err => {
                     if (err) {

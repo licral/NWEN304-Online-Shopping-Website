@@ -36,6 +36,21 @@ require('./config/passport')(passport, connectionPool);
 //========================================
 // Config app
 //========================================
+
+// force http to https
+app.use(function (request, response, next) {
+
+    console.error("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    console.error(request.headers['x-forwarded-proto']);
+
+    if (request.headers['x-forwarded-proto'] !== 'https') {
+        let httpsUrl = ['https://vinylholics.herokuapp.com', request.url].join('');
+        return response.redirect(httpsUrl);
+    }
+
+    return next();
+});
+
 app.use(upload.single('image'));
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)

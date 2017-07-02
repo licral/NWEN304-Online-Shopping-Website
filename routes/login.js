@@ -20,15 +20,7 @@ module.exports = function(app, passport){
             successRedirect : '/', //where to go on success?
             failureRedirect : '/login',
             failureFlash : true
-        }),
-        function(req, res) {
-            if (req.body.remember) {
-                req.session.cookie.maxAge = 300000;
-            } else {
-                req.session.cookie.expires = false;
-            }
-            res.redirect('/');
-        });
+        }));
 
     // Redirect the user to Facebook for authentication.  When complete,
     // Facebook will redirect the user back to the application at

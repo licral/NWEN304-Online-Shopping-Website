@@ -1,0 +1,40 @@
+<script src="/js/manage_orders.js"></script>
+
+<form action="/archive" method="post">
+    <button type="submit" class="btn btn-primary" role="button">
+        <span class="fa fa-archive"></span> Archive Selected
+    </button>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th><label for="select-all"></label><input type="checkbox" class="checkbox checkbox-primary big-checkbox" id="select-all"></th>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Date Ordered</th>
+            <th>Time Ordered</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% for (let order of orders) { %>
+        <% let id = order.id %>
+        <tr>
+            <td>
+                <input type="checkbox" class="checkbox checkbox-primary big-checkbox order-checkbox" id="select-order-<%= id %>" name="<%= id %>">
+            </td>
+            <td><label for="select-order-<%= id %>"><%= id %></label></td>
+            <td><%= order.user %></td>
+            <td><%= order.order_date %></td>
+            <td><%= order.order_time %></td>
+            <td>
+                <a href="/manage/order/<%= id %>">
+                    <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
+                </a>
+            </td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</form>

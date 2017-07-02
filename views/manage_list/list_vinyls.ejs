@@ -1,0 +1,30 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Artist</th>
+        <th>Album Cover</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% for (let album of albums) { %>
+    <tr>
+        <td><%= album.id %></td>
+        <td><%= album.title %></td>
+        <td><%= album.price %></td>
+        <td><%= album.artist_name %></td>
+        <td><img src="/image/albums/small/<%= album.id %>" width="30" alt="album cover image"/></td>
+        <td>
+            <a href="/manage/vinyl/<%= album.id %>">
+                <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
+            </a>
+            <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
+        </td>
+    </tr>
+    <% } %>
+    </tbody>
+</table>

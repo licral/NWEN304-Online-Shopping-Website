@@ -13,8 +13,7 @@
   * have ETag
 
 ## Relatively static resources
-* Images for albums or artists  
-  Not-so-dynamic pages (browse artists, artist page, 404)
+* Images for albums or artists
 * Cache for 1 day, public, weak ETag, stale resource allowed.
 * Example:
     ```
@@ -30,7 +29,7 @@
   * have ETag
 
 ## Dynamic pages
-* Index, browse albums, album page
+* All pages
 * Re-validate before using cached resource, public, weak ETag, stale resource not allowed.
 * Example:
   ```

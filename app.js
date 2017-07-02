@@ -19,8 +19,8 @@ var flash = require('connect-flash');
 var https = require('https');
 var fs = require('fs');
 
-var key = fs.readFileSync('vinylholicskey.pem');
-var cert = fs.readFileSync('certificate.pem')
+var key = fs.readFileSync('pems/vinylholicskey.pem');
+var cert = fs.readFileSync('pems/certificate.pem');
 
 var options = {
     key: key,
@@ -36,6 +36,17 @@ require('./config/passport')(passport, connectionPool);
 //========================================
 // Config app
 //========================================
+
+// force http to https
+// app.use(function (request, response, next) {
+//     if (request.headers['x-forwarded-proto'] !== 'https') {
+//         let httpsUrl = ['https://vinylholics.herokuapp.com', request.url].join('');
+//         return response.redirect(httpsUrl);
+//     }
+//
+//     return next();
+// });
+
 app.use(upload.single('image'));
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -48,6 +59,7 @@ app.use(bodyParser.json());
 
 app.use(session({
     secret: 'vinylholicssecretforauthentication',
+    cookie: { maxAge: 300000},
     resave: true,
     saveUninitialized: true
 } )); // session secret

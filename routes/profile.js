@@ -23,6 +23,10 @@ module.exports = function(app, pool){
     });
 
     app.get('/profile/:id', isLoggedIn, function (req, res) {
+        if(req.user.username != req.params.id){
+            res.redirect('/profile/' + req.user.username);
+            return;
+        }
         usersDAO.getRow([req.params.id], pool, function(err,msg,results) {
             if (err) {
                 res.status(500).send(msg);

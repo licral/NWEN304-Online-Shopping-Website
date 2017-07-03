@@ -16,7 +16,9 @@ module.exports = function (app, pool) {
         pool.query(sql)
             .then(result => {
                 pageData.albums = result.rows;
-                res.render('manage_list', pageData);
+                res.set({
+                    'Cache-Control': 'public, no-cache, must-revalidate'
+                }).render('manage_list', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
@@ -122,7 +124,9 @@ module.exports = function (app, pool) {
         pool.query(sql)
             .then(result => {
                 pageData.artists = result.rows;
-                res.render('manage_list', pageData);
+                res.set({
+                    'Cache-Control': 'public, no-cache, must-revalidate'
+                }).render('manage_list', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
@@ -226,7 +230,9 @@ module.exports = function (app, pool) {
                     };
                 });
 
-                res.render('manage_list', pageData);
+                res.set({
+                    'Cache-Control': 'public, no-cache, must-revalidate'
+                }).render('manage_list', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);

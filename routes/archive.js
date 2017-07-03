@@ -30,14 +30,26 @@ module.exports = function (app, pool) {
 
     app.get("/order_archives", function (request, response) {
         let dirName = path.join(__dirname, '../archives/orders/');
+        let pageData = {
+            title: 'View order archives',
+            description: "View order archives"
+        };
 
-        // TODO: not done!!!
+        let files = fs.readdirSync(dirName);
+        if (files.length > 0) {
+            pageData.archives = files;
+        }
 
-        fs.readdirSync(dirName).forEach(file => {
-            console.log(file);
-        });
+        response.set({
+            'Cache-Control': 'public, no-cache, must-revalidate'
+        }).render('order_archives', pageData);
+    });
 
-        response.redirect("/404");
+    app.get("/order_archives/:file", function (request, response) {
+        let fileName = request.params.file;
+        let dirName = path.join(__dirname, '../archives/orders/');
+        let fullPath = dirName + fileName;
 
+        response.download(fullPath);
     });
 };

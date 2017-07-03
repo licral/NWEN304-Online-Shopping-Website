@@ -1,0 +1,22 @@
+<html>
+<% include components/head.ejs %>
+<body>
+<% include components/menu_and_heading.ejs %>
+<div class="container content">
+    <h1>View Order Archives</h1>
+
+    <div>
+        <% if (locals.archives) { %>
+            <ul>
+                <% for (let archive of archives) { %>
+                    <li><a href="/order_archives/<%= archive %>"><%= archive %></a></li>
+                <% } %>
+            </ul>
+
+        <% } else { %>
+            <h3>No archives found</h3>
+        <% } %>
+    </div>
+</div>
+</body>
+</html>

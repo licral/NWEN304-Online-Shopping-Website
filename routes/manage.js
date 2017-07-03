@@ -10,11 +10,14 @@ module.exports = function (app, pool) {
             heading: 'Vinyls',
             description: "Manage all vinyls in the database"
         };
+        var error = req.session.error;
+        req.session.error = null;
 
         let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.id;";
 
         pool.query(sql)
             .then(result => {
+                pageData.error = error;
                 pageData.albums = result.rows;
                 res.set({
                     'Cache-Control': 'public, no-cache, must-revalidate'
@@ -22,8 +25,9 @@ module.exports = function (app, pool) {
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
+                pageData.error = "There was a problem with the database";
                 // Fix redirects here
-                res.redirect('/');
+                res.render('manage_list', pageData);
             });
     });
 
@@ -56,14 +60,14 @@ module.exports = function (app, pool) {
                     })
                     .catch(e => {
                         console.error('[ERROR] Query error', e.message, e.stack);
-                        // Fix redirects here
+                        req.session.error = "Sorry we could not find the album";
                         res.redirect('/manage/vinyls');
                     });
 
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
+                req.session.error = "Sorry we could not find the album";
                 res.redirect('/manage/vinyls');
             });
     });

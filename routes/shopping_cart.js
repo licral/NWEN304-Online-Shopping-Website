@@ -43,7 +43,7 @@ module.exports = function (app, pool) {
                     console.error('[ERROR] Query error: ', e.message, e.stack);
                 });
         } else {
-            response.send([]); // this shouldn't happen
+            response.status(400).send([]); // this shouldn't happen
             console.error("[ERROR] Received POST '/shopping_cart' without authenticated user.");
         }
     });
@@ -70,7 +70,7 @@ module.exports = function (app, pool) {
                     console.error('[ERROR] Query error: ', e.message, e.stack);
                 });
         } else {
-            response.send([]); // this shouldn't happen
+            response.status(400).send([]); // this shouldn't happen
             console.error(`[ERROR] Received DELETE '/shopping_cart/${request.params.id}' without authenticated user.`);
         }
     });
@@ -98,7 +98,7 @@ module.exports = function (app, pool) {
                     console.error('[ERROR] Query error: ', e.message, e.stack);
                 });
         } else {
-            response.send([]); // this shouldn't happen
+            response.status(400).send([]); // this shouldn't happen
             console.error(`[ERROR] Received PATCH '/shopping_cart/${request.params.id}' without authenticated user.`);
         }
     });

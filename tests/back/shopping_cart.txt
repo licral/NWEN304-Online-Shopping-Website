@@ -6,3 +6,22 @@ curl -X GET \
 tests["Body is empty"] = responseBody === "[]";
 tests["Status code is 400"] = responseCode.code === 400;
 
+curl -X POST \
+  https://vinylholics.herokuapp.com/shopping_cart \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: aad9f322-084c-38db-1c8e-e6436cd038db' \
+  -F albumId=1 \
+  -F quantity=2
+
+curl -X DELETE \
+  https://vinylholics.herokuapp.com/shopping_cart/106 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 660db120-67f3-b373-999f-394c9346b8ad'
+
+curl -X PATCH \
+  https://vinylholics.herokuapp.com/shopping_cart/108 \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: 00888c51-59a5-204b-71d7-52288bd6166d' \
+  -F quantity=1

@@ -1,0 +1,9 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/checkout \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: c3b3af31-a387-9acc-83ec-806f9d86af76'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/orders \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: e5bdda59-5b15-0e74-e868-49003ec25929'

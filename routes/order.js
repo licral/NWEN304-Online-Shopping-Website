@@ -56,7 +56,6 @@ module.exports = function (app, pool) {
                     response.render("checkout", pageData);
 
                     pool.query(sql4, [userId]).catch(error => {
-                        pageData.error = "Database error occurred";
                         console.error(`[ERROR] Failed to empty the shopping cart for user ${userId}. error: ${error.message} ${error.stack}`);
                     });
                 } else {

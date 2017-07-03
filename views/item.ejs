@@ -17,6 +17,8 @@
 
                     <% if (locals.isLoggedIn) { %>
                         <a href="#" class="btn btn-primary btn-large max-width item-button add-to-cart-trigger" role="button" data-id="<%= album.id %>" data-title="<%= album.title %>" data-price="<%= album.price %>">Add to cart</a>
+                    <% } else { %>
+                        <a href="/login" class="btn btn-primary btn-large max-width item-button" role="button">Login to add to cart!</a>
                     <% } %>
                 </div>
                 <div class="item-page-right">

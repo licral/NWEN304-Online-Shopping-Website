@@ -1,0 +1,8 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/shopping_cart \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: ad72c1ce-8e26-3d63-52e1-43766c7e4cc0'
+
+tests["Body is empty"] = responseBody === "[]";
+tests["Status code is 400"] = responseCode.code === 400;
+

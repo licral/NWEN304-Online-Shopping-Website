@@ -7,6 +7,8 @@
     <div class="register-panel left">
         <% if (message.length > 0) { %>
         <div class="alert alert-success"><%= message %></div>
+        <% } else if (locals.error) { %>
+        <div class="alert alert-danger" role="alert"><%= locals.error %></div>
         <% } %>
         <label>First Name: </label> <p><%= first_name %></p>
         <label>Last Name: </label> <p><%= last_name %></p>

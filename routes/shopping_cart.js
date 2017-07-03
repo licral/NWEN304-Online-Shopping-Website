@@ -14,7 +14,7 @@ module.exports = function (app, pool) {
                     console.error('[ERROR] Query error:', e.message, e.stack);
                 });
         } else {
-            response.send([]); // this shouldn't happen
+            response.status(400).send([]); // this shouldn't happen
             console.error("[ERROR] Received GET '/shopping_cart' without authenticated user.");
         }
     });

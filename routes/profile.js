@@ -24,9 +24,12 @@ module.exports = function(app, pool){
 
     app.get('/profile/:id', isLoggedIn, function (req, res) {
         if(req.user.username != req.params.id){
+            req.session.error = "You do not have permission to access this content.";
             res.redirect('/profile/' + req.user.username);
             return;
         }
+        var error = req.session.error;
+        req.session.error = null;
         usersDAO.getRow([req.params.id], pool, function(err,msg,results) {
             if (err) {
                 res.status(500).send(msg);
@@ -59,7 +62,8 @@ module.exports = function(app, pool){
                     suburb: results.suburb,
                     city: results.city,
                     country: results.country,
-                    message: req.flash('profileMessage')
+                    message: req.flash('profileMessage'),
+                    error: error
                 });
             });
         });

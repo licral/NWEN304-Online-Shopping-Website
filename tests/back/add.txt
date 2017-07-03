@@ -1,0 +1,8 @@
+==============================================================================================
+Note: Our add service requires a file buffer when posting, not quite sure how to post an image
+so I didn't make a curl for it.
+==============================================================================================
+
+Service: '/add/vinyl'
+Method: POST
+Success: There are 5 required fields in this form which are title, artist, released on, price and image. All of these fields are validated first before being stored in the database. If the values are invalid, an error will be rendered telling the user to provide valid information.

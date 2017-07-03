@@ -16,7 +16,8 @@ module.exports = function(app, passport){
         response.render('login', {
             title: 'Login',
             description: 'Log in to Vinylholics with an existing account.',
-            message: request.flash('loginMessage')
+            message: request.flash('loginMessage'),
+            error: request.flash('error')
         });
     });
 

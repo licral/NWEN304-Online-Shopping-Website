@@ -3,16 +3,16 @@
     <body>
         <% include components/menu_and_heading.ejs %>
         <div class="container content">
-            <% if (locals.error.length > 0) {%>
+            <% if (locals.error && locals.error.length > 0) {%>
             <div class="alert alert-danger" role="alert"><%= locals.error %></div>
             <% } %>
             <h1>Edit Artist (ID): <%= item.id %></h1>
             <div>
                 <img src="/image/artists/medium/<%= item.id %>" width="175" alt="image" />
                 <form action="/manage/artist/<%= item.id %>" method="POST" enctype="multipart/form-data">
-                    <label>Upload new image:</label>
+                    <label>*Upload new image:</label>
                     <input type="file" class="form-control-file" name="image">
-                    <label>Name:</label>
+                    <label>*Name:</label>
                     <input name="artist_name" type="text" required class="form-control" placeholder="" value="<%= item.artist_name %>">
                     <label>Description:</label>
                     <textarea rows="8" name="description" class="form-control"><%= item.description %></textarea>

@@ -23,7 +23,7 @@ module.exports = function (app, pool) {
                 }
             });
         } else {
-            request.flash('error', 'Please at lease select one order to archive');
+            request.flash('error', 'Please at least select one order to archive');
             response.redirect('/manage/orders');
         }
     });

@@ -110,7 +110,6 @@ require('./routes/manage')(app, connectionPool);
 require('./routes/archive')(app, connectionPool);
 require('./routes/add')(app, connectionPool);
 require('./routes/404')(app);
-require('./routes/access_denied')(app);
 
 //========================================
 // create https server paid resource

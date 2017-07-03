@@ -1,0 +1,16 @@
+curl -X POST \
+  https://vinylholics.herokuapp.com/archive \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: 251b4ca1-f748-c7e0-afb6-17ae87194961' \
+  -F 16=on
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/order_archives \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 32d21e5d-5831-0719-0676-e6c500d4d4ca'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/order_archives/2017-07-03T025833.json \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 2b53e1cf-227e-d73b-c86f-ec04c929e4d7'

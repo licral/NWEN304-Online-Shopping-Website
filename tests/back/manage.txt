@@ -1,18 +1,51 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/manage/vinyls \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 02aec5e7-0fd3-2427-c942-e975e292e2db'
+Service: '/manage/vinyls'
+Method: GET
+Description: Gets a list of all the vinyls in the database.
+Success: Renders a list of all the vinyls onto the manage vinyls page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not an admin
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/manage/vinyl/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: b4d45c9e-d2c7-1481-d16a-1a9192c36175'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/vinyls
 
+----------------------------------------------------------------------------------------------
+Service: '/manage/vinyl/:id'
+Method: GET
+Parameters:
+- id: vinyl ID
+Description: Gets information of a vinyl that matches the ID provided.
+Success: Gets information of a vinyl then renders it into a form on the manage vinyl page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not an admin
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/vinyl/1
+
+----------------------------------------------------------------------------------------------
+Service: '/manage/vinyl/:id'
+Method: POST
+Parameters:
+- id: vinyl ID
+Body:
+- Title
+- Artist name
+- Valid album release date
+- Valid price
+Description: Updates the information of a vinyl that matches the ID provided.
+Success: Information will be updated for an album that matches the ID provided and a success message will be rendered onto the manage vinyl page.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- ID is invalid
+- Information provided is invalid
+- User is not an admin
+
+EXAMPLE => 
 curl -X POST \
   https://vinylholics.herokuapp.com/manage/vinyl/11 \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
-  -H 'postman-token: c657609c-c2b0-12d5-2644-a1b6d44ee1b9' \
+  -H 'content-type: multipart/form-data;
   -F 'title=Testing Title' \
   -F artist=1 \
   -F 'description=This is a test edit' \
@@ -21,23 +54,76 @@ curl -X POST \
   -F genre=Rock \
   -F price=25
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/manage/artists \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 4632d351-6287-1eb5-57d8-f8fc9ac1c698'
+----------------------------------------------------------------------------------------------
+Service: '/manage/artists'
+Method: GET
+Description: Gets a list of all the artists in the database.
+Success: Gets a list of artist and displays them on the manage artists page.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- User is not an admin
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/manage/artist/7 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: ee6e6139-611d-ba77-108d-abc6e46e8a5a'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/artists
 
+----------------------------------------------------------------------------------------------
+Service: '/manage/artist/:id'
+Method: GET
+Parameters:
+- id: artist ID
+Description: Gets information of an artist that matches the ID provided.
+Success: Gets information of an artist then renders it into a form on the manage artist page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not an admin
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/artist/7
+
+----------------------------------------------------------------------------------------------
+Service: '/manage/artist/:id'
+Method: POST
+Parameters:
+- id: vinyl ID
+Body:
+- Artist name
+Description: Updates the information of an artist that matches the ID provided.
+Success: Information will be updated for an artist that matches the ID provided and a success message will be rendered onto the manage artist page.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- ID is invalid
+- Information provided is invalid
+- User is not an admin
+
+EXAMPLE => 
 curl -X POST \
   https://vinylholics.herokuapp.com/manage/artist/7 \
-  -H 'cache-control: no-cache' \
   -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
-  -H 'postman-token: 575d104e-d3e7-2769-abf3-f07e845e0847' \
   -F 'artist_name=Test Artist' \
   -F 'description=This is just a test artist'
+
+----------------------------------------------------------------------------------------------
+Service: '/manage/orders'
+Method: GET
+Parameters:
+- id: artist ID
+Description: Gets information of an artist that matches the ID provided.
+Success: Gets information of an artist then renders it into a form on the manage artist page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not an admin
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/artist/7
+
+
+
+
+
+
+
+
 
 curl -X GET \
   https://vinylholics.herokuapp.com/manage/orders \

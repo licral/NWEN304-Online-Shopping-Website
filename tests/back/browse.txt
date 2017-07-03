@@ -1,14 +1,23 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/browse/page/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 9907e3d7-b5c0-501c-86d2-06e3b2792ac5'
+Service: '/browse/artist'
+Method: GET
+Description: Gets all the artists from the database.
+Success: If there are artists, they will be rendered on the browse page.
+Fail:
+Error will be rendered when there is:
+- Database error
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/browse/page/2 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 6fa2e702-c225-87ec-248e-76e7ffe30520'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/browse/artist
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/browse/artist \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: e5acddd2-5a6e-f604-55bc-05dd60cb6d60'
+----------------------------------------------------------------------------------------------
+Service: '/browse/page/:offset'
+Method: GET
+Parameters:
+- offset: page number
+Description: Gets 10 albums from the database, using the offset/page number to determine which 10 to retrieve.
+Success: Maximum of 10 albums are rendered onto the browse page and the page number.
+Fail:
+Error will be rendered when there is:
+- Database error
+- Invalid page provided
+
+EXAMPLE =>	curl -X GET https://vinylholics.herokuapp.com/browse/page/1

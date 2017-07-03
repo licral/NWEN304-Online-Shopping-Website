@@ -1,4 +1,9 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/ \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 1705412e-982e-a042-5f6a-3a459d1dd592'
+Service: '/'
+Method: GET
+Description: Gets the 10 most recently added albums and renders them onto the index page.
+Success: Renders 10 most recently added albums onto the index page.
+Fail:
+Error will be rendered when there is:
+- Database error
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com

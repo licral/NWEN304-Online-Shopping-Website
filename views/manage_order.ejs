@@ -62,7 +62,7 @@
                 var id = $(this).attr('data-yes');
                 $.ajax({
                     url: '/manage/remove/item/' + id,
-                    type: 'post',
+                    type: 'delete',
                     success: function (jqxhr) {
                         if (jqxhr.redirect) {
                             location.href = jqxhr.redirect;

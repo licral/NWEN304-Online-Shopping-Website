@@ -320,7 +320,7 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.post('/manage/remove/item/:id', isAdmin, function (request, response) {
+    app.delete('/manage/remove/item/:id', isAdmin, function (request, response) {
         var id = request.params.id;
         let order_id;
 

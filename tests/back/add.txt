@@ -4,34 +4,53 @@ Note: Our add POST services require a file buffer when posting. Not quite sure h
 
 Service: '/add/vinyl'
 Method: POST
-Description: Used to add a new album to the database.
-Required:
+Body:
 - Title
 - Artist name
 - Valid album release date
 - Valid price
 - Image for album cover
-Success: If the information is valid, a message will be displayed notifying the user that the album was added successfully. The information is also updated in the database.
-Fail: If the values are invalid, an error will be rendered telling the user to provide valid information. 
+Description: Used to add a new album to the database.
+Success: The information is added to the album table and a success message is rendered onto the manage vinyl page.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- Information provided is invalid
+- User is not an admin
 
 ----------------------------------------------------------------------------------------------
 Service: '/add/vinyl'
 Method: GET
 Description: Provides a page with a form for adding a new album.
-=> curl -X GET https://vinylholics.herokuapp.com/add/vinyl
+Success: Form will be rendered on the add vinyl page
+Fail: 
+Error will be rendered when there is:
+- Database error
+- User is not an admin
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/add/vinyl
 
 ----------------------------------------------------------------------------------------------
 Service: '/add/artist'
 Method: POST
-Description: Used to add a new artist to the database.
-Required:
+Body:
 - Artist name
 - Image for artist cover
-Success: If the information is valid, a message will be displayed notifying the user that the album was added successfully. The information is also updated in the database.
-Fail: If the values are invalid, an error will be rendered telling the user to provide valid information. 
+Description: Used to add a new artist to the database.
+Success: The information is added to the artist table and a success message is rendered onto the manage artist page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- Information provided is invalid
+- User is not an admin
 
 ----------------------------------------------------------------------------------------------
 Service: '/add/artist'
 Method: GET
 Description: Provides a page with a form for adding a new artist.
-=> curl -X GET https://vinylholics.herokuapp.com/add/artist
+Success: Form will be rendered on the add artist page
+Fail: 
+Error will be rendered when there is:
+- User is not an admin
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/add/artist

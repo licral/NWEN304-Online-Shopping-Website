@@ -1,9 +1,25 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/login \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: dcc6724b-1eb1-4056-1a56-9d185f05cd78'
+Service: '/login'
+Method: GET
+Description: Renders a form for the user to login.
+Success: Renders a form on the login page.
+Fail: 
+Error will be rendered when there is:
+- User is still logged in
 
-curl -X POST \
-  'https://vinylholics.herokuapp.com/login?username=admin&password=admin' \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 2631b752-2656-5f36-a57e-79bc9c31eaa0'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/login
+
+----------------------------------------------------------------------------------------------
+Service: '/login'
+Method: POST
+Body:
+- username
+- password
+Description: Authenticates a user.
+Success: User is logged in and a session is established.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- Invalid username
+- Invalid password
+
+EXAMPLE => curl -X POST 'https://vinylholics.herokuapp.com/login?username=admin&password=admin'

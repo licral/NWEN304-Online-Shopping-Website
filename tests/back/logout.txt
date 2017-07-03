@@ -1,4 +1,6 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/logout \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: b170c0db-4e2f-7427-6364-444955ef9a17'
+Service: '/logout'
+Method: GET
+Description: Logs out a user.
+Success: Logs out a user and removes their session.
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/logout

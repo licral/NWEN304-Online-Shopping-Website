@@ -1,7 +1,12 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/artist/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: f1e0ac9c-4a7b-30a9-0e8e-4997a8f970dd'
+Service: '/artist/:id'
+Method: GET
+Parameters:
+- id: should be a valid artist ID
+Description: Gets information of an artist that matches the provided ID parameter and renders this information onto a page.
+Success: If the id exists, the information will be rendered on the artist page.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- ID provided is not valid
 
-
-
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/artist/1

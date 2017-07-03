@@ -1,29 +1,26 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/image/albums/large/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: de7a16b6-2b65-f8c7-faeb-101e0293c916'
+Service: '/image/albums/:size/:id'
+Method: GET
+Parameters:
+- size: The size of the image (small, medium, large)
+- id: ID of the image stored in the database
+Description: Gets an image from the albums table that matches the ID provided. If the ID doesn't exist, it will return a default image.
+Success: Image returned based on the size and id given.
+Fail:
+Error will be rendered when there is:
+- Database error
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/image/albums/medium/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: afb6ea63-f8e4-be1f-6b0b-4297867cd85f'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/image/albums/large/1
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/image/albums/small/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: d65a8003-5ffd-1778-45d9-f8a740b4c732'
+----------------------------------------------------------------------------------------------
+Service: '/image/artists/:size/:id'
+Method: GET
+Parameters:
+- size: The size of the image (small, medium, large)
+- id: ID of the image stored in the database
+Description: Gets an image from the artists table that matches the ID provided. If the ID doesn't exist, it will return a default image.
+Success: Image returned based on the size and id given.
+Fail:
+Error will be rendered when there is:
+- Database error
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/image/artists/large/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 468fdbc4-29d9-91dc-395b-aac80daea7a8'
-
-curl -X GET \
-  https://vinylholics.herokuapp.com/image/artists/medium/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 847d03a6-0ff1-cc4a-2f2c-4109b54edc7b'
-
-curl -X GET \
-  https://vinylholics.herokuapp.com/image/artists/small/1 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: db9031ae-2553-8a36-9acd-c39958077ccd'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/image/artists/large/1

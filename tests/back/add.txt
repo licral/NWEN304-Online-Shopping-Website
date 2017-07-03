@@ -1,8 +1,37 @@
 ==============================================================================================
-Note: Our add service requires a file buffer when posting, not quite sure how to post an image
-so I didn't make a curl for it.
+Note: Our add POST services require a file buffer when posting. Not quite sure how to post an image so I didn't make a curl for it.
 ==============================================================================================
 
 Service: '/add/vinyl'
 Method: POST
-Success: There are 5 required fields in this form which are title, artist, released on, price and image. All of these fields are validated first before being stored in the database. If the values are invalid, an error will be rendered telling the user to provide valid information.
+Description: Used to add a new album to the database.
+Required:
+- Title
+- Artist name
+- Valid album release date
+- Valid price
+- Image for album cover
+Success: If the information is valid, a message will be displayed notifying the user that the album was added successfully. The information is also updated in the database.
+Fail: If the values are invalid, an error will be rendered telling the user to provide valid information. 
+
+----------------------------------------------------------------------------------------------
+Service: '/add/vinyl'
+Method: GET
+Description: Provides a page with a form for adding a new album.
+=> curl -X GET https://vinylholics.herokuapp.com/add/vinyl
+
+----------------------------------------------------------------------------------------------
+Service: '/add/artist'
+Method: POST
+Description: Used to add a new artist to the database.
+Required:
+- Artist name
+- Image for artist cover
+Success: If the information is valid, a message will be displayed notifying the user that the album was added successfully. The information is also updated in the database.
+Fail: If the values are invalid, an error will be rendered telling the user to provide valid information. 
+
+----------------------------------------------------------------------------------------------
+Service: '/add/artist'
+Method: GET
+Description: Provides a page with a form for adding a new artist.
+=> curl -X GET https://vinylholics.herokuapp.com/add/artist

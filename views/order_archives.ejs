@@ -3,8 +3,11 @@
 <body>
 <% include components/menu_and_heading.ejs %>
 <div class="container content">
-    <h1>View Order Archives</h1>
+    <% if (locals.error && locals.error.length > 0) {%>
+    <div class="alert alert-danger" role="alert"><%= locals.error %></div>
+    <% } %>
 
+    <h1>View Order Archives</h1>
     <div>
         <% if (locals.archives) { %>
             <ul>

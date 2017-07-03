@@ -1,0 +1,6 @@
+curl -X POST \
+  https://vinylholics.herokuapp.com/search \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: 5313b705-a81d-e550-4d7a-394ed857ccb6' \
+  -F keyword=lizard

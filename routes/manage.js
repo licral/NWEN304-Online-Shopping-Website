@@ -38,11 +38,11 @@ module.exports = function (app, pool) {
                 pageData.item = result.rows[0];
                 var date = new Date(result.rows[0].released_on);
                 var month = (date.getMonth() + 1) + "";
-                if(month.length == 1){
+                if (month.length == 1) {
                     month = "0" + month;
                 }
                 var day = date.getDate() + "";
-                if(day.length == 1){
+                if (day.length == 1) {
                     day = "0" + day;
                 }
                 pageData.item.released_on = date.getFullYear() + "-" + month + "-" + day;
@@ -72,7 +72,7 @@ module.exports = function (app, pool) {
         var artist = req.body.artist;
         var description = req.body.description;
         var is_compilation;
-        if(req.body.is_compilation === ""){
+        if (req.body.is_compilation === "") {
             is_compilation = true;
         } else {
             is_compilation = false;
@@ -84,7 +84,7 @@ module.exports = function (app, pool) {
         let sql = "update albums set title=$1, artist_id=$2, description=$3, is_compilation=$4, released_on=$5, genre=$6, price=$7 where id=$8;";
         pool.query(sql, [title, artist, description, is_compilation, released_on, genre, price, id])
             .then(result => {
-                if(req.file === undefined){
+                if (req.file === undefined) {
                     // Fix redirects here
                     res.redirect('/manage/vinyls');
                 } else {
@@ -160,7 +160,7 @@ module.exports = function (app, pool) {
         let sql = "update artists set artist_name=$1, description=$2 where id=$3;";
         pool.query(sql, [artist_name, description, id])
             .then(result => {
-                if(req.file === undefined){
+                if (req.file === undefined) {
                     // Fix redirects here
                     res.redirect('/manage/artists');
                 } else {
@@ -307,7 +307,7 @@ module.exports = function (app, pool) {
                 res.sendStatus(200);
             } else {
                 // a workaround to make ajax respond to redirect
-                res.status(200).json({ redirect: '/manage/orders' });
+                res.status(200).json({redirect: '/manage/orders'});
             }
         }).catch(e => {
             console.error('[ERROR] Query error', e.message, e.stack);
@@ -315,40 +315,13 @@ module.exports = function (app, pool) {
             res.sendStatus(400);
         });
     });
-
-    app.post("/archive", function (request, response) {
-        // request.body example: { '16': 'on', '17': 'on', '18': 'on' }
-        let arrayOfIds = Object.keys(request.body);
-
-        if (arrayOfIds.length > 0) {
-            let archiver = require("../services/order_archiver");
-            let path = require('path');
-            let fileName = new Date().toISOString().replace(/:/g, "").split(".")[0] + '.json';
-            let filePath = path.join(__dirname, '../archives/orders/');
-            let fullPath = filePath + fileName;
-
-            archiver.archiveOrders(pool, arrayOfIds, fullPath, function (error) {
-                if (error) {
-                    console.error('[ERROR] Query error', error.message, error.stack);
-                    request.flash('archiving_error', 'Archiving failed, please examine orders with id: ' + arrayOfIds);
-                    response.redirect('/manage/orders');
-                } else {
-                    request.flash('archiving_done', 'Archiving done. File location: ' + fullPath);
-                    response.redirect('/manage/orders');
-                }
-            });
-        } else {
-            request.flash('archiving_error', 'Please at lease select one order to archive');
-            response.redirect('/manage/orders');
-        }
-    });
 };
 
 function isAdmin(req, res, next) {
 
-    if(req.user){
+    if (req.user) {
         // if user is authenticated in the session, carry on
-        if (req.user.is_admin){
+        if (req.user.is_admin) {
             return next();
         } else {
             // if they aren't redirect them to the home page

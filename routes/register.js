@@ -5,15 +5,15 @@
  */
 
 module.exports = function(app, passport){
-    app.get('/register', function (req, res) {
-        if(req.user){
-            req.session.error = "You must log out first before registering";
-            res.redirect('/');
+    app.get('/register', function (request, response) {
+        if(request.user){
+            request.flash('error', 'You must log out first before registering');
+            response.redirect('/');
         }
-        res.render('register', {
+        response.render('register', {
             title: 'Register',
             description: 'Register for the new account.',
-            message: req.flash('signupMessage')
+            message: request.flash('signupMessage')
         });
     });
 

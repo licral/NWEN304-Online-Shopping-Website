@@ -29,18 +29,18 @@ module.exports = function (passport, pool) {
                 passwordField: 'password',
                 passReqToCallback: true // allows us to pass back the entire request to the callback
             },
-            function (req, username, password, done) {
+            function (request, username, password, done) {
                 //Lets do some server side validation because we don't trust the client
-                if(!validator.isEmail(req.body.email)){
-                    return done(null, false, req.flash('signupMessage', 'Invalid Email.'));
+                if(!validator.isEmail(request.body.email)){
+                    return done(null, false, request.flash('signupMessage', 'Invalid Email.'));
                 }
 
                 if(username == '') {
-                    return done(null, false, req.flash('signupMessage', 'Username not provided.'));
+                    return done(null, false, request.flash('signupMessage', 'Username not provided.'));
                 }
 
-                if(req.body.password != req.body.confpassword) {
-                    return done(null, false, req.flash('signupMessage', 'Passwords do not match.'));
+                if(request.body.password != request.body.confpassword) {
+                    return done(null, false, request.flash('signupMessage', 'Passwords do not match.'));
                 }
 
                 pool.connect()
@@ -50,7 +50,7 @@ module.exports = function (passport, pool) {
                             return done(err);
                         }
 
-                        client.query("SELECT * FROM users WHERE email = ($1)", [req.body.email], function (err, result) {
+                        client.query("SELECT * FROM users WHERE email = ($1)", [request.body.email], function (err, result) {
                             if (err) {
                                 client.release();
                                 return done(err);
@@ -58,7 +58,7 @@ module.exports = function (passport, pool) {
 
                             if (result.rows.length) {
                                 client.release();
-                                return done(null, false, req.flash('signupMessage', 'That email already has an account.'));
+                                return done(null, false, request.flash('signupMessage', 'That email already has an account.'));
                             }
 
 
@@ -70,7 +70,7 @@ module.exports = function (passport, pool) {
 
                                 if (result.rows.length) {
                                     client.release();
-                                    return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+                                    return done(null, false, request.flash('signupMessage', 'That username is already taken.'));
                                 } else {
 
                                     var newUser = {
@@ -81,7 +81,7 @@ module.exports = function (passport, pool) {
                                     // use the transaction function to set up the user
                                     var insertQuery = "SELECT insert($1,$2,$3,$4)";
 
-                                    client.query(insertQuery, [newUser.username, newUser.password, req.body.email, newUser.username], function (err, result) {
+                                    client.query(insertQuery, [newUser.username, newUser.password, request.body.email, newUser.username], function (err, result) {
                                         client.release();
                                         if (err) {
                                             return done(err);
@@ -106,7 +106,7 @@ module.exports = function (passport, pool) {
                 passwordField: 'password',
                 passReqToCallback: true
             },
-            function (req, username, password, done) {
+            function (request, username, password, done) {
 
                 usersDAO.getRow([username], pool, function(err,msg,results) {
                     if (err) {
@@ -114,11 +114,11 @@ module.exports = function (passport, pool) {
                     }
 
                     if (!results.rows.length) {
-                        return done(null, false, req.flash('loginMessage', 'Incorrect username/password'));
+                        return done(null, false, request.flash('loginMessage', 'Incorrect username/password'));
                     }
 
                     if (!bcrypt.compareSync(password, results.rows[0].password)) {
-                        return done(null, false, req.flash('loginMessage', 'Incorrect username/password'));
+                        return done(null, false, request.flash('loginMessage', 'Incorrect username/password'));
                     }
 
                     return done(null, results.rows[0]);

@@ -3,7 +3,7 @@
  */
 module.exports = function (app, pool) {
 
-    app.get('/manage/vinyls', isAdmin, function (req, res) {
+    app.get('/manage/vinyls', isAdmin, function (request, response) {
 
         let pageData = {
             title: 'Manage All Vinyls',
@@ -12,7 +12,7 @@ module.exports = function (app, pool) {
         };
 
         // pass in flash messages
-        let flash = req.flash();
+        let flash = request.flash();
         Object.keys(flash).forEach(key => {
             pageData[key] = flash[key];
         });
@@ -22,19 +22,19 @@ module.exports = function (app, pool) {
         pool.query(sql)
             .then(result => {
                 pageData.albums = result.rows;
-                res.set({
+                response.set({
                     'Cache-Control': 'public, no-cache, must-revalidate'
                 }).render('manage_list', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 pageData.error = "There was a problem with the database";
-                res.render('manage_list', pageData);
+                response.render('manage_list', pageData);
             });
     });
 
-    app.get('/manage/vinyl/:id', isAdmin, function (req, res) {
-        var id = req.params.id;
+    app.get('/manage/vinyl/:id', isAdmin, function (request, response) {
+        var id = request.params.id;
         let pageData = {};
 
         let sql = "select * from albums where id=" + id + ";";
@@ -58,67 +58,67 @@ module.exports = function (app, pool) {
                 pool.query("select id, artist_name from artists;")
                     .then(result2 => {
                         pageData.artists = result2.rows;
-                        res.render('manage_vinyl', pageData);
+                        response.render('manage_vinyl', pageData);
                     })
                     .catch(e => {
                         console.error('[ERROR] Query error', e.message, e.stack);
-                        req.flash('error', 'Sorry we could not find the album');
-                        res.redirect('/manage/vinyls');
+                        request.flash('error', 'Sorry we could not find the album');
+                        response.redirect('/manage/vinyls');
                     });
 
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                req.flash('error', 'Sorry we could not find the album');
-                res.redirect('/manage/vinyls');
+                request.flash('error', 'Sorry we could not find the album');
+                response.redirect('/manage/vinyls');
             });
     });
 
-    app.post('/manage/vinyl/:id', isAdmin, function (req, res) {
-        var id = req.params.id;
-        var title = req.body.title;
-        var artist = req.body.artist;
-        var description = req.body.description;
+    app.post('/manage/vinyl/:id', isAdmin, function (request, response) {
+        var id = request.params.id;
+        var title = request.body.title;
+        var artist = request.body.artist;
+        var description = request.body.description;
         var is_compilation;
-        if (req.body.is_compilation === "") {
+        if (request.body.is_compilation === "") {
             is_compilation = true;
         } else {
             is_compilation = false;
         }
-        var released_on = req.body.released_on;
-        var genre = req.body.genre;
-        var price = req.body.price;
+        var released_on = request.body.released_on;
+        var genre = request.body.genre;
+        var price = request.body.price;
 
         let sql = "update albums set title=$1, artist_id=$2, description=$3, is_compilation=$4, released_on=$5, genre=$6, price=$7 where id=$8;";
         pool.query(sql, [title, artist, description, is_compilation, released_on, genre, price, id])
             .then(result => {
-                if (req.file === undefined) {
-                    req.flash('message', 'Album has been successfully editted');
-                    res.redirect('/manage/vinyls');
+                if (request.file === undefined) {
+                    request.flash('message', 'Album has been successfully editted');
+                    response.redirect('/manage/vinyls');
                 } else {
-                    var album_image = req.file.buffer.toString('base64');
+                    var album_image = request.file.buffer.toString('base64');
                     sql = "update album_images set image=$1 where album_id=$2;";
                     pool.query(sql, [album_image, id])
                         .then(result2 => {
-                            req.flash('message', 'Album has been successfully editted');
-                            res.redirect('/manage/vinyls');
+                            request.flash('message', 'Album has been successfully editted');
+                            response.redirect('/manage/vinyls');
                         })
                         .catch(e => {
                             console.error('[ERROR] Query error', e.message, e.stack);
-                            req.flash('error', 'Sorry image could not be saved');
-                            res.redirect('/manage/vinyls');
+                            request.flash('error', 'Sorry image could not be saved');
+                            response.redirect('/manage/vinyls');
                         });
                 }
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                req.flash('error', 'Sorry album could not be editted');
-                res.redirect('/manage/vinyls');
+                request.flash('error', 'Sorry album could not be editted');
+                response.redirect('/manage/vinyls');
             });
     });
 
 
-    app.get('/manage/artists', isAdmin, function (req, res) {
+    app.get('/manage/artists', isAdmin, function (request, response) {
 
         let pageData = {
             title: 'Manage All Artists',
@@ -127,7 +127,7 @@ module.exports = function (app, pool) {
         };
 
         // pass in flash messages
-        let flash = req.flash();
+        let flash = request.flash();
         Object.keys(flash).forEach(key => {
             pageData[key] = flash[key];
         });
@@ -137,19 +137,19 @@ module.exports = function (app, pool) {
         pool.query(sql)
             .then(result => {
                 pageData.artists = result.rows;
-                res.set({
+                response.set({
                     'Cache-Control': 'public, no-cache, must-revalidate'
                 }).render('manage_list', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 pageData.error = "There was a problem with the database";
-                res.render('manage_list', pageData);
+                response.render('manage_list', pageData);
             });
     });
 
-    app.get('/manage/artist/:id', isAdmin, function (req, res) {
-        var id = req.params.id;
+    app.get('/manage/artist/:id', isAdmin, function (request, response) {
+        var id = request.params.id;
         let pageData = {};
 
         let sql = "select * from artists where id=$1;";
@@ -160,50 +160,50 @@ module.exports = function (app, pool) {
                 pageData.description = "Viewing information of artist " + result.rows[0].artist_name;
                 pageData.item = result.rows[0];
 
-                res.render('manage_artist', pageData);
+                response.render('manage_artist', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                req.flash('error', 'Sorry we could not find the artist');
-                res.redirect('/manage/artists');
+                request.flash('error', 'Sorry we could not find the artist');
+                response.redirect('/manage/artists');
             });
     });
 
-    app.post('/manage/artist/:id', isAdmin, function (req, res) {
-        var id = req.params.id;
-        var artist_name = req.body.artist_name;
-        var description = req.body.description;
+    app.post('/manage/artist/:id', isAdmin, function (request, response) {
+        var id = request.params.id;
+        var artist_name = request.body.artist_name;
+        var description = request.body.description;
 
         let sql = "update artists set artist_name=$1, description=$2 where id=$3;";
         pool.query(sql, [artist_name, description, id])
             .then(result => {
-                if (req.file === undefined) {
-                    req.flash('message', 'Artist has been successfully editted');
-                    res.redirect('/manage/artists');
+                if (request.file === undefined) {
+                    request.flash('message', 'Artist has been successfully editted');
+                    response.redirect('/manage/artists');
                 } else {
-                    var album_image = req.file.buffer.toString('base64');
+                    var album_image = request.file.buffer.toString('base64');
                     sql = "update artist_images set image=$1 where artist_id=$2;";
                     pool.query(sql, [album_image, id])
                         .then(result2 => {
-                            req.flash('message', 'Artist has been successfully editted');
-                            res.redirect('/manage/artists');
+                            request.flash('message', 'Artist has been successfully editted');
+                            response.redirect('/manage/artists');
                         })
                         .catch(e => {
                             console.error('[ERROR] Query error', e.message, e.stack);
-                            req.flash('error', 'Sorry image could not be saved');
-                            res.redirect('/manage/artists');
+                            request.flash('error', 'Sorry image could not be saved');
+                            response.redirect('/manage/artists');
                         });
                 }
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                req.flash('error', 'Sorry artist could not be editted');
-                res.redirect('/manage/artists');
+                request.flash('error', 'Sorry artist could not be editted');
+                response.redirect('/manage/artists');
             });
     });
 
 
-    app.get('/manage/orders', isAdmin, function (req, res) {
+    app.get('/manage/orders', isAdmin, function (request, response) {
         let pageData = {
             title: 'Manage All Orders',
             heading: 'Orders',
@@ -211,7 +211,7 @@ module.exports = function (app, pool) {
         };
 
         // pass in flash messages
-        let flash = req.flash();
+        let flash = request.flash();
         Object.keys(flash).forEach(key => {
             pageData[key] = flash[key];
         });
@@ -244,19 +244,19 @@ module.exports = function (app, pool) {
                     };
                 });
 
-                res.set({
+                response.set({
                     'Cache-Control': 'public, no-cache, must-revalidate'
                 }).render('manage_list', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 pageData.error = "There was a problem with the database";
-                res.render('manage_list', pageData);
+                response.render('manage_list', pageData);
             });
     });
 
-    app.get('/manage/order/:id', isAdmin, function (req, res) {
-        var id = req.params.id;
+    app.get('/manage/order/:id', isAdmin, function (request, response) {
+        var id = request.params.id;
         let pageData = {};
 
         let sql = "SELECT orders.id AS order_id, users.username, orders.order_time, order_details.album_id, albums.title, order_details.quantity, order_details.price, order_details.id AS item_id FROM orders INNER JOIN order_details ON orders.id = order_details.order_id INNER JOIN albums ON order_details.album_id = albums.id INNER JOIN users ON orders.user_id = users.id WHERE orders.id = $1;";
@@ -294,17 +294,17 @@ module.exports = function (app, pool) {
                 }, 0);
                 pageData.totalPrice = Number(totalPrice).toFixed(2);
 
-                res.render('manage_order', pageData);
+                response.render('manage_order', pageData);
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                req.flash('error', 'Sorry we could not find the order');
-                res.redirect('/manage/orders');
+                request.flash('error', 'Sorry we could not find the order');
+                response.redirect('/manage/orders');
             });
     });
 
-    app.post('/manage/remove/item/:id', isAdmin, function (req, res) {
-        var id = req.params.id;
+    app.post('/manage/remove/item/:id', isAdmin, function (request, response) {
+        var id = request.params.id;
         let order_id;
 
         let sql1 = "SELECT order_id FROM order_details WHERE id = $1";
@@ -324,33 +324,33 @@ module.exports = function (app, pool) {
             }
         }).then(result => {
             if (result === undefined) {
-                res.sendStatus(200);
+                response.sendStatus(200);
             } else {
                 // a workaround to make ajax respond to redirect
-                res.status(200).json({redirect: '/manage/orders'});
+                response.status(200).json({redirect: '/manage/orders'});
             }
         }).catch(e => {
             console.error('[ERROR] Query error', e.message, e.stack);
             // Fix redirects here
-            res.sendStatus(400);
+            response.sendStatus(400);
         });
     });
 };
 
-function isAdmin(req, res, next) {
+function isAdmin(request, response, next) {
 
-    if (req.user) {
+    if (request.user) {
         // if user is authenticated in the session, carry on
-        if (req.user.is_admin) {
+        if (request.user.is_admin) {
             return next();
         } else {
             // if they aren't redirect them to the home page
-            req.session.error = "Sorry you do not have permissions to access this content.";
-            res.redirect('/');
+            request.flash('error', 'Sorry you do not have permissions to access this content');
+            response.redirect('/');
         }
     } else {
-        req.session.error = "You must be logged in to access this content.";
-        res.redirect('/login');
+        request.flash('error', 'You must be logged in to access this content');
+        response.redirect('/login');
     }
 
 }

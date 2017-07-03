@@ -3,8 +3,8 @@
  */
 module.exports = function (app, pool) {
 
-    app.get('/item/:id', function (req, res) {
-        let id = req.params.id;
+    app.get('/item/:id', function (request, reponse) {
+        let id = request.params.id;
         let pageData = {
             album: {},
             artist: {}
@@ -18,7 +18,7 @@ module.exports = function (app, pool) {
                     pageData.title = "Oooops";
                     pageData.description = "Oooops, we can't find this album";
                     pageData.error = "Oooops, we can't find this album";
-                    res.render('item', pageData);
+                    reponse.render('item', pageData);
                     console.error(`[ERROR] Cannot find album with id ${id}`);
                 } else {
                     let row = result.rows[0];
@@ -42,14 +42,14 @@ module.exports = function (app, pool) {
                         description: row.artist_description
                     };
 
-                    res.set({
+                    reponse.set({
                         'Cache-Control': 'public, no-cache, must-revalidate'
                     }).render('item', pageData);
                 }
             })
             .catch(e => {
                 pageData.error = "Database error occurred";
-                res.render('item', pageData);
+                reponse.render('item', pageData);
                 console.error('[ERROR] Query error:', e.message, e.stack);
             });
     });

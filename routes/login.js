@@ -8,18 +8,15 @@
 
 module.exports = function(app, passport){
 
-    app.get('/login', function (req, res) {
-        if(req.user){
-            req.session.error = "You must log out first before registering";
-            res.redirect('/');
+    app.get('/login', function (request, response) {
+        if(request.user){
+            request.flash('error', 'You must log out first before registering');
+            response.redirect('/');
         }
-        var error = req.session.error;
-        req.session.error = null;
-        res.render('login', {
+        response.render('login', {
             title: 'Login',
             description: 'Log in to Vinylholics with an existing account.',
-            message: req.flash('loginMessage'),
-            error: error
+            message: request.flash('loginMessage')
         });
     });
 

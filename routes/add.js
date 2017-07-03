@@ -3,20 +3,20 @@
  */
 module.exports = function (app, pool) {
 
-    app.post('/add/vinyl', function (req, res) {
-        var title = req.body.title;
-        var artist = req.body.artist;
-        var description = req.body.description;
+    app.post('/add/vinyl', function (request, response) {
+        var title = request.body.title;
+        var artist = request.body.artist;
+        var description = request.body.description;
         var is_compilation;
-        if(req.body.is_compilation === ""){
+        if(request.body.is_compilation === ""){
             is_compilation = true;
         } else {
             is_compilation = false;
         }
-        var released_on = req.body.released_on;
-        var genre = req.body.genre;
-        var price = req.body.price;
-        var album_image = req.file.buffer.toString('base64');
+        var released_on = request.body.released_on;
+        var genre = request.body.genre;
+        var price = request.body.price;
+        var album_image = request.file.buffer.toString('base64');
 
         let sql = "insert into albums (title, description, is_compilation, released_on, genre, price, artist_id) values ($1, $2, $3, $4, $5, $6, $7);";
         pool.query(sql, [title, description, is_compilation, released_on, genre, price, artist])
@@ -29,28 +29,29 @@ module.exports = function (app, pool) {
                         sql = "insert into album_images (image, album_id) values ($1, $2);";
                         pool.query(sql, [album_image, album_id])
                             .then(result => {
-                                res.redirect('/manage/vinyls');
+                                request.flash('message', "The album has been successfully added.");
+                                response.redirect('/manage/vinyls');
                             })
                             .catch(e => {
                                 console.error('[ERROR] Query error', e.message, e.stack);
-                                // Fix redirects here
-                                res.redirect('/manage/vinyls');
+                                request.flash('error', "Sorry the image was not saved, please try again. If this doesn't work");
+                                response.redirect('/manage/vinyls');
                             });
                     })
                     .catch(e2 => {
                         console.error('[ERROR] Query error', e2.message, e2.stack);
-                        // Fix redirects here
-                        res.redirect('/manage/vinyls');
+                        request.flash('error', "Sorry the image was not saved, please try again. If this doesn't work");
+                        response.redirect('/manage/vinyls');
                     });
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
-                res.redirect('/manage/vinyls');
+                request.flash('error', "Sorry the album could not be saved, please try again. If this doesn't work");
+                response.redirect('/manage/vinyls');
             });
     });
 
-    app.get('/add/vinyl', function (req, res) {
+    app.get('/add/vinyl', function (request, response) {
         let pageData = {
             title : "Add New Vinyl",
             description : "Add a new vinyl record"
@@ -71,23 +72,23 @@ module.exports = function (app, pool) {
                 }
                 pageData.date = date.getFullYear() + "-" + month + "-" + day;
 
-                res.set({
+                response.set({
                     'Cache-Control': 'public, no-cache, must-revalidate',
                     'Expires': new Date(Date.now() + 86400000).toUTCString()
                 }).render('new_vinyl', pageData);
             })
             .catch(e => {
                 pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                res.render('new_vinyl', pageData);
+                response.render('new_vinyl', pageData);
                 console.error('[ERROR] Query error', e.message, e.stack);
             });
     });
 
 
-    app.post('/add/artist', function (req, res) {
-        var artist_name = req.body.artist_name;
-        var description = req.body.description;
-        var image = req.file.buffer.toString('base64');
+    app.post('/add/artist', function (request, response) {
+        var artist_name = request.body.artist_name;
+        var description = request.body.description;
+        var image = request.file.buffer.toString('base64');
 
         let sql = "insert into artists (artist_name, description) values($1, $2);";
         pool.query(sql, [artist_name, description])
@@ -100,29 +101,30 @@ module.exports = function (app, pool) {
                         sql = "insert into artist_images (image, artist_id) values ($1, $2);";
                         pool.query(sql, [image, artist_id])
                             .then(result => {
-                                res.redirect('/manage/artists');
+                                request.flash('message', "The artist has been successfully added.");
+                                response.redirect('/manage/artists');
                             })
                             .catch(e => {
                                 console.error('[ERROR] Query error', e.message, e.stack);
-                                // Fix redirects here
-                                res.redirect('/manage/artists');
+                                request.flash('error', "Sorry the image could not be saved, please try again. If this doesn't work");
+                                response.redirect('/manage/artists');
                             });
                     })
                     .catch(e2 => {
                         console.error('[ERROR] Query error', e2.message, e2.stack);
-                        // Fix redirects here
-                        res.redirect('/manage/artists');
+                        request.flash('error', "Sorry the image could not be saved, please try again. If this doesn't work");
+                        response.redirect('/manage/artists');
                     });
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
-                res.redirect('/manage/artists');
+                request.flash('error', "Sorry the artist could not be saved, please try again. If this doesn't work");
+                response.redirect('/manage/artists');
             });
     });
 
-    app.get('/add/artist', function (req, res) {
-        res.set({
+    app.get('/add/artist', function (request, response) {
+        response.set({
             'Cache-Control': 'public, no-cache, must-revalidate',
             'Expires': new Date(Date.now() + 86400000).toUTCString()
         }).render('new_artist', {

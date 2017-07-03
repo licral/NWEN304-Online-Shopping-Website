@@ -110,7 +110,6 @@ module.exports = function(app, pool){
 
         if(err)
         {
-            client.release();
             req.flash('updateDetailMessage', err);
             res.redirect('/profile_update');
             return;

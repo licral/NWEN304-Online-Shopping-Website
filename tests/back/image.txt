@@ -1,0 +1,29 @@
+curl -X GET \
+  https://vinylholics.herokuapp.com/image/albums/large/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: de7a16b6-2b65-f8c7-faeb-101e0293c916'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/image/albums/medium/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: afb6ea63-f8e4-be1f-6b0b-4297867cd85f'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/image/albums/small/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: d65a8003-5ffd-1778-45d9-f8a740b4c732'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/image/artists/large/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 468fdbc4-29d9-91dc-395b-aac80daea7a8'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/image/artists/medium/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 847d03a6-0ff1-cc4a-2f2c-4109b54edc7b'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/image/artists/small/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: db9031ae-2553-8a36-9acd-c39958077ccd'

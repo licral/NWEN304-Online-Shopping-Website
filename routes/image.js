@@ -36,6 +36,7 @@ module.exports = function (app, pool, path) {
                 }
             })
             .catch(e => {
+                response.sendFile(path.join(__dirname, "../public/img", defaultImagePath));
                 console.error("[ERROR] Query error", e.message, e.stack);
             });
     });
@@ -71,6 +72,7 @@ module.exports = function (app, pool, path) {
                 }
             })
             .catch(e => {
+                response.sendFile(path.join(__dirname, "../public/img", defaultImagePath));
                 console.error("[ERROR] Query error", e.message, e.stack);
             });
     });

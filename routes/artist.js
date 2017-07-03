@@ -12,7 +12,7 @@ module.exports = function (app, pool) {
         Promise.all(sqls.map(sql => {
             return pool.query(sql, [id]);
         })).then((arrayOfResult) => {
-            if (arrayOfResult.rowCount === 0 || arrayOfResult.rowCount === undefined) {
+            if (!arrayOfResult[0].rows[0]) {
                 pageData.title = "Oooops";
                 pageData.description = "Oooops, we can't find this artist";
                 pageData.error = "Oooops, we can't find this artist";

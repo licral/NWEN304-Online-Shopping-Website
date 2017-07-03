@@ -18,12 +18,14 @@ module.exports = function(app, pool){
         pool.query(sql)
             .then(result => {
                 pageData.albums = result.rows;
-                res.render('index', pageData);
+                res.set({
+                    'Cache-Control': 'public, no-cache, must-revalidate'
+                }).render('index', pageData);
             })
-            .catch(e => {
+            .catch(error => {
                 console.error('[ERROR] Unable to connect to database', error.message, error.stack);
                 // Fix redirect here
                 res.render('index', pageData);
             });
     });
-}
+};

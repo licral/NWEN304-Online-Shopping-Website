@@ -40,23 +40,7 @@
                     </div>
                 <% } %>
 
-                <% if (locals.results.songs.length > 0) { %>
-                    <div class="song-panel">
-                        <h3>Songs</h3>
-                        <ul>
-                            <% for (let song of results.songs) { %>
-                            <li>
-                                Song Title: <%= song.title %>,
-                                Track No: <%= song.track_no %>,
-                                Album id: <%= song.album_id %>,
-                                Artist id: <%= song.artist_id %>
-                            </li>
-                            <% } %>
-                        </ul>
-                    </div>
-                <% } %>
-
-                <% if (locals.results.albums.length + locals.results.artists.length + locals.results.songs.length <= 0) { %>
+                <% if (locals.results.albums.length + locals.results.artists.length <= 0) { %>
                     <h3>Nothing found</h3>
                 <% } %>
 

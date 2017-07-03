@@ -12,33 +12,21 @@ module.exports = function (app, pool) {
             description: "Browse all artists of the vinyls we sell."
         };
 
-        pool.connect()
-            .then(client => {
-                let sql = "SELECT id, artist_name FROM artists;";
+        let sql = "SELECT id, artist_name FROM artists";
 
-                client.query(sql)
-                    .then(result => {
-                        res.set({
-                            'Cache-Control': 'public, max-age=86400, must-revalidate',
-                            'Expires': new Date(Date.now() + 86400000).toUTCString()
-                        });
-                        client.release();
-                        pageData.artists = result.rows;
-                        res.render('browse', pageData);
+        pool.query(sql)
+            .then(result => {
+                pageData.artists = result.rows;
 
-                        console.log(`[Log] Sending all ${result.rowCount} albums to the client`);
-                    })
-                    .catch(e => {
-                        client.release();
-                        pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
-                        res.render('browse', pageData);
-                        console.error('[ERROR] Query error', e.message, e.stack);
-                    });
+                res.set({
+                    'Cache-Control': 'public, no-cache, must-revalidate',
+                    'Expires': new Date(Date.now() + 86400000).toUTCString()
+                }).render('browse', pageData);
             })
-            .catch(error => {
-                pageData.error = "Database unavailable, please try again.";
+            .catch(e => {
+                pageData.error = "Database error occurred, please refresh or contact hectorcaesar@hotmail.com.";
                 res.render('browse', pageData);
-                console.error('[ERROR] Unable to connect to database', error.message, error.stack);
+                console.error('[ERROR] Query error', e.message, e.stack);
             });
     });
 
@@ -49,8 +37,7 @@ module.exports = function (app, pool) {
             description: "Browse all vinyl records",
         };
 
-        var offset = (req.params.offset - 1)*10;
-
+        let offset = (req.params.offset - 1) * 10;
         let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.title limit 10 offset $1;";
 
         pool.query(sql, [offset])
@@ -64,10 +51,8 @@ module.exports = function (app, pool) {
                         pageData.count = count;
                         pageData.current_page = req.params.offset;
                         res.set({
-                            'Cache-Control': 'public, max-age=86400, must-revalidate',
-                            'Expires': new Date(Date.now() + 86400000).toUTCString()
-                        });
-                        res.render('browse', pageData);
+                            'Cache-Control': 'public, no-cache, must-revalidate'
+                        }).render('browse', pageData);
                     })
                     .catch(e2 => {
                         console.error('[ERROR] Unable to connect to database', e2.message, e2.stack);

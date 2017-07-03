@@ -4,114 +4,39 @@
 <% include components/menu_and_heading.ejs %>
 <div class="container content">
     <h1>Manage All <%= heading %></h1>
+
     <% if(heading === "Vinyls") { %>
-    <a href="/add/vinyl" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"
-                                                                     aria-hidden="true"></span> Add Vinyl</a>
+        <a href="/add/vinyl" class="btn btn-primary" role="button">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Vinyl
+        </a>
     <% } else if(heading === "Artists") { %>
-    <a href="/add/artist" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"
-                                                                      aria-hidden="true"></span> Add Artist</a>
+        <a href="/add/artist" class="btn btn-primary" role="button">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Artist
+        </a>
     <% } %>
+
     <div>
+        <% if (locals.archiving_error) { %>
+            <div class="alert alert-danger" id="111">
+                <%= archiving_error %>
+            </div>
+        <% } else if (locals.archiving_done) { %>
+            <div class="alert alert-success" id="222">
+                <%= archiving_done %>
+            </div>
+        <% } %>
+
         <% if (locals.error) { %>
             <div class="alert alert-danger">
                 <%= error %>
             </div>
         <% } else { %>
             <% if (locals.albums) { %>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Price</th>
-                        <th>Artist</th>
-                        <th>Album Cover</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% for (let album of albums) { %>
-                        <tr>
-                            <td><%= album.id %></td>
-                            <td><%= album.title %></td>
-                            <td><%= album.price %></td>
-                            <td><%= album.artist_name %></td>
-                            <td><img src="/image/albums/small/<%= album.id %>" width="30" alt="album cover image"/></td>
-                            <td>
-                                <a href="/manage/vinyl/<%= album.id %>">
-                                    <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
-                                </a>
-                                <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
-                            </td>
-                        </tr>
-                    <% } %>
+                <% include manage_list/list_vinyls.ejs %>
             <% } else if (locals.artists) { %>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Artist Image</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <% for (let artist of artists) { %>
-                    <tr>
-                        <td><%= artist.id %></td>
-                        <td><%= artist.artist_name %></td>
-                        <td><img src="/image/artists/small/<%= artist.id %>" width="30" alt="album cover image"/></td>
-                        <td>
-                            <a href="/manage/artist/<%= artist.id %>">
-                                <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
-                            </a>
-                            <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
-                        </td>
-                    </tr>
-                    <% } %>
+                <% include manage_list/list_artists.ejs %>
             <% } else if (locals.orders) { %>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>User</th>
-                        <th>Date Ordered</th>
-                        <th>Time Ordered</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% for (let order of orders) { %>
-                    <%
-                        var date = new Date(order.order_time);
-                        var end = 'AM';
-                        var hour = date.getUTCHours();
-                        if(hour >= 12){
-                            end = 'PM';
-                        }
-                        if(hour > 12){
-                            hour = hour - 12;
-                        }
-                        var minute = date.getMinutes();
-                        if(minute < 10){
-                            minute = '0' + minute;
-                        }
-                    %>
-                    <tr>
-                        <td><%= order.id %></td>
-                        <td><%= order.username %></td>
-                        <td><%= date.getDate() %>/<%= date.getMonth() + 1 %>/<%= date.getFullYear() %></td>
-                        <td><%= hour %>:<%= minute %> <%= end %></td>
-                        <td>
-                            <a href="/manage/order/<%= order.id %>">
-                                <span class="glyphicon glyphicon-pencil action edit" aria-hidden="true"></span>
-                            </a>
-                            <span class="glyphicon glyphicon-remove action remove" aria-hidden="true"></span>
-                        </td>
-                    </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                <% include manage_list/list_orders.ejs %>
             <% } %>
         <% } %>
     </div>

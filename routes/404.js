@@ -5,7 +5,10 @@ module.exports = function (app) {
             description: "How many times do I have to tell you, there is no spoon!",
         };
 
-        response.render('404', pageData);
+        response.header({
+            'Cache-Control': 'public, no-cache, must-revalidate',
+            'Expires': new Date(Date.now() + 86400000).toUTCString()
+        }).render('404', pageData);
         console.log(`[Log] Someone is poking around. Received: ${request.method} '${request.path}'`);
     });
 };

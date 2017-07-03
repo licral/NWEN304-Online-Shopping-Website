@@ -53,7 +53,6 @@ module.exports = function (app, pool) {
                         res.render('manage_vinyl', pageData);
                     })
                     .catch(e => {
-                        client.release();
                         console.error('[ERROR] Query error', e.message, e.stack);
                         // Fix redirects here
                         res.redirect('/manage/vinyls');
@@ -193,11 +192,40 @@ module.exports = function (app, pool) {
             description: "Manage all order histories in the database"
         };
 
-        let sql = "SELECT orders.id, orders.order_time, users.username FROM orders JOIN users ON orders.user_id=users.id order by orders.id";
+        // pass in flash messages
+        let flash = req.flash();
+        Object.keys(flash).forEach(key => {
+            pageData[key] = flash[key];
+        });
+
+        let sql = "SELECT orders.id, orders.order_time, users.displayname FROM orders JOIN users ON orders.user_id = users.id ORDER BY orders.id";
 
         pool.query(sql)
             .then(result => {
-                pageData.orders = result.rows;
+                pageData.orders = result.rows.map(order => {
+                    let timeStamp = new Date(order.order_time);
+                    let hour = timeStamp.getUTCHours();
+                    let minute = timeStamp.getMinutes();
+                    let day = timeStamp.getDate();
+                    let month = timeStamp.getMonth() + 1;
+                    let year = timeStamp.getFullYear();
+
+                    day = day < 10 ? '0' + day : day;
+                    month = month < 10 ? '0' + month : month;
+
+                    let end = hour >= 12 ? "PM" : "AM";
+                    hour = hour > 12 ? hour - 12 : hour;
+                    hour = hour < 10 ? '0' + hour : hour;
+                    minute = minute < 10 ? '0' + minute : minute;
+
+                    return {
+                        id: order.id,
+                        order_date: `${day}/${month}/${year}`,
+                        order_time: `${hour}:${minute} ${end}`,
+                        user: order.displayname
+                    };
+                });
+
                 res.render('manage_list', pageData);
             })
             .catch(e => {
@@ -215,16 +243,37 @@ module.exports = function (app, pool) {
 
         pool.query(sql, [id])
             .then(result => {
-                pageData.title = "Order #" + result.rows[0].order_id;
-                pageData.description = "Viewing information of order # " + result.rows[0].order_id;
-                pageData.order_id = result.rows[0].order_id;
-                pageData.order_time = result.rows[0].order_time;
-                pageData.user = result.rows[0].username;
+                let order = result.rows[0];
+
+                let timeStamp = new Date(order.order_time);
+                let hour = timeStamp.getUTCHours();
+                let minute = timeStamp.getMinutes();
+                let day = timeStamp.getDate();
+                let month = timeStamp.getMonth() + 1;
+                let year = timeStamp.getFullYear();
+
+                day = day < 10 ? '0' + day : day;
+                month = month < 10 ? '0' + month : month;
+
+                let end = hour >= 12 ? "PM" : "AM";
+                hour = hour > 12 ? hour - 12 : hour;
+                hour = hour < 10 ? '0' + hour : hour;
+                minute = minute < 10 ? '0' + minute : minute;
+
+                pageData.order_time = `${hour}:${minute} ${end}`;
+                pageData.order_date = `${day}/${month}/${year}`;
+
+                pageData.title = "Order #" + order.order_id;
+                pageData.description = "Viewing information of order # " + order.order_id;
+                pageData.order_id = order.order_id;
+                pageData.user = order.username;
                 pageData.albums = result.rows;
-                pageData.totalPrice = 0;
-                pageData.albums.forEach(album => {
-                    pageData.totalPrice = pageData.totalPrice + album.quantity * Number(album.price);
-                });
+
+                let totalPrice = pageData.albums.reduce((sum, album) => {
+                    return sum + album.quantity * Number(album.price);
+                }, 0);
+                pageData.totalPrice = Number(totalPrice).toFixed(2);
+
                 res.render('manage_order', pageData);
             })
             .catch(e => {
@@ -236,17 +285,62 @@ module.exports = function (app, pool) {
 
     app.post('/manage/remove/item/:id', isAdmin, function (req, res) {
         var id = req.params.id;
+        let order_id;
 
-        let sql = "delete from order_details where id=$1;";
-        pool.query(sql, [id])
-            .then(result => {
+        let sql1 = "SELECT order_id FROM order_details WHERE id = $1";
+        let sql2 = "DELETE FROM order_details WHERE id = $1";
+        let sql3 = "SELECT id FROM order_details WHERE order_id = $1";
+
+        pool.query(sql1, [id]).then(result => {
+            order_id = result.rows[0].order_id;
+            return pool.query(sql2, [id]);
+        }).then(result => {
+            return pool.query(sql3, [order_id]);
+        }).then(result => {
+            if (result.rowCount === 0) {
+                // we need to delete the corresponding order as well
+                let sql4 = "DELETE FROM orders WHERE id = $1";
+                return pool.query(sql4, [order_id]);
+            }
+        }).then(result => {
+            if (result === undefined) {
                 res.sendStatus(200);
-            })
-            .catch(e => {
-                console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
-                res.sendStatus(400);
+            } else {
+                // a workaround to make ajax respond to redirect
+                res.status(200).json({ redirect: '/manage/orders' });
+            }
+        }).catch(e => {
+            console.error('[ERROR] Query error', e.message, e.stack);
+            // Fix redirects here
+            res.sendStatus(400);
+        });
+    });
+
+    app.post("/archive", function (request, response) {
+        // request.body example: { '16': 'on', '17': 'on', '18': 'on' }
+        let arrayOfIds = Object.keys(request.body);
+
+        if (arrayOfIds.length > 0) {
+            let archiver = require("../services/order_archiver");
+            let path = require('path');
+            let fileName = new Date().toISOString().replace(/:/g, "").split(".")[0] + '.json';
+            let filePath = path.join(__dirname, '../archives/orders/');
+            let fullPath = filePath + fileName;
+
+            archiver.archiveOrders(pool, arrayOfIds, fullPath, function (error) {
+                if (error) {
+                    console.error('[ERROR] Query error', error.message, error.stack);
+                    request.flash('archiving_error', 'Archiving failed, please examine orders with id: ' + arrayOfIds);
+                    response.redirect('/manage/orders');
+                } else {
+                    request.flash('archiving_done', 'Archiving done. File location: ' + fullPath);
+                    response.redirect('/manage/orders');
+                }
             });
+        } else {
+            request.flash('archiving_error', 'Please at lease select one order to archive');
+            response.redirect('/manage/orders');
+        }
     });
 };
 

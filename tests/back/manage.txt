@@ -2,3 +2,49 @@ curl -X GET \
   https://vinylholics.herokuapp.com/manage/vinyls \
   -H 'cache-control: no-cache' \
   -H 'postman-token: 02aec5e7-0fd3-2427-c942-e975e292e2db'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/manage/vinyl/1 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: b4d45c9e-d2c7-1481-d16a-1a9192c36175'
+
+curl -X POST \
+  https://vinylholics.herokuapp.com/manage/vinyl/11 \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: c657609c-c2b0-12d5-2644-a1b6d44ee1b9' \
+  -F 'title=Testing Title' \
+  -F artist=1 \
+  -F 'description=This is a test edit' \
+  -F is_compilation= \
+  -F released_on=2017-05-28 \
+  -F genre=Rock \
+  -F price=25
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/manage/artists \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 4632d351-6287-1eb5-57d8-f8fc9ac1c698'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/manage/artist/7 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: ee6e6139-611d-ba77-108d-abc6e46e8a5a'
+
+curl -X POST \
+  https://vinylholics.herokuapp.com/manage/artist/7 \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: 575d104e-d3e7-2769-abf3-f07e845e0847' \
+  -F 'artist_name=Test Artist' \
+  -F 'description=This is just a test artist'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/manage/orders \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: e9a8bbe5-6df8-8a98-21f0-6785dd51e728'
+
+curl -X GET \
+  https://vinylholics.herokuapp.com/manage/order/21 \
+  -H 'cache-control: no-cache' \
+  -H 'postman-token: 35661267-75de-a80c-f439-b841e6fd597e'

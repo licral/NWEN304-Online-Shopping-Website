@@ -1,0 +1,22 @@
+{
+  "orders": {
+    "20": {
+      "user_id": 1,
+      "order_time": "2017-06-19T12:26:11.606Z",
+      "albums": {
+        "8": {
+          "quantity": 1,
+          "price": "1.00"
+        },
+        "9": {
+          "quantity": 1,
+          "price": "9999.99"
+        },
+        "11": {
+          "quantity": 1,
+          "price": "29.99"
+        }
+      }
+    }
+  }
+}

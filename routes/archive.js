@@ -15,15 +15,15 @@ module.exports = function (app, pool) {
             archiver.archiveOrders(pool, arrayOfIds, fullPath, function (error) {
                 if (error) {
                     console.error('[ERROR] Query error', error.message, error.stack);
-                    request.flash('archiving_error', 'Archiving failed, please examine orders with id: ' + arrayOfIds);
+                    request.flash('error', 'Archiving failed, please examine orders with id: ' + arrayOfIds);
                     response.redirect('/manage/orders');
                 } else {
-                    request.flash('archiving_done', 'Archiving done. File location: ' + fullPath);
+                    request.flash('message', 'Archiving done. File location: ' + fullPath);
                     response.redirect('/manage/orders');
                 }
             });
         } else {
-            request.flash('archiving_error', 'Please at lease select one order to archive');
+            request.flash('error', 'Please at lease select one order to archive');
             response.redirect('/manage/orders');
         }
     });

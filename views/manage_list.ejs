@@ -3,17 +3,13 @@
 <body>
 <% include components/menu_and_heading.ejs %>
 <div class="container content">
-    <% if (locals.archiving_error) { %>
-    <div class="alert alert-danger" id="111">
-        <%= archiving_error %>
-    </div>
-    <% } else if (locals.archiving_done) { %>
-    <div class="alert alert-success" id="222">
-        <%= archiving_done %>
-    </div>
-    <% } else if (locals.error) { %>
+    <% if (locals.error) { %>
     <div class="alert alert-danger">
         <%= error %>, please refresh or contact our <a href="mailto:hectorcaesar@hotmail.com">customer service</a>.
+    </div>
+    <% } else if (locals.message) { %>
+    <div class="alert alert-success">
+        <%= message %>
     </div>
     <% } %>
 

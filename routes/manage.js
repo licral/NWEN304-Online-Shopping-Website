@@ -10,14 +10,17 @@ module.exports = function (app, pool) {
             heading: 'Vinyls',
             description: "Manage all vinyls in the database"
         };
-        var error = req.session.error;
-        req.session.error = null;
+
+        // pass in flash messages
+        let flash = req.flash();
+        Object.keys(flash).forEach(key => {
+            pageData[key] = flash[key];
+        });
 
         let sql = "select a.id, a.title, a.price, b.artist_name from albums a join artists b on a.artist_id=b.id order by a.id;";
 
         pool.query(sql)
             .then(result => {
-                pageData.error = error;
                 pageData.albums = result.rows;
                 res.set({
                     'Cache-Control': 'public, no-cache, must-revalidate'
@@ -26,7 +29,6 @@ module.exports = function (app, pool) {
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
                 pageData.error = "There was a problem with the database";
-                // Fix redirects here
                 res.render('manage_list', pageData);
             });
     });
@@ -60,14 +62,14 @@ module.exports = function (app, pool) {
                     })
                     .catch(e => {
                         console.error('[ERROR] Query error', e.message, e.stack);
-                        req.session.error = "Sorry we could not find the album";
+                        req.flash('error', 'Sorry we could not find the album');
                         res.redirect('/manage/vinyls');
                     });
 
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                req.session.error = "Sorry we could not find the album";
+                req.flash('error', 'Sorry we could not find the album');
                 res.redirect('/manage/vinyls');
             });
     });
@@ -91,25 +93,26 @@ module.exports = function (app, pool) {
         pool.query(sql, [title, artist, description, is_compilation, released_on, genre, price, id])
             .then(result => {
                 if (req.file === undefined) {
-                    // Fix redirects here
+                    req.flash('message', 'Album has been successfully editted');
                     res.redirect('/manage/vinyls');
                 } else {
                     var album_image = req.file.buffer.toString('base64');
                     sql = "update album_images set image=$1 where album_id=$2;";
                     pool.query(sql, [album_image, id])
                         .then(result2 => {
+                            req.flash('message', 'Album has been successfully editted');
                             res.redirect('/manage/vinyls');
                         })
                         .catch(e => {
                             console.error('[ERROR] Query error', e.message, e.stack);
-                            // Fix redirects here
+                            req.flash('error', 'Sorry image could not be saved');
                             res.redirect('/manage/vinyls');
                         });
                 }
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
+                req.flash('error', 'Sorry album could not be editted');
                 res.redirect('/manage/vinyls');
             });
     });
@@ -123,6 +126,12 @@ module.exports = function (app, pool) {
             description: "Manage all artists in the database"
         };
 
+        // pass in flash messages
+        let flash = req.flash();
+        Object.keys(flash).forEach(key => {
+            pageData[key] = flash[key];
+        });
+
         let sql = "select id, artist_name from artists order by id;";
 
         pool.query(sql)
@@ -134,8 +143,8 @@ module.exports = function (app, pool) {
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
-                res.redirect('/');
+                pageData.error = "There was a problem with the database";
+                res.render('manage_list', pageData);
             });
     });
 
@@ -155,7 +164,7 @@ module.exports = function (app, pool) {
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
+                req.flash('error', 'Sorry we could not find the artist');
                 res.redirect('/manage/artists');
             });
     });
@@ -169,25 +178,26 @@ module.exports = function (app, pool) {
         pool.query(sql, [artist_name, description, id])
             .then(result => {
                 if (req.file === undefined) {
-                    // Fix redirects here
+                    req.flash('message', 'Artist has been successfully editted');
                     res.redirect('/manage/artists');
                 } else {
                     var album_image = req.file.buffer.toString('base64');
                     sql = "update artist_images set image=$1 where artist_id=$2;";
                     pool.query(sql, [album_image, id])
                         .then(result2 => {
+                            req.flash('message', 'Artist has been successfully editted');
                             res.redirect('/manage/artists');
                         })
                         .catch(e => {
                             console.error('[ERROR] Query error', e.message, e.stack);
-                            // Fix redirects here
+                            req.flash('error', 'Sorry image could not be saved');
                             res.redirect('/manage/artists');
                         });
                 }
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
+                req.flash('error', 'Sorry artist could not be editted');
                 res.redirect('/manage/artists');
             });
     });
@@ -240,8 +250,8 @@ module.exports = function (app, pool) {
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
-                res.redirect('/');
+                pageData.error = "There was a problem with the database";
+                res.render('manage_list', pageData);
             });
     });
 
@@ -288,7 +298,7 @@ module.exports = function (app, pool) {
             })
             .catch(e => {
                 console.error('[ERROR] Query error', e.message, e.stack);
-                // Fix redirects here
+                req.flash('error', 'Sorry we could not find the order');
                 res.redirect('/manage/orders');
             });
     });

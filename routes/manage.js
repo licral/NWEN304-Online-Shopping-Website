@@ -35,7 +35,9 @@ module.exports = function (app, pool) {
 
     app.get('/manage/vinyl/:id', isAdmin, function (request, response) {
         var id = request.params.id;
-        let pageData = {};
+        let pageData = {
+            error: request.flash('error')
+        };
 
         let sql = "select * from albums where id=" + id + ";";
 
@@ -75,6 +77,13 @@ module.exports = function (app, pool) {
     });
 
     app.post('/manage/vinyl/:id', isAdmin, function (request, response) {
+        var data = request.body;
+        var error = validateAlbumInput(data, request.file);
+        if(error){
+            request.flash('error', error);
+            response.redirect('/manage/vinyl/' + request.params.id);
+            return;
+        }
         var id = request.params.id;
         var title = request.body.title;
         var artist = request.body.artist;
@@ -119,7 +128,6 @@ module.exports = function (app, pool) {
 
 
     app.get('/manage/artists', isAdmin, function (request, response) {
-
         let pageData = {
             title: 'Manage All Artists',
             heading: 'Artists',
@@ -150,7 +158,9 @@ module.exports = function (app, pool) {
 
     app.get('/manage/artist/:id', isAdmin, function (request, response) {
         var id = request.params.id;
-        let pageData = {};
+        let pageData = {
+            error: request.flash('error')
+        };
 
         let sql = "select * from artists where id=$1;";
 
@@ -170,6 +180,13 @@ module.exports = function (app, pool) {
     });
 
     app.post('/manage/artist/:id', isAdmin, function (request, response) {
+        var data = request.body;
+        var error = validateArtistInput(data, request.file);
+        if(error){
+            request.flash('error', error);
+            response.redirect('/manage/artist/' + request.params.id);
+            return;
+        }
         var id = request.params.id;
         var artist_name = request.body.artist_name;
         var description = request.body.description;
@@ -352,5 +369,29 @@ function isAdmin(request, response, next) {
         request.flash('error', 'You must be logged in to access this content');
         response.redirect('/login');
     }
+}
 
+function validateAlbumInput(data, file){
+    if(data.title == '' || data.title === undefined){
+        return 'Title must not be empty';
+    }
+    if(data.artist == '' || data.artist === undefined){
+        return 'Artist must not be empty';
+    }
+    if(data.released_on == '' || data.released_on === undefined){
+        return 'Released On must not be empty';
+    } else if (new Date(data.released_on) === "Invalid Date") {
+        return 'Released On must be a valid date';
+    }
+    if(data.price == '' || data.price === undefined){
+        return 'Price must not be empty';
+    } else if (isNaN(data.price) || data.price <= 0) {
+        return 'Price must be a valid number';
+    }
+}
+
+function validateArtistInput(data, file){
+    if(data.artist_name == '' || data.artist_name === undefined){
+        return 'Artist name must not be empty';
+    }
 }

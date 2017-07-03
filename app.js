@@ -38,14 +38,14 @@ require('./config/passport')(passport, connectionPool);
 //========================================
 
 // force http to https
-// app.use(function (request, response, next) {
-//     if (request.headers['x-forwarded-proto'] !== 'https') {
-//         let httpsUrl = ['https://vinylholics.herokuapp.com', request.url].join('');
-//         return response.redirect(httpsUrl);
-//     }
-//
-//     return next();
-// });
+app.use(function (request, response, next) {
+    if (request.headers['x-forwarded-proto'] !== 'https') {
+        let httpsUrl = ['https://vinylholics.herokuapp.com', request.url].join('');
+        return response.redirect(httpsUrl);
+    }
+
+    return next();
+});
 
 app.use(upload.single('image'));
 app.use(morgan('dev')); // log every request to the console

@@ -45,7 +45,7 @@ Error will be rendered when there is:
 EXAMPLE => 
 curl -X POST \
   https://vinylholics.herokuapp.com/manage/vinyl/11 \
-  -H 'content-type: multipart/form-data;
+  -H 'content-type: multipart/form-data' \
   -F 'title=Testing Title' \
   -F artist=1 \
   -F 'description=This is a test edit' \
@@ -106,16 +106,43 @@ curl -X POST \
 ----------------------------------------------------------------------------------------------
 Service: '/manage/orders'
 Method: GET
-Parameters:
-- id: artist ID
-Description: Gets information of an artist that matches the ID provided.
-Success: Gets information of an artist then renders it into a form on the manage artist page.
+Description: Gets a list of all the orders in the database.
+Success: Gets all the orders and renders them on the manage order history page.
 Fail:
 Error will be rendered when there is:
 - Database error
 - User is not an admin
 
-EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/artist/7
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/orders
+
+----------------------------------------------------------------------------------------------
+Service: '/manage/order/:id'
+Method: GET
+Parameters:
+- id: order ID
+Description: Gets information of an order that matches the ID provided.
+Success: Gets information of an order then renders it into a form on the manage order page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not an admin
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/order/21
+
+----------------------------------------------------------------------------------------------
+Service: '/manage/remove/item/:id'
+Method: DELETE
+Parameters:
+- id: order ID
+Description: Removes a vinyl from a order.
+Success: Removes a vinyl that matches the id provided from a order.
+Fail:
+Error will be rendered when there is:
+- Database error
+- ID is invalid
+- User is not an admin
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/remove/item/78
 
 
 
@@ -125,12 +152,4 @@ EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/manage/artist/7
 
 
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/manage/orders \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: e9a8bbe5-6df8-8a98-21f0-6785dd51e728'
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/manage/order/21 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 35661267-75de-a80c-f439-b841e6fd597e'

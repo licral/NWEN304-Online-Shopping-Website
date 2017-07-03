@@ -1,9 +1,24 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/checkout \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: c3b3af31-a387-9acc-83ec-806f9d86af76'
+Service: '/checkout'
+Method: GET
+Description: Processes a shopping cart into an order.
+Success: Takes the shopping cart and makes an order, which can then be viewed under order history.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
+- If the shopping cart is empty
+- If an item in the shopping cart doesn't exist
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/orders \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: e5bdda59-5b15-0e74-e868-49003ec25929'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/checkout
+
+----------------------------------------------------------------------------------------------
+Service: '/orders'
+Method: GET
+Description: Gets all the orders that a user has made.
+Success: Gets all the orders that a user has made and renders it onto the order history page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/orders

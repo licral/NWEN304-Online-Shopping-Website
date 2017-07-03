@@ -68,6 +68,11 @@ module.exports = function(app, pool){
     });
 
     app.get('/profile_update/:id', isLoggedIn, function (request, response){
+        if(request.user.username != request.params.id){
+            response.flash('error', 'You do not have permission to access this content');
+            response.redirect('/profile_update/' + request.user.username);
+            return;
+        }
         usersDAO.getRow([request.params.id], pool, function(err,msg,results) {
             if (err) {
                 response.status(500).send(msg);
@@ -98,7 +103,8 @@ module.exports = function(app, pool){
                     street: results.street,
                     suburb: results.suburb,
                     city:  results.city,
-                    country: results.country
+                    country: results.country,
+                    error: request.flash('error')
                 });
             });
         });

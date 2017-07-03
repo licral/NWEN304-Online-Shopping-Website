@@ -1,18 +1,65 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/profile_update_registration \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 38735df1-d0dc-c776-1eec-9f7a3e061e0e'
+Service: '/profile_update_registration'
+Method: GET
+Description: Renders an empty form for user details.
+Success: Renders an empty form for user details.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
 
-curl -X GET \
-  https://vinylholics.herokuapp.com/profile/admin \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: c781d29c-902c-44c7-4a0c-36df34a7679a'
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/profile_update_registration
 
+----------------------------------------------------------------------------------------------
+Service: '/profile/:id'
+Method: GET
+Parameters:
+- id: username
+Description: Gets the profile information of a user that matches the given ID, if the user's user name matches the ID, otherwise will redirect back to the profile page of the user logged in.
+Success: Gets the profile information of a user who is logged in and will render it onto the profile page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
+- Incorrect user logged in
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/profile/admin
+
+----------------------------------------------------------------------------------------------
+Service: '/profile_update/:id'
+Method: GET
+Parameters:
+- id: username
+Description: Gets the profile information of a user that matches the given ID, if the user's user name matches the ID, otherwise will redirect back to the edit profile page of the user logged in. The information will be displayed in a form for editting.
+Success: Gets the profile information of a user who is logged in and will render it onto the edit profile page.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
+- Incorrect user logged in
+
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/profile_update/admin
+
+----------------------------------------------------------------------------------------------
+Service: '/profile_update'
+Method: POST
+Body:
+- First name
+- Phone number
+- Street
+- Suburb
+- City
+- Country
+Description: Updates the profile information of a user that is logged in.
+Success: Profile information will be updated for a user that is logged in and a success message will be rendered onto the manage artist page.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- Information provided is invalid
+
+EXAMPLE => 
 curl -X POST \
   https://vinylholics.herokuapp.com/profile_update \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
-  -H 'postman-token: 98fc0494-e25d-fee0-3470-7c7bd9756ee0' \
+  -H 'content-type: multipart/form-data' \
   -F firstname=admin \
   -F lastname=admin \
   -F phone=12345678 \
@@ -20,3 +67,11 @@ curl -X POST \
   -F 'suburb=test suburb' \
   -F 'city=test city' \
   -F 'country=test country'
+
+
+
+
+
+
+
+

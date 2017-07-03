@@ -1,27 +1,82 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/shopping_cart \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: ad72c1ce-8e26-3d63-52e1-43766c7e4cc0'
+Service: '/shopping_cart'
+Method: GET
+Description: Gets the shopping cart of the user logged in.
+Success: Gets the shopping cart of the user logged in and returns it as json.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
 
-tests["Body is empty"] = responseBody === "[]";
-tests["Status code is 400"] = responseCode.code === 400;
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/shopping_cart
 
+----------------------------------------------------------------------------------------------
+Service: '/shopping_cart'
+Method: POST
+Body:
+- Album ID
+- Quantity
+Description: Adds an item to the shopping cart.
+Success: Adds an item to the shopping cart.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- Information provided is invalid
+- User is not logged in
+
+EXAMPLE => 
 curl -X POST \
   https://vinylholics.herokuapp.com/shopping_cart \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
-  -H 'postman-token: aad9f322-084c-38db-1c8e-e6436cd038db' \
+  -H 'content-type: multipart/form-data' \
   -F albumId=1 \
   -F quantity=2
 
-curl -X DELETE \
-  https://vinylholics.herokuapp.com/shopping_cart/106 \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 660db120-67f3-b373-999f-394c9346b8ad'
+----------------------------------------------------------------------------------------------
+Service: '/shopping_cart/:id'
+Method: DELETE
+Parameters:
+- id: item ID
+Description: Removed the item that matches the given ID from the shopping cart.
+Success: Removed the item that matches the given ID from the shopping cart.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
+- Information provided is invalid
 
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/shopping_cart/106
+
+----------------------------------------------------------------------------------------------
+Service: '/shopping_cart/:id'
+Method: PATCH
+Parameters:
+- id: item ID
+Body:
+- Quantity
+Description: Updates the quantity of an item that matches the provided ID in the shopping cart.
+Success: Updates the quantity of an item that matches the provided ID in the shopping cart.
+Fail:
+Error will be rendered when there is:
+- Database error
+- User is not logged in
+- Information provided is invalid
+
+EXAMPLE => 
 curl -X PATCH \
   https://vinylholics.herokuapp.com/shopping_cart/108 \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
-  -H 'postman-token: 00888c51-59a5-204b-71d7-52288bd6166d' \
+  -H 'content-type: multipart/form-data' \
   -F quantity=1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

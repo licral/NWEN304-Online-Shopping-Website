@@ -1,14 +1,33 @@
-curl -X GET \
-  https://vinylholics.herokuapp.com/register \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: 649943a4-5412-e5f4-6cf4-20e2ad601a3d'
+Service: '/register'
+Method: GET
+Description: Gets a form for registration.
+Success: Gets a form and renders it onto the registration page.
+Fail:
+Error will be rendered when there is:
+- User is still logged in
 
-// THE EMAIL, USERNAME WILL NEED TO BE ALTERED FOR EACH NEW TEST
+EXAMPLE => curl -X GET https://vinylholics.herokuapp.com/register
+
+----------------------------------------------------------------------------------------------
+Service: '/register'
+Method: POST
+Body:
+- Username
+- Password
+- Confirmation Password
+- Email
+Description: Registers a new user.
+Success: Registers a new user and takes them to the profile update page.
+Fail: 
+Error will be rendered when there is:
+- Database error
+- Information provided is invalid
+- Username or email already exists
+
+EXAMPLE => 
 curl -X POST \
   https://vinylholics.herokuapp.com/register \
-  -H 'cache-control: no-cache' \
-  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
-  -H 'postman-token: b3d784b4-f9f3-097f-93ea-59d1b06982c2' \
+  -H 'content-type: multipart/form-data' \
   -F email=test1@test.com \
   -F username=test1 \
   -F password=test \

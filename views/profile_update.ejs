@@ -8,22 +8,24 @@
 
         <% if (message.length > 0) { %>
         <div class="alert alert-danger"><%= message %></div>
+        <% } else if(locals.error && locals.error.length > 0) {%>
+        <div class="alert alert-danger"><%= error %></div>
         <% } %>
 
         <form action="/profile_update" method="post">
-            <label>First Name:</label>
+            <label>*First Name:</label>
             <input name="firstname" type="text" class="form-control login-input" required value="<%= first_name %>">
             <label>Last Name:</label>
             <input name="lastname" type="text" class="form-control login-input" value="<%= last_name %>">
-            <label>Phone Number:</label>
+            <label>*Phone Number:</label>
             <input name="phone" type="number" class="form-control login-input" required value="<%= contact_no %>">
-            <label>Street Address</label>
+            <label>*Street Address</label>
             <input name="street" type="text" class="form-control login-input" required value="<%= street %>">
-            <label>Suburb</label>
+            <label>*Suburb</label>
             <input name="suburb" type="text" class="form-control login-input" required value="<%= suburb %>">
-            <label>City</label>
+            <label>*City</label>
             <input name="city" type="text" class="form-control login-input" required value="<%= city %>">
-            <label>Country</label>
+            <label>*Country</label>
             <input name="country" type="text" class="form-control login-input" required value="<%= country %>">
 
             <button class="btn btn-primary btn-large" type="submit">Update</button>

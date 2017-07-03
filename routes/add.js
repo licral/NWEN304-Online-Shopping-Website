@@ -3,7 +3,14 @@
  */
 module.exports = function (app, pool) {
 
-    app.post('/add/vinyl', function (request, response) {
+    app.post('/add/vinyl', isAdmin, function (request, response) {
+        var data = request.body;
+        var error = validateAlbumInput(data, request.file);
+        if(error){
+            request.flash('error', error);
+            response.redirect('/add/vinyl');
+            return;
+        }
         var title = request.body.title;
         var artist = request.body.artist;
         var description = request.body.description;
@@ -51,10 +58,11 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.get('/add/vinyl', function (request, response) {
+    app.get('/add/vinyl', isAdmin, function (request, response) {
         let pageData = {
             title : "Add New Vinyl",
-            description : "Add a new vinyl record"
+            description : "Add a new vinyl record",
+            error: request.flash('error')
         };
         let sql = "select id, artist_name from artists;";
 
@@ -85,7 +93,14 @@ module.exports = function (app, pool) {
     });
 
 
-    app.post('/add/artist', function (request, response) {
+    app.post('/add/artist', isAdmin, function (request, response) {
+        var data = request.body;
+        var error = validateArtistInput(data, request.file);
+        if(error){
+            request.flash('error', error);
+            response.redirect('/add/artist');
+            return;
+        }
         var artist_name = request.body.artist_name;
         var description = request.body.description;
         var image = request.file.buffer.toString('base64');
@@ -123,13 +138,61 @@ module.exports = function (app, pool) {
             });
     });
 
-    app.get('/add/artist', function (request, response) {
+    app.get('/add/artist', isAdmin, function (request, response) {
         response.set({
             'Cache-Control': 'public, no-cache, must-revalidate',
             'Expires': new Date(Date.now() + 86400000).toUTCString()
         }).render('new_artist', {
             title : "Add New Artist",
-            description : "Add a new artist"
+            description : "Add a new artist",
+            error: request.flash('error')
         });
     });
 };
+
+function isAdmin(request, response, next) {
+    if (request.user) {
+        // if user is authenticated in the session, carry on
+        if (request.user.is_admin) {
+            return next();
+        } else {
+            // if they aren't redirect them to the home page
+            request.flash('error', 'Sorry you do not have permissions to access this content');
+            response.redirect('/');
+        }
+    } else {
+        request.flash('error', 'You must be logged in to access this content');
+        response.redirect('/login');
+    }
+}
+
+function validateAlbumInput(data, file){
+    if(data.title == '' || data.title === undefined){
+        return 'Title must not be empty';
+    }
+    if(data.artist == '' || data.artist === undefined){
+        return 'Artist must not be empty';
+    }
+    if(data.released_on == '' || data.released_on === undefined){
+        return 'Released On must not be empty';
+    } else if (new Date(data.released_on) === "Invalid Date") {
+        return 'Released On must be a valid date';
+    }
+    if(data.price == '' || data.price === undefined){
+        return 'Price must not be empty';
+    } else if (isNaN(data.price) || data.price <= 0) {
+        return 'Price must be a valid number';
+    }
+    if(file == '' || file === undefined || file.buffer == '' || file.buffer === undefined){
+        return 'Image must not be empty';
+    }
+}
+
+function validateArtistInput(data, file){
+    if(data.artist_name == '' || data.artist_name === undefined){
+        return 'Artist name must not be empty';
+    }
+    if(file == '' || file === undefined || file.buffer == '' || file.buffer === undefined){
+        return 'Image must not be empty';
+    }
+}

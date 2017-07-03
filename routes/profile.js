@@ -114,7 +114,7 @@ module.exports = function(app, pool){
         {
             client.release();
             request.flash('updateDetailMessage', err);
-            response.redirect('/profile_update');
+            response.redirect('/profile_update/' + request.user.username);
             return;
         }
 
